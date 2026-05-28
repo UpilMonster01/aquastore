@@ -1,2 +1,88 @@
-<?php require "../config/db.php";$pesanan=null;$detail=[]; if(!empty($_GET['nomor'])){$stmt=$pdo->prepare("SELECT * FROM pesanan WHERE nomor_pesanan=?");$stmt->execute([trim($_GET['nomor'])]);$pesanan=$stmt->fetch();if($pesanan){$d=$pdo->prepare("SELECT dp.*,i.nama FROM detail_pesanan dp JOIN ikan i ON dp.ikan_id=i.id WHERE dp.pesanan_id=?");$d->execute([$pesanan['id']]);$detail=$d->fetchAll();}}
-?><!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><title>Cek Pesanan</title><link rel="stylesheet" href="../assets/css/style.css"></head><body><header class="topbar"><div class="brand"><div class="brand-icon">🐟</div><div><h2>AquaStore</h2><small>Cek Pesanan</small></div></div><nav class="menu"><a href="../index.php">Beranda</a><a href="katalog.php">Katalog</a></nav></header><section class="checkout-section"><div class="section-title"><span>Tracking</span><h2>Cek Status Pesanan</h2></div><form method="GET" class="checkout-form" style="max-width:700px;margin:auto"><input type="text" name="nomor" placeholder="Contoh: AQS-20260521-1234" value="<?= e($_GET['nomor']??'') ?>" required><button class="login-button">Cek</button></form><?php if(!empty($_GET['nomor'])&&!$pesanan): ?><div class="empty-box"><h2>Pesanan tidak ditemukan.</h2></div><?php endif; ?><?php if($pesanan): ?><div class="order-result"><h2><?= e($pesanan['nomor_pesanan']) ?></h2><p>Nama: <?= e($pesanan['nama_pelanggan']) ?></p><p>Status: <b><?= e($pesanan['status']) ?></b></p><p>Total: <b><?= rupiah($pesanan['total_harga']) ?></b></p><br><div class="table-box"><table><tr><th>Ikan</th><th>Jumlah</th><th>Harga</th></tr><?php foreach($detail as $d): ?><tr><td><?= e($d['nama']) ?></td><td><?= e($d['jumlah']) ?></td><td><?= rupiah($d['harga_satuan']) ?></td></tr><?php endforeach; ?></table></div></div><?php endif; ?></section></body></html>
+<?php
+require "../config/db.php";
+
+$pesanan = null;
+$detail = [];
+
+if (!empty($_GET['nomor'])) {
+    $stmt = $pdo->prepare("SELECT * FROM pesanan WHERE nomor_pesanan = ?");
+    $stmt->execute([trim($_GET['nomor'])]);
+    $pesanan = $stmt->fetch();
+
+    if ($pesanan) {
+        $d = $pdo->prepare("SELECT dp.*, i.nama FROM detail_pesanan dp JOIN ikan i ON dp.ikan_id = i.id WHERE dp.pesanan_id = ?");
+        $d->execute([$pesanan['id']]);
+        $detail = $d->fetchAll();
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cek Pesanan</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">🐟</div>
+            <div>
+                <h2>AquaStore</h2>
+                <small>Cek Pesanan</small>
+            </div>
+        </div>
+        <nav class="menu">
+            <a href="../index.php">Beranda</a>
+            <a href="katalog.php">Katalog</a>
+        </nav>
+    </header>
+
+    <section class="checkout-section">
+        <div class="section-title">
+            <span>Tracking</span>
+            <h2>Cek Status Pesanan</h2>
+        </div>
+
+        <form method="GET" class="checkout-form" style="max-width:700px;margin:auto;">
+            <input type="text" name="nomor" placeholder="Contoh: AQS-20260521-1234" value="<?= e($_GET['nomor'] ?? '') ?>" required>
+            <button class="login-button">Cek</button>
+        </form>
+
+        <?php if (!empty($_GET['nomor']) && !$pesanan): ?>
+            <div class="empty-box">
+                <h2>Pesanan tidak ditemukan.</h2>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($pesanan): ?>
+            <div class="order-result">
+                <h2><?= e($pesanan['nomor_pesanan']) ?></h2>
+                <p>Nama: <?= e($pesanan['nama_pelanggan']) ?></p>
+                <p>Status: <b><?= e($pesanan['status']) ?></b></p>
+                <p>Total: <b><?= rupiah($pesanan['total_harga']) ?></b></p>
+                <br>
+                <div class="table-box">
+                    <table>
+                        <tr>
+                            <th>Ikan</th>
+                            <th>Jumlah</th>
+                            <th>Harga</th>
+                        </tr>
+                        <?php foreach ($detail as $d): ?>
+                            <tr>
+                                <td><?= e($d['nama']) ?></td>
+                                <td><?= e($d['jumlah']) ?></td>
+                                <td><?= rupiah($d['harga_satuan']) ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </table>
+                </div>
+            </div>
+        <?php endif; ?>
+    </section>
+</body>
+
+</html>

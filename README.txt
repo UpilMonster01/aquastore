@@ -15,5 +15,5 @@ Password: admin123
 
 Catatan:
 - Gambar homepage ada di assets/img/hero.jpg.
-- Kalau mau ganti gambar, cukup replace file hero.jpg.
+- Kalau mau ganti gambar beranda, cukup replace file hero.jpg.
 - Upload ikan tersimpan di uploads/ikan/.
