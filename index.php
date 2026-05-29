@@ -28,7 +28,7 @@ $ikanPopuler = $pdo->query("SELECT * FROM ikan ORDER BY id DESC LIMIT 4")->fetch
         <nav class="menu">
             <a href="index.php" class="active">Beranda</a>
             <a href="pelanggan/katalog.php">Katalog</a>
-            <a href="pelanggan/perawatan.php">Perawatan</a>
+            <a href="pelanggan/perawatan.php">Perlengkapan</a>
             <a href="pelanggan/cek-pesanan.php">Cek Pesanan</a>
         </nav>
 

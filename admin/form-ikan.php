@@ -4,19 +4,25 @@
 
 <select name="kategori_air" required>
     <?php foreach(['Laut','Tawar','Payau'] as $v): ?>
-        <option value="<?= $v ?>" <?= (($i['kategori_air'] ?? '') === $v) ? 'selected' : '' ?>><?= $v ?></option>
+        <option value="<?= $v ?>" <?= (($i['kategori_air'] ?? '') === $v) ? 'selected' : '' ?>>
+            <?= $v ?>
+        </option>
     <?php endforeach; ?>
 </select>
 
 <select name="kategori_sifat" required>
     <?php foreach(['Predator','Non-Predator'] as $v): ?>
-        <option value="<?= $v ?>" <?= (($i['kategori_sifat'] ?? '') === $v) ? 'selected' : '' ?>><?= $v ?></option>
+        <option value="<?= $v ?>" <?= (($i['kategori_sifat'] ?? '') === $v) ? 'selected' : '' ?>>
+            <?= $v ?>
+        </option>
     <?php endforeach; ?>
 </select>
 
 <select name="kategori_jenis" required>
     <?php foreach(['Hias','Konsumsi','Langka'] as $v): ?>
-        <option value="<?= $v ?>" <?= (($i['kategori_jenis'] ?? '') === $v) ? 'selected' : '' ?>><?= $v ?></option>
+        <option value="<?= $v ?>" <?= (($i['kategori_jenis'] ?? '') === $v) ? 'selected' : '' ?>>
+            <?= $v ?>
+        </option>
     <?php endforeach; ?>
 </select>
 
@@ -28,13 +34,17 @@
 
 <select name="tingkat_perawatan" required>
     <?php foreach(['Mudah','Sedang','Sulit'] as $v): ?>
-        <option value="<?= $v ?>" <?= (($i['tingkat_perawatan'] ?? '') === $v) ? 'selected' : '' ?>><?= $v ?></option>
+        <option value="<?= $v ?>" <?= (($i['tingkat_perawatan'] ?? '') === $v) ? 'selected' : '' ?>>
+            <?= $v ?>
+        </option>
     <?php endforeach; ?>
 </select>
 
 <select name="status" required>
     <?php foreach(['Tersedia','Habis','Pre-order'] as $v): ?>
-        <option value="<?= $v ?>" <?= (($i['status'] ?? '') === $v) ? 'selected' : '' ?>><?= $v ?></option>
+        <option value="<?= $v ?>" <?= (($i['status'] ?? '') === $v) ? 'selected' : '' ?>>
+            <?= $v ?>
+        </option>
     <?php endforeach; ?>
 </select>
 
@@ -63,3 +73,5 @@
 </div>
 
 <textarea name="deskripsi" placeholder="Deskripsi ikan"><?= e($i['deskripsi'] ?? '') ?></textarea>
+
+<textarea name="tips_perawatan" placeholder="Tips perawatan ikan"><?= e($i['tips_perawatan'] ?? '') ?></textarea>

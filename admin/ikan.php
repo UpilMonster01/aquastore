@@ -165,6 +165,17 @@ $data = $stmt->fetchAll();
                                     Edit
                                 </button>
 
+                                <?php if (!empty($i['foto'])): ?>
+                                    <form action="../proses/hapus-foto-ikan.php" method="POST" style="display:inline-block;"
+                                        onsubmit="return confirm('Hapus foto ikan ini?')">
+                                        <input type="hidden" name="id" value="<?= $i['id'] ?>">
+
+                                        <button class="delete-button">
+                                            Hapus Foto
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
+
                                 <form action="../proses/hapus-ikan.php" method="POST" style="display:inline-block;"
                                     onsubmit="return confirm('Hapus ikan ini?')">
 

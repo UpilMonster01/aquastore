@@ -5,6 +5,7 @@
     </div>
     <a href="dashboard.php">📊 Dashboard</a>
     <a href="ikan.php">🐠 Data Ikan</a>
+    <a href="perlengkapan.php">🛠️ Perlengkapan</a>
     <a href="pesanan.php">🛒 Pesanan</a>
     <a href="perawatan.php">💧 Perawatan</a>
     <a href="keuangan.php">💰 Keuangan</a>

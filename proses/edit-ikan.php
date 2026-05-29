@@ -69,6 +69,7 @@ $update = $pdo->prepare("
         tingkat_perawatan = ?,
         foto = ?,
         deskripsi = ?,
+        tips_perawatan = ?,
         status = ?
     WHERE id = ?
 ");
@@ -85,6 +86,7 @@ $update->execute([
     $_POST['tingkat_perawatan'] ?? 'Mudah',
     $foto,
     trim($_POST['deskripsi'] ?? ''),
+    trim($_POST['tips_perawatan'] ?? ''),
     $_POST['status'] ?? 'Tersedia',
     $id
 ]);

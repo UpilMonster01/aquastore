@@ -1,7 +1,7 @@
 <?php
 require "../config/db.php";
 
-$id = (int)($_GET['id'] ?? 0);
+$id = (int) ($_GET['id'] ?? 0);
 $stmt = $pdo->prepare("SELECT * FROM ikan WHERE id = ?");
 $stmt->execute([$id]);
 $ikan = $stmt->fetch();
@@ -12,7 +12,7 @@ if (!$ikan) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
-    $j = max(1, (int)$_POST['jumlah']);
+    $j = max(1, (int) $_POST['jumlah']);
 
     if ($j > $ikan['stok']) {
         flash('error', 'Stok tidak cukup.');
@@ -25,11 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-$tips = [
-    'Mudah' => 'Cocok untuk pemula. Jaga air bersih dan beri pakan secukupnya.',
-    'Sedang' => 'Butuh filter baik, suhu stabil, dan pengecekan air rutin.',
-    'Sulit' => 'Butuh parameter air stabil, tank matang, dan pemantauan sering.',
-];
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -62,7 +57,7 @@ $tips = [
         <div class="detail-wrapper">
             <div class="detail-photo">
                 <?php if ($ikan['foto']): ?>
-                    <img src="../uploads/ikan/<?= e($ikan['foto']) ?>">
+                    <img src="../uploads/ikan/<?= e($ikan['foto']) ?>?v=<?= time() ?>">
                 <?php else: ?>
                     <span><?= $ikan['kategori_sifat'] === 'Predator' ? '🦈' : '🐠' ?></span>
                 <?php endif; ?>
@@ -96,7 +91,9 @@ $tips = [
 
                 <div class="care-box">
                     <h3>Tips Perawatan</h3>
-                    <p><?= e($tips[$ikan['tingkat_perawatan']] ?? '') ?></p>
+                    <p>
+                        <?= e($ikan['tips_perawatan'] ?: 'Belum ada tips perawatan khusus untuk ikan ini.') ?>
+                    </p>
                 </div>
 
                 <form method="POST" class="cart-form">
