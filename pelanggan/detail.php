@@ -2,6 +2,7 @@
 require "../config/db.php";
 
 $id = (int) ($_GET['id'] ?? 0);
+
 $stmt = $pdo->prepare("SELECT * FROM ikan WHERE id = ?");
 $stmt->execute([$id]);
 $ikan = $stmt->fetch();
@@ -10,11 +11,18 @@ if (!$ikan) {
     die("Ikan tidak ditemukan.");
 }
 
+$jumlahKeranjang =
+    (!empty($_SESSION['keranjang']) ? count($_SESSION['keranjang']) : 0) +
+    (!empty($_SESSION['keranjang_perlengkapan']) ? count($_SESSION['keranjang_perlengkapan']) : 0);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
-    $j = max(1, (int) $_POST['jumlah']);
 
-    if ($j > $ikan['stok']) {
+    $j = max(1, (int) ($_POST['jumlah'] ?? 1));
+
+    if ($ikan['stok'] <= 0) {
+        flash('error', 'Stok ikan habis.');
+    } elseif ($j > $ikan['stok']) {
         flash('error', 'Stok tidak cukup.');
     } else {
         $_SESSION['keranjang'][$id] = ($_SESSION['keranjang'][$id] ?? 0) + $j;
@@ -24,15 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: detail.php?id=$id");
     exit;
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
     <meta charset="UTF-8">
-    <title><?= e($ikan['nama']) ?></title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <title><?= e($ikan['nama']) ?> - AquaStore</title>
+    <link rel="stylesheet" href="../assets/css/style.css?v=55">
 </head>
 
 <body>
@@ -44,11 +51,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <small>Detail Ikan</small>
             </div>
         </div>
+
         <nav class="menu">
             <a href="../index.php">Beranda</a>
             <a href="katalog.php">Katalog</a>
-            <a href="keranjang.php">Keranjang</a>
+            <a href="perawatan.php">Perlengkapan</a>
+            <a href="cek-pesanan.php">Cek Pesanan</a>
         </nav>
+
+        <a href="keranjang.php" class="cart">
+            🛒
+            <?php if ($jumlahKeranjang > 0): ?>
+                <span><?= $jumlahKeranjang ?></span>
+            <?php endif; ?>
+        </a>
     </header>
 
     <section class="detail-section">
@@ -56,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="detail-wrapper">
             <div class="detail-photo">
-                <?php if ($ikan['foto']): ?>
+                <?php if (!empty($ikan['foto'])): ?>
                     <img src="../uploads/ikan/<?= e($ikan['foto']) ?>?v=<?= time() ?>">
                 <?php else: ?>
                     <span><?= $ikan['kategori_sifat'] === 'Predator' ? '🦈' : '🐠' ?></span>
@@ -64,10 +80,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="detail-info">
-                <span class="detail-badge"><?= e($ikan['kategori_air']) ?> • <?= e($ikan['kategori_sifat']) ?></span>
+                <span class="detail-badge">
+                    <?= e($ikan['kategori_air']) ?> • <?= e($ikan['kategori_sifat']) ?>
+                </span>
+
                 <h1><?= e($ikan['nama']) ?></h1>
-                <p><i><?= e($ikan['nama_latin']) ?></i></p>
+
+                <p>
+                    <i><?= e($ikan['nama_latin']) ?></i>
+                </p>
+
                 <h2><?= rupiah($ikan['harga']) ?></h2>
+
                 <p><?= e($ikan['deskripsi']) ?></p>
 
                 <div class="info-grid">
@@ -75,14 +99,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <b>Stok</b>
                         <span><?= e($ikan['stok']) ?></span>
                     </div>
+
                     <div>
                         <b>Ukuran</b>
                         <span><?= e($ikan['ukuran_cm']) ?> cm</span>
                     </div>
+
                     <div>
                         <b>Jenis</b>
                         <span><?= e($ikan['kategori_jenis']) ?></span>
                     </div>
+
                     <div>
                         <b>Perawatan</b>
                         <span><?= e($ikan['tingkat_perawatan']) ?></span>
@@ -98,12 +125,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <form method="POST" class="cart-form">
                     <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
+
                     <label>
                         Jumlah
-                        <input type="number" name="jumlah" value="1" min="1" max="<?= e($ikan['stok']) ?>">
+                        <input 
+                            type="number" 
+                            name="jumlah" 
+                            value="1" 
+                            min="1" 
+                            max="<?= e($ikan['stok']) ?>"
+                            <?= $ikan['stok'] <= 0 ? 'disabled' : '' ?>
+                        >
                     </label>
-                    <button class="hero-button">Tambah ke Keranjang</button>
+
+                    <button 
+                        class="hero-button"
+                        <?= $ikan['stok'] <= 0 ? 'disabled' : '' ?>
+                    >
+                        <?= $ikan['stok'] <= 0 ? 'Stok Habis' : 'Tambah ke Keranjang' ?>
+                    </button>
                 </form>
+
+                <br>
+
+                <a href="katalog.php" class="mini-button">
+                    ← Kembali ke Katalog
+                </a>
             </div>
         </div>
     </section>

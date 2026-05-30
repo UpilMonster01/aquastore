@@ -1,7 +1,7 @@
 <?php
 require "../config/db.php";
 
-if (empty($_SESSION['keranjang']) && empty($_SESSION['keranjang_perlengkapan'])) {
+if (empty($_SESSION['keranjang']) && empty($_SESSION['keranjang_perlengkapan']) && empty($_GET['sukses'])) {
     flash('error', 'Keranjang masih kosong.');
     header("Location: katalog.php");
     exit;
@@ -11,7 +11,6 @@ $ikanItems = [];
 $alatItems = [];
 $subtotal = 0;
 
-/* AMBIL IKAN */
 if (!empty($_SESSION['keranjang'])) {
     $ids = array_keys($_SESSION['keranjang']);
     $in = implode(',', array_fill(0, count($ids), '?'));
@@ -33,7 +32,6 @@ if (!empty($_SESSION['keranjang'])) {
     }
 }
 
-/* AMBIL PERLENGKAPAN */
 if (!empty($_SESSION['keranjang_perlengkapan'])) {
     $ids = array_keys($_SESSION['keranjang_perlengkapan']);
     $in = implode(',', array_fill(0, count($ids), '?'));
@@ -55,13 +53,28 @@ if (!empty($_SESSION['keranjang_perlengkapan'])) {
     }
 }
 
-/* PROSES CHECKOUT */
+$jumlahKeranjang =
+    (!empty($_SESSION['keranjang']) ? count($_SESSION['keranjang']) : 0) +
+    (!empty($_SESSION['keranjang_perlengkapan']) ? count($_SESSION['keranjang_perlengkapan']) : 0);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nama = trim($_POST['nama_pelanggan']);
-    $hp = trim($_POST['no_hp']);
-    $alamat = trim($_POST['alamat']);
-    $pengiriman = $_POST['metode_pengiriman'];
-    $bayar = $_POST['metode_bayar'];
+    $nama = trim($_POST['nama_pelanggan'] ?? '');
+    $hp = trim($_POST['no_hp'] ?? '');
+    $alamat = trim($_POST['alamat'] ?? '');
+    $pengiriman = $_POST['metode_pengiriman'] ?? 'Ambil Sendiri';
+    $bayar = $_POST['metode_bayar'] ?? 'COD';
+
+    if ($nama === '' || $hp === '' || $alamat === '') {
+        flash('error', 'Semua data wajib diisi.');
+        header("Location: checkout.php");
+        exit;
+    }
+
+    if (strlen($alamat) < 8) {
+        flash('error', 'Alamat terlalu pendek.');
+        header("Location: checkout.php");
+        exit;
+    }
 
     $ongkir = $pengiriman === 'Kurir' ? 15000 : 0;
     $total = $subtotal + $ongkir;
@@ -88,7 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $pesananId = $pdo->lastInsertId();
 
-        /* SIMPAN DETAIL IKAN */
         foreach ($ikanItems as $i) {
             $jumlah = $_SESSION['keranjang'][$i['id']];
 
@@ -109,7 +121,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stok->execute([$jumlah, $i['id']]);
         }
 
-        /* SIMPAN DETAIL PERLENGKAPAN */
         foreach ($alatItems as $p) {
             $jumlah = $_SESSION['keranjang_perlengkapan'][$p['id']];
 
@@ -132,8 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $pdo->commit();
 
-        unset($_SESSION['keranjang']);
-        unset($_SESSION['keranjang_perlengkapan']);
+        unset($_SESSION['keranjang'], $_SESSION['keranjang_perlengkapan']);
 
         header("Location: checkout.php?sukses=" . urlencode($nomor));
         exit;
@@ -147,25 +157,92 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 if (!empty($_GET['sukses'])):
+    $nomorSukses = $_GET['sukses'];
+
+    $stmt = $pdo->prepare("SELECT * FROM pesanan WHERE nomor_pesanan = ?");
+    $stmt->execute([$nomorSukses]);
+    $pesananSukses = $stmt->fetch();
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <title>Checkout Berhasil</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css?v=230">
 </head>
 <body>
-<section class="popular-section">
-    <div class="success-order">
-        <h1>Pesanan Berhasil 🎉</h1>
-        <p>Nomor pesanan kamu:</p>
-        <h2><?= e($_GET['sukses']) ?></h2>
 
-        <a href="cek-pesanan.php" class="hero-button">Cek Pesanan</a>
-        <a href="katalog.php" class="mini-button">Kembali Belanja</a>
+<section class="checkout-success-page">
+    <div class="success-order premium-success">
+        <div class="success-icon">🎉</div>
+
+        <h1>Pesanan Berhasil</h1>
+
+        <p>Simpan nomor pesanan ini untuk cek status:</p>
+
+        <div class="order-number-box">
+            <?= e($nomorSukses) ?>
+        </div>
+
+        <?php if ($pesananSukses): ?>
+            <div class="payment-box">
+                <h3>Instruksi Pembayaran</h3>
+
+                <?php if ($pesananSukses['metode_bayar'] === 'Transfer Bank'): ?>
+
+                    <p>Silakan transfer ke rekening berikut:</p>
+
+                    <div class="payment-info">
+                        <b>Bank BCA</b><br>
+                        No. Rekening: 1234567890<br>
+                        a.n. AquaStore
+                    </div>
+
+                    <p>
+                        Setelah transfer, simpan bukti pembayaran dan hubungi admin.
+                    </p>
+
+                <?php elseif ($pesananSukses['metode_bayar'] === 'QRIS'): ?>
+
+                    <p>Scan QRIS berikut untuk melakukan pembayaran:</p>
+
+                    <img src="../assets/img/qris.png" class="qris-img" alt="QRIS AquaStore">
+
+                    <p>
+                        Pastikan nominal pembayaran sesuai total pesanan.
+                    </p>
+
+                <?php else: ?>
+
+                    <p>
+                        Pembayaran dilakukan saat pesanan diterima atau saat ambil sendiri di toko.
+                    </p>
+
+                <?php endif; ?>
+
+                <div class="payment-total">
+                    Total Pembayaran:
+                    <b><?= rupiah($pesananSukses['total_harga']) ?></b>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <p class="success-note">
+            Pesanan kamu masuk dengan status <b>Pending</b>. Admin akan memproses pesanan secepatnya.
+        </p>
+
+        <div class="success-actions">
+            <a href="cek-pesanan.php?nomor=<?= urlencode($nomorSukses) ?>" class="hero-button">
+                Cek Pesanan
+            </a>
+
+            <a href="katalog.php" class="mini-button">
+                Belanja Lagi
+            </a>
+        </div>
     </div>
 </section>
+
 </body>
 </html>
 <?php exit; endif; ?>
@@ -175,7 +252,7 @@ if (!empty($_GET['sukses'])):
 <head>
     <meta charset="UTF-8">
     <title>Checkout - AquaStore</title>
-    <link rel="stylesheet" href="../assets/css/style.css?v=160">
+    <link rel="stylesheet" href="../assets/css/style.css?v=230">
 </head>
 <body>
 
@@ -192,23 +269,35 @@ if (!empty($_GET['sukses'])):
         <a href="../index.php">Beranda</a>
         <a href="katalog.php">Katalog</a>
         <a href="perawatan.php">Perlengkapan</a>
-        <a href="keranjang.php">Keranjang</a>
+        <a href="cek-pesanan.php">Cek Pesanan</a>
     </nav>
+
+    <a href="keranjang.php" class="cart">
+        🛒
+        <?php if ($jumlahKeranjang > 0): ?>
+            <span><?= $jumlahKeranjang ?></span>
+        <?php endif; ?>
+    </a>
 </header>
 
 <section class="checkout-section">
     <div class="section-title">
-        <span>Checkout</span>
+        <span>AquaStore Checkout</span>
         <h2>Lengkapi Pesanan</h2>
+        <p>Isi data dengan benar agar pesanan ikan dan perlengkapan bisa diproses.</p>
     </div>
 
     <?php show_flash(); ?>
 
-    <div class="checkout-grid">
-        <form method="POST" class="checkout-form">
+    <div class="checkout-premium-grid">
+        <form method="POST" class="checkout-form premium-checkout-form">
+            <h3>Data Pelanggan</h3>
+
             <input type="text" name="nama_pelanggan" placeholder="Nama lengkap" required>
-            <input type="text" name="no_hp" placeholder="Nomor HP" required>
+            <input type="text" name="no_hp" placeholder="Nomor HP / WhatsApp" required>
             <textarea name="alamat" placeholder="Alamat lengkap" required></textarea>
+
+            <h3>Pengiriman & Pembayaran</h3>
 
             <select name="metode_pengiriman" id="pengiriman" onchange="hitungTotal()">
                 <option value="Ambil Sendiri">Ambil Sendiri - Gratis</option>
@@ -216,35 +305,71 @@ if (!empty($_GET['sukses'])):
             </select>
 
             <select name="metode_bayar">
-                <option>Transfer Bank</option>
-                <option>COD</option>
-                <option>QRIS</option>
+                <option value="Transfer Bank">Transfer Bank</option>
+                <option value="COD">COD</option>
+                <option value="QRIS">QRIS</option>
             </select>
 
-            <button class="login-button">Buat Pesanan</button>
+            <div class="checkout-warning">
+                Pastikan nomor HP aktif agar admin bisa menghubungi kamu.
+            </div>
+
+            <button class="login-button full-button">
+                Buat Pesanan
+            </button>
         </form>
 
-        <div class="summary-box">
+        <div class="checkout-summary-premium">
             <h3>Ringkasan Pesanan</h3>
 
-            <?php foreach ($ikanItems as $i): 
-                $jumlah = $_SESSION['keranjang'][$i['id']];
-            ?>
-                <p>🐠 <?= e($i['nama']) ?> x <?= $jumlah ?> = <?= rupiah($jumlah * $i['harga']) ?></p>
-            <?php endforeach; ?>
+            <?php if ($ikanItems): ?>
+                <h4>🐠 Ikan Hias</h4>
 
-            <?php foreach ($alatItems as $p): 
-                $jumlah = $_SESSION['keranjang_perlengkapan'][$p['id']];
-            ?>
-                <p>🛠️ <?= e($p['nama']) ?> x <?= $jumlah ?> = <?= rupiah($jumlah * $p['harga']) ?></p>
-            <?php endforeach; ?>
+                <?php foreach ($ikanItems as $i): 
+                    $jumlah = $_SESSION['keranjang'][$i['id']];
+                ?>
+                    <div class="checkout-item">
+                        <div>
+                            <b><?= e($i['nama']) ?></b>
+                            <span>x <?= $jumlah ?></span>
+                        </div>
+                        <strong><?= rupiah($jumlah * $i['harga']) ?></strong>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
 
-            <hr>
+            <?php if ($alatItems): ?>
+                <h4>🛠️ Perlengkapan</h4>
 
-            <p>Subtotal: <b id="subtotal" data-total="<?= $subtotal ?>"><?= rupiah($subtotal) ?></b></p>
-            <p>Ongkir: <b id="ongkir">Rp 0</b></p>
+                <?php foreach ($alatItems as $p): 
+                    $jumlah = $_SESSION['keranjang_perlengkapan'][$p['id']];
+                ?>
+                    <div class="checkout-item">
+                        <div>
+                            <b><?= e($p['nama']) ?></b>
+                            <span>x <?= $jumlah ?></span>
+                        </div>
+                        <strong><?= rupiah($jumlah * $p['harga']) ?></strong>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
 
-            <h2>Total: <span id="grandTotal"><?= rupiah($subtotal) ?></span></h2>
+            <div class="checkout-line"></div>
+
+            <div class="checkout-row">
+                <span>Subtotal</span>
+                <b id="subtotal" data-total="<?= $subtotal ?>"><?= rupiah($subtotal) ?></b>
+            </div>
+
+            <div class="checkout-row">
+                <span>Ongkir</span>
+                <b id="ongkir">Rp 0</b>
+            </div>
+
+            <div class="checkout-total">
+                <span>Total</span>
+                <b id="grandTotal"><?= rupiah($subtotal) ?></b>
+            </div>
         </div>
     </div>
 </section>

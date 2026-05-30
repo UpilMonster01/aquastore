@@ -72,3 +72,7 @@ function previewFoto(input) {
 
     reader.readAsDataURL(file);
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    hitungTotal();
+});
