@@ -12,7 +12,8 @@ $ikanPopuler = $pdo->query("SELECT * FROM ikan ORDER BY id DESC LIMIT 4")->fetch
     <title>AquaStore</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
@@ -26,10 +27,20 @@ $ikanPopuler = $pdo->query("SELECT * FROM ikan ORDER BY id DESC LIMIT 4")->fetch
         </div>
 
         <nav class="menu">
-            <a href="index.php" class="active">Beranda</a>
+            <a href="index.php">Beranda</a>
             <a href="pelanggan/katalog.php">Katalog</a>
             <a href="pelanggan/perawatan.php">Perlengkapan</a>
             <a href="pelanggan/cek-pesanan.php">Cek Pesanan</a>
+
+            <?php if (!empty($_SESSION['user'])): ?>
+                <a href="pelanggan/logout.php">
+                    Logout (<?= e($_SESSION['user']['nama']) ?>)
+                </a>
+            <?php else: ?>
+                <a href="pelanggan/login.php">
+                    Login
+                </a>
+            <?php endif; ?>
         </nav>
 
         <a href="pelanggan/keranjang.php" class="cart">
@@ -147,7 +158,6 @@ $ikanPopuler = $pdo->query("SELECT * FROM ikan ORDER BY id DESC LIMIT 4")->fetch
             <input type="text" name="username" placeholder="Username" required>
             <input type="password" name="password" placeholder="Password" required>
             <button class="login-button" type="submit">Masuk</button>
-            <p>Default: admin / admin123</p>
         </form>
     </div>
 

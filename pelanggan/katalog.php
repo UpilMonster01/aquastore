@@ -52,7 +52,7 @@ $jumlahKeranjang = !empty($_SESSION['keranjang']) ? array_sum($_SESSION['keranja
         <nav class="menu">
             <a href="../index.php">Beranda</a>
             <a href="katalog.php" class="active">Katalog</a>
-            <a href="perawatan.php">Perawatan</a>
+            <a href="perawatan.php">Perlengkapan</a>
             <a href="cek-pesanan.php">Cek Pesanan</a>
         </nav>
         <a href="keranjang.php" class="cart">
