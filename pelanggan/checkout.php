@@ -1,6 +1,14 @@
 <?php
 require "../config/db.php";
 
+if (empty($_SESSION['user'])) {
+    flash('error', 'Silakan login terlebih dahulu sebelum checkout.');
+    header("Location: login.php");
+    exit;
+}
+
+$user = $_SESSION['user'] ?? [];
+
 if (empty($_SESSION['keranjang']) && empty($_SESSION['keranjang_perlengkapan']) && empty($_GET['sukses'])) {
     flash('error', 'Keranjang masih kosong.');
     header("Location: katalog.php");
@@ -162,218 +170,212 @@ if (!empty($_GET['sukses'])):
     $stmt = $pdo->prepare("SELECT * FROM pesanan WHERE nomor_pesanan = ?");
     $stmt->execute([$nomorSukses]);
     $pesananSukses = $stmt->fetch();
-?>
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Checkout Berhasil</title>
-    <link rel="stylesheet" href="../assets/css/style.css?v=230">
-</head>
-<body>
+    ?>
+    <!DOCTYPE html>
+    <html lang="id">
 
-<section class="checkout-success-page">
-    <div class="success-order premium-success">
-        <div class="success-icon">🎉</div>
+    <head>
+        <meta charset="UTF-8">
+        <title>Checkout Berhasil</title>
+        <link rel="stylesheet" href="../assets/css/style.css?v=240">
+    </head>
 
-        <h1>Pesanan Berhasil</h1>
+    <body>
 
-        <p>Simpan nomor pesanan ini untuk cek status:</p>
+        <section class="checkout-success-page">
+            <div class="success-order premium-success">
+                <div class="success-icon">🎉</div>
 
-        <div class="order-number-box">
-            <?= e($nomorSukses) ?>
-        </div>
+                <h1>Pesanan Berhasil</h1>
 
-        <?php if ($pesananSukses): ?>
-            <div class="payment-box">
-                <h3>Instruksi Pembayaran</h3>
+                <p>Simpan nomor pesanan ini untuk cek status:</p>
 
-                <?php if ($pesananSukses['metode_bayar'] === 'Transfer Bank'): ?>
+                <div class="order-number-box">
+                    <?= e($nomorSukses) ?>
+                </div>
 
-                    <p>Silakan transfer ke rekening berikut:</p>
+                <?php if ($pesananSukses): ?>
+                    <div class="payment-box">
+                        <h3>Instruksi Pembayaran</h3>
 
-                    <div class="payment-info">
-                        <b>Bank BCA</b><br>
-                        No. Rekening: 1234567890<br>
-                        a.n. AquaStore
+                        <?php if ($pesananSukses['metode_bayar'] === 'Transfer Bank'): ?>
+
+                            <p>Silakan transfer ke rekening berikut:</p>
+
+                            <div class="payment-info">
+                                <b>Bank BCA</b><br>
+                                No. Rekening: 1234567890<br>
+                                a.n. AquaStore
+                            </div>
+
+                            <p>
+                                Setelah transfer, simpan bukti pembayaran dan hubungi admin.
+                            </p>
+
+                        <?php elseif ($pesananSukses['metode_bayar'] === 'QRIS'): ?>
+
+                            <p>Scan QRIS berikut untuk melakukan pembayaran:</p>
+
+                            <img src="../assets/img/qris.png" class="qris-img" alt="QRIS AquaStore">
+
+                            <p>
+                                Pastikan nominal pembayaran sesuai total pesanan.
+                            </p>
+
+                        <?php else: ?>
+
+                            <p>
+                                Pembayaran dilakukan saat pesanan diterima atau saat ambil sendiri di toko.
+                            </p>
+
+                        <?php endif; ?>
+
+                        <div class="payment-total">
+                            Total Pembayaran:
+                            <b><?= rupiah($pesananSukses['total_harga']) ?></b>
+                        </div>
                     </div>
-
-                    <p>
-                        Setelah transfer, simpan bukti pembayaran dan hubungi admin.
-                    </p>
-
-                <?php elseif ($pesananSukses['metode_bayar'] === 'QRIS'): ?>
-
-                    <p>Scan QRIS berikut untuk melakukan pembayaran:</p>
-
-                    <img src="../assets/img/qris.png" class="qris-img" alt="QRIS AquaStore">
-
-                    <p>
-                        Pastikan nominal pembayaran sesuai total pesanan.
-                    </p>
-
-                <?php else: ?>
-
-                    <p>
-                        Pembayaran dilakukan saat pesanan diterima atau saat ambil sendiri di toko.
-                    </p>
-
                 <?php endif; ?>
 
-                <div class="payment-total">
-                    Total Pembayaran:
-                    <b><?= rupiah($pesananSukses['total_harga']) ?></b>
+                <p class="success-note">
+                    Pesanan kamu masuk dengan status <b>Pending</b>. Admin akan memproses pesanan secepatnya.
+                </p>
+
+                <div class="success-actions">
+                    <a href="cek-pesanan.php?nomor=<?= urlencode($nomorSukses) ?>" class="hero-button">
+                        Cek Pesanan
+                    </a>
+
+                    <a href="katalog.php" class="mini-button">
+                        Belanja Lagi
+                    </a>
                 </div>
             </div>
-        <?php endif; ?>
+        </section>
 
-        <p class="success-note">
-            Pesanan kamu masuk dengan status <b>Pending</b>. Admin akan memproses pesanan secepatnya.
-        </p>
+    </body>
 
-        <div class="success-actions">
-            <a href="cek-pesanan.php?nomor=<?= urlencode($nomorSukses) ?>" class="hero-button">
-                Cek Pesanan
-            </a>
-
-            <a href="katalog.php" class="mini-button">
-                Belanja Lagi
-            </a>
-        </div>
-    </div>
-</section>
-
-</body>
-</html>
-<?php exit; endif; ?>
+    </html>
+    <?php exit; endif; ?>
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Checkout - AquaStore</title>
-    <link rel="stylesheet" href="../assets/css/style.css?v=230">
+    <link rel="stylesheet" href="../assets/css/style.css?v=240">
 </head>
+
 <body>
 
-<header class="topbar">
-    <div class="brand">
-        <div class="brand-icon">🐟</div>
-        <div>
-            <h2>AquaStore</h2>
-            <small>Checkout</small>
+    <?php include "../components/navbar.php"; ?>
+
+    <section class="checkout-section">
+        <div class="section-title">
+            <span>AquaStore Checkout</span>
+            <h2>Lengkapi Pesanan</h2>
+            <p>Isi data dengan benar agar pesanan ikan dan perlengkapan bisa diproses.</p>
         </div>
-    </div>
 
-    <nav class="menu">
-        <a href="../index.php">Beranda</a>
-        <a href="katalog.php">Katalog</a>
-        <a href="perawatan.php">Perlengkapan</a>
-        <a href="cek-pesanan.php">Cek Pesanan</a>
-    </nav>
+        <?php show_flash(); ?>
 
-    <a href="keranjang.php" class="cart">
-        🛒
-        <?php if ($jumlahKeranjang > 0): ?>
-            <span><?= $jumlahKeranjang ?></span>
-        <?php endif; ?>
-    </a>
-</header>
+        <div class="checkout-premium-grid">
+            <form method="POST" class="checkout-form premium-checkout-form">
+                <h3>Data Pelanggan</h3>
 
-<section class="checkout-section">
-    <div class="section-title">
-        <span>AquaStore Checkout</span>
-        <h2>Lengkapi Pesanan</h2>
-        <p>Isi data dengan benar agar pesanan ikan dan perlengkapan bisa diproses.</p>
-    </div>
+                <input type="text" name="nama_pelanggan" placeholder="Nama lengkap"
+                    value="<?= e($user['nama'] ?? '') ?>" required>
 
-    <?php show_flash(); ?>
+                <input type="text" name="no_hp" placeholder="Nomor HP / WhatsApp" value="<?= e($user['no_hp'] ?? '') ?>"
+                    required>
 
-    <div class="checkout-premium-grid">
-        <form method="POST" class="checkout-form premium-checkout-form">
-            <h3>Data Pelanggan</h3>
+                <textarea name="alamat" placeholder="Alamat lengkap" required><?= e($user['alamat'] ?? '') ?></textarea>
 
-            <input type="text" name="nama_pelanggan" placeholder="Nama lengkap" required>
-            <input type="text" name="no_hp" placeholder="Nomor HP / WhatsApp" required>
-            <textarea name="alamat" placeholder="Alamat lengkap" required></textarea>
+                <h3>Pengiriman & Pembayaran</h3>
 
-            <h3>Pengiriman & Pembayaran</h3>
+                <select name="metode_pengiriman" id="pengiriman" onchange="hitungTotal()">
+                    <option value="Ambil Sendiri">Ambil Sendiri - Gratis</option>
+                    <option value="Kurir">Kurir - Rp 15.000</option>
+                </select>
 
-            <select name="metode_pengiriman" id="pengiriman" onchange="hitungTotal()">
-                <option value="Ambil Sendiri">Ambil Sendiri - Gratis</option>
-                <option value="Kurir">Kurir - Rp 15.000</option>
-            </select>
+                <select name="metode_bayar">
+                    <option value="Transfer Bank">Transfer Bank</option>
+                    <option value="COD">COD</option>
+                    <option value="QRIS">QRIS</option>
+                </select>
 
-            <select name="metode_bayar">
-                <option value="Transfer Bank">Transfer Bank</option>
-                <option value="COD">COD</option>
-                <option value="QRIS">QRIS</option>
-            </select>
+                <div class="checkout-warning">
+                    Pastikan nomor HP aktif agar admin bisa menghubungi kamu.
+                </div>
 
-            <div class="checkout-warning">
-                Pastikan nomor HP aktif agar admin bisa menghubungi kamu.
-            </div>
+                <div class="checkout-actions">
+                    <a href="keranjang.php" class="cancel-button">
+                        ❌ Batal
+                    </a>
 
-            <button class="login-button full-button">
-                Buat Pesanan
-            </button>
-        </form>
+                    <button class="login-button full-button">
+                        ✅ Buat Pesanan
+                    </button>
+                </div>
+            </form>
 
-        <div class="checkout-summary-premium">
-            <h3>Ringkasan Pesanan</h3>
+            <div class="checkout-summary-premium">
+                <h3>Ringkasan Pesanan</h3>
 
-            <?php if ($ikanItems): ?>
-                <h4>🐠 Ikan Hias</h4>
+                <?php if ($ikanItems): ?>
+                    <h4>🐠 Ikan Hias</h4>
 
-                <?php foreach ($ikanItems as $i): 
-                    $jumlah = $_SESSION['keranjang'][$i['id']];
-                ?>
-                    <div class="checkout-item">
-                        <div>
-                            <b><?= e($i['nama']) ?></b>
-                            <span>x <?= $jumlah ?></span>
+                    <?php foreach ($ikanItems as $i):
+                        $jumlah = $_SESSION['keranjang'][$i['id']];
+                        ?>
+                        <div class="checkout-item">
+                            <div>
+                                <b><?= e($i['nama']) ?></b>
+                                <span>x <?= $jumlah ?></span>
+                            </div>
+                            <strong><?= rupiah($jumlah * $i['harga']) ?></strong>
                         </div>
-                        <strong><?= rupiah($jumlah * $i['harga']) ?></strong>
-                    </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
 
-            <?php if ($alatItems): ?>
-                <h4>🛠️ Perlengkapan</h4>
+                <?php if ($alatItems): ?>
+                    <h4>🛠️ Perlengkapan</h4>
 
-                <?php foreach ($alatItems as $p): 
-                    $jumlah = $_SESSION['keranjang_perlengkapan'][$p['id']];
-                ?>
-                    <div class="checkout-item">
-                        <div>
-                            <b><?= e($p['nama']) ?></b>
-                            <span>x <?= $jumlah ?></span>
+                    <?php foreach ($alatItems as $p):
+                        $jumlah = $_SESSION['keranjang_perlengkapan'][$p['id']];
+                        ?>
+                        <div class="checkout-item">
+                            <div>
+                                <b><?= e($p['nama']) ?></b>
+                                <span>x <?= $jumlah ?></span>
+                            </div>
+                            <strong><?= rupiah($jumlah * $p['harga']) ?></strong>
                         </div>
-                        <strong><?= rupiah($jumlah * $p['harga']) ?></strong>
-                    </div>
-                <?php endforeach; ?>
-            <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
 
-            <div class="checkout-line"></div>
+                <div class="checkout-line"></div>
 
-            <div class="checkout-row">
-                <span>Subtotal</span>
-                <b id="subtotal" data-total="<?= $subtotal ?>"><?= rupiah($subtotal) ?></b>
-            </div>
+                <div class="checkout-row">
+                    <span>Subtotal</span>
+                    <b id="subtotal" data-total="<?= $subtotal ?>"><?= rupiah($subtotal) ?></b>
+                </div>
 
-            <div class="checkout-row">
-                <span>Ongkir</span>
-                <b id="ongkir">Rp 0</b>
-            </div>
+                <div class="checkout-row">
+                    <span>Ongkir</span>
+                    <b id="ongkir">Rp 0</b>
+                </div>
 
-            <div class="checkout-total">
-                <span>Total</span>
-                <b id="grandTotal"><?= rupiah($subtotal) ?></b>
+                <div class="checkout-total">
+                    <span>Total</span>
+                    <b id="grandTotal"><?= rupiah($subtotal) ?></b>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<script src="../assets/js/main.js"></script>
+    <script src="../assets/js/main.js"></script>
 </body>
+
 </html>

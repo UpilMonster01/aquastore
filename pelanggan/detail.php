@@ -42,30 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../assets/css/style.css?v=55">
 </head>
 
-<body>
-    <header class="topbar">
-        <div class="brand">
-            <div class="brand-icon">🐟</div>
-            <div>
-                <h2>AquaStore</h2>
-                <small>Detail Ikan</small>
-            </div>
-        </div>
-
-        <nav class="menu">
-            <a href="../index.php">Beranda</a>
-            <a href="katalog.php">Katalog</a>
-            <a href="perawatan.php">Perlengkapan</a>
-            <a href="cek-pesanan.php">Cek Pesanan</a>
-        </nav>
-
-        <a href="keranjang.php" class="cart">
-            🛒
-            <?php if ($jumlahKeranjang > 0): ?>
-                <span><?= $jumlahKeranjang ?></span>
-            <?php endif; ?>
-        </a>
-    </header>
+<?php include "../components/navbar.php"; ?>
 
     <section class="detail-section">
         <?php show_flash(); ?>

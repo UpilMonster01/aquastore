@@ -12,44 +12,11 @@ $ikanPopuler = $pdo->query("SELECT * FROM ikan ORDER BY id DESC LIMIT 4")->fetch
     <title>AquaStore</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <header class="topbar">
-        <div class="brand">
-            <div class="brand-icon">🐟</div>
-            <div>
-                <h2>AquaStore</h2>
-                <small>Everything for your aquarium</small>
-            </div>
-        </div>
-
-        <nav class="menu">
-            <a href="index.php">Beranda</a>
-            <a href="pelanggan/katalog.php">Katalog</a>
-            <a href="pelanggan/perawatan.php">Perlengkapan</a>
-            <a href="pelanggan/cek-pesanan.php">Cek Pesanan</a>
-
-            <?php if (!empty($_SESSION['user'])): ?>
-                <a href="pelanggan/logout.php">
-                    Logout (<?= e($_SESSION['user']['nama']) ?>)
-                </a>
-            <?php else: ?>
-                <a href="pelanggan/login.php">
-                    Login
-                </a>
-            <?php endif; ?>
-        </nav>
-
-        <a href="pelanggan/keranjang.php" class="cart">
-            🛒
-            <?php if ($jumlahKeranjang > 0): ?>
-                <span><?= $jumlahKeranjang ?></span>
-            <?php endif; ?>
-        </a>
-    </header>
+   <?php include "components/navbar.php"; ?>
 
     <section class="hero-home">
         <div class="hero-content">

@@ -60,3 +60,10 @@ function admin_only()
         exit;
     }
 }
+
+function user_only() {
+    if (empty($_SESSION['user'])) {
+        header("Location: login.php");
+        exit;
+    }
+}
