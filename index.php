@@ -106,8 +106,8 @@ $ikanPopuler = $pdo->query("SELECT * FROM ikan ORDER BY id DESC LIMIT 4")->fetch
 
     <section class="about-section">
         <span>Tentang Kami</span>
-        <h2>AquaStore Anime Aquarium Shop</h2>
-        <p>AquaStore menyediakan ikan hias berkualitas dengan tampilan website modern, fresh, dan anime-style.</p>
+        <h2>AquaStore</h2>
+        <p>AquaStore menyediakan ikan hias dan perlengkapan akuarium berkualitas</p>
     </section>
 
     <footer class="footer">
