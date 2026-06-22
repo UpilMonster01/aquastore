@@ -76,3 +76,49 @@ function previewFoto(input) {
 document.addEventListener('DOMContentLoaded', function () {
     hitungTotal();
 });
+
+function openAuthDrawer(tab = 'login') {
+    document.getElementById('authDrawer')?.classList.add('show');
+    document.getElementById('authOverlay')?.classList.add('show');
+    showAuthTab(tab);
+}
+
+function closeAuthDrawer() {
+    document.getElementById('authDrawer')?.classList.remove('show');
+    document.getElementById('authOverlay')?.classList.remove('show');
+}
+
+function showAuthTab(tab) {
+    const loginTab = document.getElementById('loginTab');
+    const registerTab = document.getElementById('registerTab');
+    const loginPanel = document.getElementById('loginPanel');
+    const registerPanel = document.getElementById('registerPanel');
+
+    if (!loginTab || !registerTab || !loginPanel || !registerPanel) return;
+
+    loginTab.classList.remove('active');
+    registerTab.classList.remove('active');
+    loginPanel.classList.remove('active');
+    registerPanel.classList.remove('active');
+
+    if (tab === 'register') {
+        registerTab.classList.add('active');
+        registerPanel.classList.add('active');
+    } else {
+        loginTab.classList.add('active');
+        loginPanel.classList.add('active');
+    }
+}
+
+function toggleAccountMenu() {
+    document.getElementById('accountDropdown')?.classList.toggle('show');
+}
+
+window.addEventListener('click', function(e) {
+    const trigger = document.querySelector('.account-pill');
+    const dropdown = document.getElementById('accountDropdown');
+
+    if (dropdown && trigger && !trigger.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.remove('show');
+    }
+});

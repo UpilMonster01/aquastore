@@ -3,10 +3,10 @@ require "../config/db.php";
 
 $email = trim($_POST['email'] ?? '');
 $password = trim($_POST['password'] ?? '');
+$redirect = $_POST['redirect'] ?? '../index.php';
 
 $stmt = $pdo->prepare("SELECT * FROM pelanggan WHERE email = ?");
 $stmt->execute([$email]);
-
 $user = $stmt->fetch();
 
 if ($user && password_verify($password, $user['password'])) {
@@ -19,7 +19,7 @@ if ($user && password_verify($password, $user['password'])) {
     ];
 
     flash('success', 'Login berhasil.');
-    header("Location: ../index.php");
+    header("Location: " . $redirect);
     exit;
 }
 
