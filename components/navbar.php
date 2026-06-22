@@ -21,7 +21,7 @@
             <div class="account-menu">
                 <button class="account-pill" onclick="toggleAccountMenu()" type="button">
                     <span class="account-avatar">
-                        <?= strtoupper(substr($_SESSION['user']['nama'], 0, 1)) ?>
+                        <?= e(strtoupper(substr($_SESSION['user']['nama'], 0, 1))) ?>
                     </span>
 
                     <span class="account-name">
@@ -48,9 +48,15 @@
         <?php endif; ?>
 
         <?php
-        $jumlahKeranjang =
-            (!empty($_SESSION['keranjang']) ? count($_SESSION['keranjang']) : 0) +
-            (!empty($_SESSION['keranjang_perlengkapan']) ? count($_SESSION['keranjang_perlengkapan']) : 0);
+        $jumlahIkan = !empty($_SESSION['keranjang'])
+            ? array_sum($_SESSION['keranjang'])
+            : 0;
+
+        $jumlahPerlengkapan = !empty($_SESSION['keranjang_perlengkapan'])
+            ? array_sum($_SESSION['keranjang_perlengkapan'])
+            : 0;
+
+        $jumlahKeranjang = $jumlahIkan + $jumlahPerlengkapan;
         ?>
 
         <a href="/aquastore/pelanggan/keranjang.php" class="cart">

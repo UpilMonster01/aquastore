@@ -14,18 +14,6 @@ function closeModal(id) {
     document.getElementById(id)?.classList.remove('show');
 }
 
-window.addEventListener('click', function (e) {
-    const login = document.getElementById('loginModal');
-
-    if (e.target === login) {
-        closeLogin();
-    }
-
-    if (e.target.classList.contains('modal')) {
-        e.target.classList.remove('show');
-    }
-});
-
 function hitungTotal() {
     const pengiriman = document.getElementById('pengiriman');
     const subtotal = document.getElementById('subtotal');
@@ -50,6 +38,8 @@ function previewFoto(input) {
     if (!file) return;
 
     const area = input.closest('.upload-area');
+    if (!area) return;
+
     let preview = area.querySelector('.preview-image');
     const placeholder = area.querySelector('.upload-placeholder');
 
@@ -73,19 +63,18 @@ function previewFoto(input) {
     reader.readAsDataURL(file);
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    hitungTotal();
-});
-
 function openAuthDrawer(tab = 'login') {
     document.getElementById('authDrawer')?.classList.add('show');
     document.getElementById('authOverlay')?.classList.add('show');
+    document.body.classList.add('drawer-open');
+
     showAuthTab(tab);
 }
 
 function closeAuthDrawer() {
     document.getElementById('authDrawer')?.classList.remove('show');
     document.getElementById('authOverlay')?.classList.remove('show');
+    document.body.classList.remove('drawer-open');
 }
 
 function showAuthTab(tab) {
@@ -114,11 +103,57 @@ function toggleAccountMenu() {
     document.getElementById('accountDropdown')?.classList.toggle('show');
 }
 
-window.addEventListener('click', function(e) {
+function konfirmasiBatal(e) {
+    e.preventDefault();
+
+    if (confirm("Apakah Anda yakin ingin membatalkan checkout?")) {
+        window.location.href = "keranjang.php";
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    hitungTotal();
+
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.get('auth') === 'login') {
+        openAuthDrawer('login');
+    }
+
+    if (params.get('auth') === 'register') {
+        openAuthDrawer('register');
+    }
+});
+
+window.addEventListener('click', function (e) {
+    const login = document.getElementById('loginModal');
+
+    if (e.target === login) {
+        closeLogin();
+    }
+
+    if (e.target.classList.contains('modal')) {
+        e.target.classList.remove('show');
+    }
+
     const trigger = document.querySelector('.account-pill');
     const dropdown = document.getElementById('accountDropdown');
 
-    if (dropdown && trigger && !trigger.contains(e.target) && !dropdown.contains(e.target)) {
+    if (
+        dropdown &&
+        trigger &&
+        !trigger.contains(e.target) &&
+        !dropdown.contains(e.target)
+    ) {
         dropdown.classList.remove('show');
+    }
+});
+
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        closeAuthDrawer();
+
+        const dropdown = document.getElementById('accountDropdown');
+        dropdown?.classList.remove('show');
     }
 });

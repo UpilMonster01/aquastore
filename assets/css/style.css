@@ -2002,3 +2002,964 @@ td {
         max-width: 80px;
     }
 }
+
+body.drawer-open {
+    overflow: hidden;
+}
+
+.auth-overlay {
+    z-index: 3000;
+}
+
+.auth-drawer {
+    z-index: 3001;
+}
+
+.account-open-btn {
+    height: 42px;
+    padding: 0 14px;
+    border: 1px solid #dbeafe;
+    border-radius: 999px;
+    background: #f8fcff;
+    color: var(--text);
+    box-shadow: none;
+    font-size: 14px;
+}
+
+.account-open-btn span {
+    width: 28px;
+    height: 28px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    color: #fff;
+    font-size: 14px;
+}
+
+.account-open-btn b {
+    font-weight: 800;
+}
+
+.account-open-btn:hover {
+    background: #eef7ff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(22, 119, 255, .12);
+}
+
+.account-pill {
+    box-shadow: none;
+    border: 1px solid #dbeafe;
+    background: #f8fcff;
+}
+
+.account-pill:hover {
+    background: #eef7ff;
+}
+
+.account-dropdown {
+    z-index: 2500;
+}
+
+@media(max-width: 520px) {
+    .auth-drawer {
+        width: 100vw;
+        right: -100vw;
+        padding: 28px 22px;
+    }
+
+    .auth-drawer.show {
+        right: 0;
+    }
+
+    .auth-drawer-header h2 {
+        font-size: 24px;
+    }
+
+    .auth-logo {
+        width: 56px;
+        height: 56px;
+        font-size: 30px;
+    }
+}
+
+/* =========================
+   CUSTOMER PROFILE
+========================= */
+
+.profile-section {
+    min-height: 100vh;
+    padding: 150px 6% 80px;
+    background: var(--soft);
+}
+
+.profile-container {
+    max-width: 1150px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 28px;
+    align-items: flex-start;
+}
+
+.profile-card,
+.profile-side-card {
+    background: white;
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    padding: 30px;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.profile-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 22px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    color: white;
+    font-size: 34px;
+    font-weight: 900;
+    flex-shrink: 0;
+}
+
+.profile-header span {
+    color: var(--blue);
+    font-weight: 900;
+}
+
+.profile-header h1 {
+    margin: 4px 0;
+    font-size: 36px;
+}
+
+.profile-header p {
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-form label {
+    font-weight: 800;
+    color: var(--text);
+}
+
+.profile-form input,
+.profile-form textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #d5e8f1;
+    border-radius: 15px;
+    outline: none;
+    font-family: inherit;
+}
+
+.profile-form textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+.profile-form input:focus,
+.profile-form textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 4px rgba(22, 119, 255, .08);
+}
+
+.profile-form input[readonly] {
+    background: #f8fafc;
+    color: var(--muted);
+    cursor: not-allowed;
+}
+
+.profile-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.profile-side-card h3 {
+    margin-bottom: 20px;
+    color: var(--text);
+}
+
+.profile-info-item {
+    padding: 16px;
+    border-radius: 18px;
+    background: #f4fbff;
+    margin-bottom: 12px;
+}
+
+.profile-info-item span {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.profile-info-item b {
+    color: var(--text);
+    word-break: break-word;
+}
+
+.profile-order-btn {
+    width: 100%;
+    margin-top: 12px;
+}
+
+@media(max-width: 900px) {
+    .profile-container {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-actions {
+        flex-direction: column;
+    }
+
+    .profile-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+/* =========================
+   PESANAN SAYA
+========================= */
+
+.my-order-section {
+    min-height: 100vh;
+    padding: 150px 6% 80px;
+    background: var(--soft);
+}
+
+.my-order-section .section-title p {
+    max-width: 720px;
+    margin: 12px auto 0;
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.my-order-container {
+    max-width: 1050px;
+    margin: auto;
+    display: grid;
+    gap: 22px;
+}
+
+.my-order-card {
+    padding: 28px;
+    border-radius: 28px;
+    background: white;
+    box-shadow: var(--shadow);
+}
+
+.my-order-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.my-order-top span,
+.my-order-info span,
+.my-order-address span {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.my-order-top h3 {
+    color: var(--text);
+    font-size: 24px;
+}
+
+.my-order-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.my-order-info div,
+.my-order-address {
+    padding: 16px;
+    border-radius: 18px;
+    background: #f4fbff;
+}
+
+.my-order-info b {
+    color: var(--text);
+}
+
+.my-order-info .order-price {
+    color: var(--blue);
+    font-size: 18px;
+}
+
+.my-order-address p {
+    color: var(--text);
+    line-height: 1.7;
+}
+
+.my-order-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+@media(max-width: 900px) {
+    .my-order-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .my-order-info {
+        grid-template-columns: 1fr;
+    }
+
+    .my-order-actions {
+        justify-content: stretch;
+    }
+
+    .my-order-actions .hero-button {
+        width: 100%;
+    }
+}
+
+/* =========================
+   PESANAN SAYA - DETAIL ITEM
+========================= */
+
+.order-detail-box {
+    margin-top: 22px;
+    border-radius: 22px;
+    background: #f8fcff;
+    overflow: hidden;
+    border: 1px solid #e3f2ff;
+}
+
+.order-detail-box summary {
+    padding: 18px 20px;
+    cursor: pointer;
+    font-weight: 900;
+    color: var(--blue);
+    background: #eef7ff;
+    list-style: none;
+}
+
+.order-detail-box summary::-webkit-details-marker {
+    display: none;
+}
+
+.order-detail-box summary::after {
+    content: "＋";
+    float: right;
+    font-weight: 900;
+}
+
+.order-detail-box[open] summary::after {
+    content: "−";
+}
+
+.order-detail-group {
+    padding: 20px;
+}
+
+.order-detail-group h4 {
+    margin-bottom: 14px;
+    color: var(--text);
+}
+
+.order-product-list {
+    display: grid;
+    gap: 12px;
+}
+
+.order-product-item {
+    display: grid;
+    grid-template-columns: 72px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 18px;
+    background: white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .04);
+}
+
+.order-product-img {
+    width: 72px;
+    height: 68px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #eef7ff;
+}
+
+.order-product-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.order-product-img span {
+    font-size: 34px;
+}
+
+.order-product-info h5 {
+    color: var(--text);
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.order-product-info small {
+    display: inline-block;
+    margin-bottom: 5px;
+    color: var(--blue);
+    font-weight: 800;
+}
+
+.order-product-info p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.order-product-price {
+    color: var(--blue);
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.order-detail-total {
+    margin: 0 20px 20px;
+    padding: 18px;
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    border-radius: 18px;
+    background: white;
+    border: 2px dashed #d5e8f1;
+}
+
+.order-detail-total span {
+    color: var(--muted);
+    font-weight: 800;
+}
+
+.order-detail-total b {
+    color: var(--blue);
+    font-size: 20px;
+}
+
+.order-no-product {
+    margin: 20px;
+    padding: 18px;
+    border-radius: 18px;
+    background: white;
+    color: var(--muted);
+    text-align: center;
+    font-weight: 800;
+}
+
+.my-order-actions {
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.order-help-text {
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.order-help-text.success {
+    color: #16a34a;
+}
+
+@media(max-width: 700px) {
+    .order-product-item {
+        grid-template-columns: 64px 1fr;
+    }
+
+    .order-product-price {
+        grid-column: 1 / -1;
+        text-align: right;
+    }
+
+    .order-detail-total {
+        flex-direction: column;
+    }
+}
+
+/* =========================
+   ADMIN PESANAN DETAIL
+========================= */
+
+.admin-order-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.admin-order-filter select {
+    min-width: 180px;
+    padding: 13px;
+    border: 1px solid #d5e8f1;
+    border-radius: 15px;
+    outline: none;
+    font-family: inherit;
+    background: white;
+    font-weight: 800;
+}
+
+.order-admin-modal {
+    width: min(1050px, 96%);
+}
+
+.admin-order-number {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    border-radius: 16px;
+    background: #eef7ff;
+    color: var(--blue);
+    font-weight: 900;
+}
+
+.admin-order-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.admin-order-detail-grid div {
+    padding: 16px;
+    border-radius: 18px;
+    background: #f4fbff;
+}
+
+.admin-order-detail-grid .wide {
+    grid-column: span 3;
+}
+
+.admin-order-detail-grid span {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.admin-order-detail-grid b {
+    color: var(--text);
+    word-break: break-word;
+}
+
+.status-text {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 999px;
+    color: white !important;
+}
+
+.admin-detail-title {
+    margin: 26px 0 14px;
+    color: var(--text);
+}
+
+.small-table {
+    margin-bottom: 12px;
+}
+
+.admin-order-total-box {
+    margin-top: 24px;
+    padding: 20px;
+    border-radius: 20px;
+    background: #eef7ff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-order-total-box span {
+    color: var(--muted);
+    font-weight: 800;
+}
+
+.admin-order-total-box b {
+    color: var(--blue);
+    font-size: 24px;
+}
+
+@media(max-width: 900px) {
+    .admin-order-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admin-order-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-order-detail-grid .wide {
+        grid-column: span 1;
+    }
+
+    .admin-order-total-box {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+    }
+}
+
+/* =========================
+   UPLOAD BUKTI PEMBAYARAN
+========================= */
+
+.payment-proof-box {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 22px;
+    background: #f8fcff;
+    border: 1px solid #e3f2ff;
+}
+
+.payment-proof-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.payment-proof-header span {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.payment-proof-header h4 {
+    color: var(--text);
+    margin-top: 4px;
+}
+
+.payment-status {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 999px;
+    color: white !important;
+    font-size: 13px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.payment-unpaid {
+    background: #f59e0b;
+}
+
+.payment-waiting {
+    background: #3b82f6;
+}
+
+.payment-verified {
+    background: #16a34a;
+}
+
+.payment-rejected {
+    background: #ef4444;
+}
+
+.proof-current {
+    margin-bottom: 16px;
+}
+
+.proof-img {
+    max-width: 260px;
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+}
+
+.proof-file-link {
+    display: inline-flex;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: white;
+    color: var(--blue);
+    font-weight: 900;
+    box-shadow: 0 8px 20px rgba(0,0,0,.06);
+}
+
+.proof-upload-form {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+}
+
+.proof-upload-form input[type="file"] {
+    padding: 13px;
+    border: 1px dashed #b9d9f8;
+    border-radius: 15px;
+    background: white;
+}
+
+.proof-note {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.proof-note.success {
+    color: #16a34a;
+}
+
+.cod-box {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+@media(max-width: 760px) {
+    .payment-proof-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .proof-upload-form {
+        grid-template-columns: 1fr;
+    }
+
+    .proof-upload-form .hero-button {
+        width: 100%;
+    }
+
+    .proof-img {
+        max-width: 100%;
+    }
+}
+
+/* =========================
+   ADMIN BUKTI PEMBAYARAN
+========================= */
+
+.admin-payment-proof-box {
+    margin: 24px 0;
+    padding: 22px;
+    border-radius: 22px;
+    background: #f8fcff;
+    border: 1px solid #e3f2ff;
+}
+
+.admin-payment-proof-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.admin-payment-proof-header span {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.admin-payment-proof-header h3 {
+    color: var(--text);
+}
+
+.admin-proof-preview {
+    margin-bottom: 18px;
+}
+
+.admin-proof-img {
+    max-width: 320px;
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+}
+
+.admin-proof-empty {
+    padding: 18px;
+    border-radius: 18px;
+    background: white;
+    color: var(--muted);
+    font-weight: 800;
+    margin-bottom: 18px;
+}
+
+.admin-payment-form {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+}
+
+.admin-payment-form select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #d5e8f1;
+    border-radius: 15px;
+    outline: none;
+    font-family: inherit;
+    background: white;
+    font-weight: 800;
+}
+
+@media(max-width: 760px) {
+    .admin-payment-proof-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .admin-payment-form {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-payment-form .hero-button {
+        width: 100%;
+    }
+
+    .admin-proof-img {
+        max-width: 100%;
+    }
+}
+
+/* =========================
+   TRACKING PAYMENT STATUS
+========================= */
+
+.tracking-payment-box {
+    margin: 28px 0;
+    padding: 22px;
+    border-radius: 24px;
+    background: #f8fcff;
+    border: 1px solid #e3f2ff;
+}
+
+.tracking-payment-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.tracking-payment-header span {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.tracking-payment-header h3 {
+    color: var(--text);
+}
+
+.tracking-payment-note {
+    padding: 16px;
+    border-radius: 18px;
+    background: white;
+    color: var(--muted);
+    font-weight: 700;
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+.tracking-payment-note.success {
+    color: #16a34a;
+}
+
+.tracking-payment-note.rejected {
+    color: #ef4444;
+}
+
+.tracking-proof-preview {
+    margin-bottom: 16px;
+}
+
+.tracking-proof-img {
+    max-width: 280px;
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+}
+
+@media(max-width: 760px) {
+    .tracking-payment-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tracking-proof-img {
+        max-width: 100%;
+    }
+}
+
+/* =========================
+   CATATAN PEMBAYARAN
+========================= */
+
+.admin-payment-form-note {
+    grid-template-columns: 1fr;
+}
+
+.admin-payment-form-note textarea {
+    width: 100%;
+    min-height: 95px;
+    padding: 14px;
+    border: 1px solid #d5e8f1;
+    border-radius: 15px;
+    outline: none;
+    font-family: inherit;
+    resize: vertical;
+    background: white;
+}
+
+.admin-payment-form-note textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 4px rgba(22, 119, 255, .08);
+}
+
+.payment-reject-note {
+    margin: 14px 0 18px;
+    padding: 16px;
+    border-radius: 18px;
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    color: #991b1b;
+}
+
+.payment-reject-note b {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.payment-reject-note p {
+    line-height: 1.7;
+}
+
+.customer-note {
+    background: #fff7ed;
+    border-color: #fed7aa;
+    color: #9a3412;
+}

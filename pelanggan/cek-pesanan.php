@@ -1,50 +1,128 @@
 <?php
 require "../config/db.php";
 
+$nomor = trim($_GET['nomor'] ?? '');
 $pesanan = null;
 $detailIkan = [];
-$detailAlat = [];
+$detailPerlengkapan = [];
 
-if (!empty($_GET['nomor'])) {
-    $nomor = trim($_GET['nomor']);
-
-    $stmt = $pdo->prepare("SELECT * FROM pesanan WHERE nomor_pesanan = ?");
+if ($nomor !== '') {
+    $stmt = $pdo->prepare("
+        SELECT *
+        FROM pesanan
+        WHERE nomor_pesanan = ?
+        LIMIT 1
+    ");
     $stmt->execute([$nomor]);
     $pesanan = $stmt->fetch();
 
     if ($pesanan) {
-        $dIkan = $pdo->prepare("
-            SELECT dp.*, i.nama, i.foto
+        $stmtIkan = $pdo->prepare("
+            SELECT 
+                dp.*,
+                i.nama AS nama_ikan,
+                i.foto AS foto_ikan
             FROM detail_pesanan dp
-            JOIN ikan i ON dp.ikan_id = i.id
+            LEFT JOIN ikan i ON dp.ikan_id = i.id
             WHERE dp.pesanan_id = ?
         ");
-        $dIkan->execute([$pesanan['id']]);
-        $detailIkan = $dIkan->fetchAll();
+        $stmtIkan->execute([$pesanan['id']]);
+        $detailIkan = $stmtIkan->fetchAll();
 
-        $dAlat = $pdo->prepare("
-            SELECT dpp.*, p.nama, p.foto
+        $stmtPerlengkapan = $pdo->prepare("
+            SELECT 
+                dpp.*,
+                p.nama AS nama_perlengkapan,
+                p.foto AS foto_perlengkapan,
+                p.kategori AS kategori_perlengkapan
             FROM detail_pesanan_perlengkapan dpp
-            JOIN perlengkapan p ON dpp.perlengkapan_id = p.id
+            LEFT JOIN perlengkapan p ON dpp.perlengkapan_id = p.id
             WHERE dpp.pesanan_id = ?
         ");
-        $dAlat->execute([$pesanan['id']]);
-        $detailAlat = $dAlat->fetchAll();
+        $stmtPerlengkapan->execute([$pesanan['id']]);
+        $detailPerlengkapan = $stmtPerlengkapan->fetchAll();
     }
 }
 
-$jumlahKeranjang =
-    (!empty($_SESSION['keranjang']) ? count($_SESSION['keranjang']) : 0) +
-    (!empty($_SESSION['keranjang_perlengkapan']) ? count($_SESSION['keranjang_perlengkapan']) : 0);
+function status_class_tracking($status)
+{
+    $status = strtolower($status);
 
-$statusList = ['Pending', 'Diproses', 'Dikirim', 'Selesai'];
+    if ($status === 'pending') {
+        return 'status-pending';
+    }
+
+    if ($status === 'diproses') {
+        return 'status-diproses';
+    }
+
+    if ($status === 'dikirim') {
+        return 'status-dikirim';
+    }
+
+    if ($status === 'selesai') {
+        return 'status-selesai';
+    }
+
+    return 'status-pending';
+}
+
+function payment_status_class_tracking($status)
+{
+    $status = strtolower($status ?? 'belum bayar');
+
+    if ($status === 'belum bayar') {
+        return 'payment-unpaid';
+    }
+
+    if ($status === 'menunggu verifikasi') {
+        return 'payment-waiting';
+    }
+
+    if ($status === 'terverifikasi') {
+        return 'payment-verified';
+    }
+
+    if ($status === 'ditolak') {
+        return 'payment-rejected';
+    }
+
+    return 'payment-unpaid';
+}
+
+function is_active_step($currentStatus, $step)
+{
+    $urutan = [
+        'Pending' => 1,
+        'Diproses' => 2,
+        'Dikirim' => 3,
+        'Selesai' => 4
+    ];
+
+    return ($urutan[$currentStatus] ?? 1) >= ($urutan[$step] ?? 1);
+}
+
+function is_image_tracking($file)
+{
+    $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+    return in_array($ext, ['jpg', 'jpeg', 'png', 'webp'], true);
+}
+
+function tanggal_tracking($data)
+{
+    if (!empty($data['created_at'])) {
+        return date('d M Y H:i', strtotime($data['created_at']));
+    }
+
+    return '-';
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <title>Cek Pesanan - AquaStore</title>
-    <link rel="stylesheet" href="../assets/css/style.css?v=200">
+    <link rel="stylesheet" href="../assets/css/style.css?v=320">
 </head>
 <body>
 
@@ -52,34 +130,41 @@ $statusList = ['Pending', 'Diproses', 'Dikirim', 'Selesai'];
 
 <section class="checkout-section tracking-section">
     <div class="section-title">
-        <span>AquaStore Tracking</span>
+        <span>Tracking Pesanan</span>
         <h2>Cek Status Pesanan</h2>
-        <p>Masukkan nomor pesanan untuk melihat status dan detail pembelian kamu.</p>
+        <p>Masukkan nomor pesanan untuk melihat status pesanan, pembayaran, dan detail produk.</p>
     </div>
 
+    <?php show_flash(); ?>
+
     <form method="GET" class="tracking-form">
-        <input 
-            type="text" 
-            name="nomor" 
-            placeholder="Contoh: AQS-20260529-1234"
-            value="<?= e($_GET['nomor'] ?? '') ?>"
+        <input
+            type="text"
+            name="nomor"
+            placeholder="Contoh: AQS-20260622-1234"
+            value="<?= e($nomor) ?>"
             required
         >
 
-        <button>
-            🔍 Cek Pesanan
+        <button type="submit">
+            Cek Pesanan
         </button>
     </form>
 
-    <?php if (!empty($_GET['nomor']) && !$pesanan): ?>
+    <?php if ($nomor !== '' && !$pesanan): ?>
         <div class="tracking-empty">
-            <div>❌</div>
-            <h2>Pesanan tidak ditemukan</h2>
-            <p>Pastikan nomor pesanan sudah benar.</p>
+            <div>🔎</div>
+            <h2>Pesanan Tidak Ditemukan</h2>
+            <p>Nomor pesanan yang kamu masukkan belum terdaftar.</p>
         </div>
     <?php endif; ?>
 
     <?php if ($pesanan): ?>
+        <?php
+        $statusPembayaran = $pesanan['status_pembayaran'] ?? 'Belum Bayar';
+        $buktiPembayaran = $pesanan['bukti_pembayaran'] ?? '';
+        ?>
+
         <div class="tracking-card">
             <div class="tracking-header">
                 <div>
@@ -87,20 +172,31 @@ $statusList = ['Pending', 'Diproses', 'Dikirim', 'Selesai'];
                     <h2><?= e($pesanan['nomor_pesanan']) ?></h2>
                 </div>
 
-                <div class="status-badge status-<?= strtolower($pesanan['status']) ?>">
+                <div class="status-badge <?= status_class_tracking($pesanan['status']) ?>">
                     <?= e($pesanan['status']) ?>
                 </div>
             </div>
 
             <div class="tracking-timeline">
-                <?php foreach ($statusList as $s): 
-                    $active = array_search($s, $statusList) <= array_search($pesanan['status'], $statusList);
-                ?>
-                    <div class="timeline-step <?= $active ? 'active' : '' ?>">
-                        <div class="dot"></div>
-                        <span><?= $s ?></span>
-                    </div>
-                <?php endforeach; ?>
+                <div class="timeline-step <?= is_active_step($pesanan['status'], 'Pending') ? 'active' : '' ?>">
+                    <div class="dot"></div>
+                    Pending
+                </div>
+
+                <div class="timeline-step <?= is_active_step($pesanan['status'], 'Diproses') ? 'active' : '' ?>">
+                    <div class="dot"></div>
+                    Diproses
+                </div>
+
+                <div class="timeline-step <?= is_active_step($pesanan['status'], 'Dikirim') ? 'active' : '' ?>">
+                    <div class="dot"></div>
+                    Dikirim
+                </div>
+
+                <div class="timeline-step <?= is_active_step($pesanan['status'], 'Selesai') ? 'active' : '' ?>">
+                    <div class="dot"></div>
+                    Selesai
+                </div>
             </div>
 
             <div class="tracking-info-grid">
@@ -115,13 +211,30 @@ $statusList = ['Pending', 'Diproses', 'Dikirim', 'Selesai'];
                 </div>
 
                 <div>
-                    <b>Pengiriman</b>
+                    <b>Metode Pengiriman</b>
                     <span><?= e($pesanan['metode_pengiriman']) ?></span>
                 </div>
 
                 <div>
-                    <b>Pembayaran</b>
+                    <b>Metode Pembayaran</b>
                     <span><?= e($pesanan['metode_bayar']) ?></span>
+                </div>
+
+                <div>
+                    <b>Status Pembayaran</b>
+
+                    <?php if ($pesanan['metode_bayar'] === 'COD'): ?>
+                        <span class="payment-status payment-verified">COD</span>
+                    <?php else: ?>
+                        <span class="payment-status <?= payment_status_class_tracking($statusPembayaran) ?>">
+                            <?= e($statusPembayaran) ?>
+                        </span>
+                    <?php endif; ?>
+                </div>
+
+                <div>
+                    <b>Tanggal Pesanan</b>
+                    <span><?= tanggal_tracking($pesanan) ?></span>
                 </div>
 
                 <div class="wide">
@@ -129,64 +242,149 @@ $statusList = ['Pending', 'Diproses', 'Dikirim', 'Selesai'];
                     <span><?= e($pesanan['alamat']) ?></span>
                 </div>
 
-                <div>
-                    <b>Total</b>
+                <div class="wide">
+                    <b>Total Pembayaran</b>
                     <span class="total-price"><?= rupiah($pesanan['total_harga']) ?></span>
                 </div>
             </div>
 
-            <?php if (!empty($detailIkan)): ?>
+            <div class="tracking-payment-box">
+                <div class="tracking-payment-header">
+                    <div>
+                        <span>Pembayaran</span>
+                        <h3>Informasi Pembayaran</h3>
+                    </div>
+
+                    <?php if ($pesanan['metode_bayar'] === 'COD'): ?>
+                        <b class="payment-status payment-verified">COD</b>
+                    <?php else: ?>
+                        <b class="payment-status <?= payment_status_class_tracking($statusPembayaran) ?>">
+                            <?= e($statusPembayaran) ?>
+                        </b>
+                    <?php endif; ?>
+                </div>
+
+                <?php if ($pesanan['metode_bayar'] === 'COD'): ?>
+
+                    <p class="tracking-payment-note">
+                        Pesanan menggunakan metode COD. Pembayaran dilakukan saat pesanan diterima atau saat ambil sendiri di toko.
+                    </p>
+
+                <?php else: ?>
+
+                    <?php if ($statusPembayaran === 'Belum Bayar'): ?>
+                        <p class="tracking-payment-note">
+                            Pembayaran belum dikirim. Silakan upload bukti pembayaran melalui halaman <b>Pesanan Saya</b>.
+                        </p>
+                    <?php elseif ($statusPembayaran === 'Menunggu Verifikasi'): ?>
+                        <p class="tracking-payment-note">
+                            Bukti pembayaran sudah dikirim dan sedang menunggu verifikasi admin.
+                        </p>
+                    <?php elseif ($statusPembayaran === 'Terverifikasi'): ?>
+                        <p class="tracking-payment-note success">
+                            Pembayaran sudah diverifikasi oleh admin.
+                        </p>
+                    <?php elseif ($statusPembayaran === 'Ditolak'): ?>
+                        <p class="tracking-payment-note rejected">
+                            Bukti pembayaran ditolak. Silakan upload ulang bukti pembayaran yang benar melalui halaman Pesanan Saya.
+                        </p>
+                    <?php endif; ?>
+
+                    <?php if (!empty($buktiPembayaran)): ?>
+                        <div class="tracking-proof-preview">
+                            <?php if (is_image_tracking($buktiPembayaran)): ?>
+                                <a href="../uploads/bukti/<?= e($buktiPembayaran) ?>" target="_blank">
+                                    <img
+                                        src="../uploads/bukti/<?= e($buktiPembayaran) ?>"
+                                        alt="Bukti pembayaran"
+                                        class="tracking-proof-img"
+                                    >
+                                </a>
+                            <?php else: ?>
+                                <a
+                                    href="../uploads/bukti/<?= e($buktiPembayaran) ?>"
+                                    target="_blank"
+                                    class="proof-file-link"
+                                >
+                                    Lihat File Bukti Pembayaran
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (!empty($_SESSION['user']) && ($_SESSION['user']['id'] ?? null) == ($pesanan['pelanggan_id'] ?? null)): ?>
+                        <a href="pesanan-saya.php" class="mini-button">
+                            Upload / Kelola Bukti Pembayaran
+                        </a>
+                    <?php endif; ?>
+
+                <?php endif; ?>
+            </div>
+
+            <?php if ($detailIkan): ?>
                 <h3 class="tracking-subtitle">🐠 Ikan Hias</h3>
 
                 <div class="tracking-items">
                     <?php foreach ($detailIkan as $item): ?>
                         <div class="tracking-item">
                             <div class="tracking-img">
-                                <?php if (!empty($item['foto'])): ?>
-                                    <img src="../uploads/ikan/<?= e($item['foto']) ?>?v=<?= time() ?>">
+                                <?php if (!empty($item['foto_ikan'])): ?>
+                                    <img src="../uploads/ikan/<?= e($item['foto_ikan']) ?>" alt="<?= e($item['nama_ikan']) ?>">
                                 <?php else: ?>
                                     <span>🐠</span>
                                 <?php endif; ?>
                             </div>
 
                             <div>
-                                <h4><?= e($item['nama']) ?></h4>
-                                <p>Jumlah: <?= e($item['jumlah']) ?></p>
+                                <h4><?= e($item['nama_ikan'] ?: 'Produk ikan tidak ditemukan') ?></h4>
+                                <p><?= $item['jumlah'] ?> x <?= rupiah($item['harga_satuan']) ?></p>
                             </div>
 
-                            <b><?= rupiah($item['harga_satuan']) ?></b>
+                            <b><?= rupiah($item['jumlah'] * $item['harga_satuan']) ?></b>
                         </div>
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
 
-            <?php if (!empty($detailAlat)): ?>
-                <h3 class="tracking-subtitle">🛠️ Perlengkapan</h3>
+            <?php if ($detailPerlengkapan): ?>
+                <h3 class="tracking-subtitle">🛠️ Perlengkapan Aquarium</h3>
 
                 <div class="tracking-items">
-                    <?php foreach ($detailAlat as $item): ?>
+                    <?php foreach ($detailPerlengkapan as $item): ?>
                         <div class="tracking-item">
                             <div class="tracking-img">
-                                <?php if (!empty($item['foto'])): ?>
-                                    <img src="../uploads/perlengkapan/<?= e($item['foto']) ?>?v=<?= time() ?>">
+                                <?php if (!empty($item['foto_perlengkapan'])): ?>
+                                    <img src="../uploads/perlengkapan/<?= e($item['foto_perlengkapan']) ?>" alt="<?= e($item['nama_perlengkapan']) ?>">
                                 <?php else: ?>
                                     <span>🛠️</span>
                                 <?php endif; ?>
                             </div>
 
                             <div>
-                                <h4><?= e($item['nama']) ?></h4>
-                                <p>Jumlah: <?= e($item['jumlah']) ?></p>
+                                <h4><?= e($item['nama_perlengkapan'] ?: 'Produk tidak ditemukan') ?></h4>
+
+                                <?php if (!empty($item['kategori_perlengkapan'])): ?>
+                                    <p><?= e($item['kategori_perlengkapan']) ?></p>
+                                <?php endif; ?>
+
+                                <p><?= $item['jumlah'] ?> x <?= rupiah($item['harga_satuan']) ?></p>
                             </div>
 
-                            <b><?= rupiah($item['harga_satuan']) ?></b>
+                            <b><?= rupiah($item['jumlah'] * $item['harga_satuan']) ?></b>
                         </div>
                     <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (!$detailIkan && !$detailPerlengkapan): ?>
+                <div class="order-no-product">
+                    Detail produk tidak ditemukan.
                 </div>
             <?php endif; ?>
         </div>
     <?php endif; ?>
 </section>
 
+<script src="../assets/js/main.js"></script>
 </body>
 </html>
