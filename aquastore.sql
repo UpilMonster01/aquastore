@@ -1,102 +1,293 @@
 CREATE DATABASE IF NOT EXISTS aquastore;
 USE aquastore;
 
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TABLE IF EXISTS detail_pesanan_perlengkapan;
+DROP TABLE IF EXISTS detail_pesanan;
+DROP TABLE IF EXISTS pesanan;
+DROP TABLE IF EXISTS pelanggan;
+DROP TABLE IF EXISTS perlengkapan;
+DROP TABLE IF EXISTS ikan;
+DROP TABLE IF EXISTS tank;
+DROP TABLE IF EXISTS perawatan;
+DROP TABLE IF EXISTS pengeluaran;
+DROP TABLE IF EXISTS admin;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- =========================
+-- TABEL ADMIN
+-- =========================
+
 CREATE TABLE admin (
- id INT AUTO_INCREMENT PRIMARY KEY,
- username VARCHAR(50) NOT NULL UNIQUE,
- password VARCHAR(255) NOT NULL,
- nama VARCHAR(100) NOT NULL,
- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    nama VARCHAR(100) DEFAULT 'Administrator',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO admin (username,password,nama) VALUES
-('admin','$2y$10$e0MYzXyjpJS7Pd0RVvHwHeVh7iZqQ4ZrD8oMQMgBwldYyL4bNQ9Qa','Admin AquaStore');
--- login: admin / admin123
+INSERT INTO admin (username, password, nama)
+VALUES ('admin', 'admin123', 'Administrator AquaStore');
+
+-- =========================
+-- TABEL PELANGGAN
+-- =========================
+
+CREATE TABLE pelanggan (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    no_hp VARCHAR(30),
+    alamat TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- =========================
+-- TABEL IKAN
+-- =========================
 
 CREATE TABLE ikan (
- id INT AUTO_INCREMENT PRIMARY KEY,
- nama VARCHAR(100) NOT NULL,
- nama_latin VARCHAR(100),
- kategori_air ENUM('Laut','Tawar','Payau') NOT NULL,
- kategori_sifat ENUM('Predator','Non-Predator') NOT NULL,
- kategori_jenis ENUM('Hias','Konsumsi','Langka') NOT NULL,
- harga INT NOT NULL,
- stok INT NOT NULL,
- ukuran_cm DECIMAL(5,2),
- tingkat_perawatan ENUM('Mudah','Sedang','Sulit') NOT NULL,
- foto VARCHAR(255),
- deskripsi TEXT,
- status ENUM('Tersedia','Habis','Pre-order') DEFAULT 'Tersedia',
- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(100) NOT NULL,
+    jenis VARCHAR(100) NOT NULL,
+    harga INT NOT NULL DEFAULT 0,
+    stok INT NOT NULL DEFAULT 0,
+    ukuran VARCHAR(50),
+    tingkat_perawatan VARCHAR(50),
+    foto VARCHAR(255),
+    deskripsi TEXT,
+    tips_perawatan TEXT,
+    status ENUM('Tersedia','Habis') DEFAULT 'Tersedia',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE tank (
- id INT AUTO_INCREMENT PRIMARY KEY,
- nama VARCHAR(100) NOT NULL,
- ukuran_liter INT,
- jenis_air VARCHAR(50),
- suhu VARCHAR(50),
- ph VARCHAR(50),
- kapasitas INT,
- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- =========================
+-- TABEL PERLENGKAPAN
+-- =========================
+
+CREATE TABLE perlengkapan (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(100) NOT NULL,
+    kategori ENUM(
+        'Pakan',
+        'Filter',
+        'Aerator',
+        'Heater',
+        'Obat',
+        'Lampu',
+        'Substrate',
+        'Dekorasi',
+        'Lainnya'
+    ) NOT NULL,
+    harga INT NOT NULL DEFAULT 0,
+    stok INT NOT NULL DEFAULT 0,
+    foto VARCHAR(255),
+    deskripsi TEXT,
+    status ENUM('Tersedia','Habis') DEFAULT 'Tersedia',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- =========================
+-- TABEL PESANAN
+-- =========================
 
 CREATE TABLE pesanan (
- id INT AUTO_INCREMENT PRIMARY KEY,
- nomor_pesanan VARCHAR(50) NOT NULL UNIQUE,
- nama_pelanggan VARCHAR(100) NOT NULL,
- no_hp VARCHAR(30) NOT NULL,
- alamat TEXT NOT NULL,
- metode_pengiriman VARCHAR(50) NOT NULL,
- metode_bayar VARCHAR(50) NOT NULL,
- total_harga INT NOT NULL,
- status ENUM('Pending','Diproses','Dikirim','Selesai') DEFAULT 'Pending',
- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pelanggan_id INT NULL,
+    nomor_pesanan VARCHAR(50) NOT NULL UNIQUE,
+    nama_pelanggan VARCHAR(100) NOT NULL,
+    no_hp VARCHAR(30) NOT NULL,
+    alamat TEXT NOT NULL,
+    metode_pengiriman ENUM('Ambil Sendiri','Kurir') DEFAULT 'Ambil Sendiri',
+    metode_bayar ENUM('Transfer Bank','COD','QRIS') DEFAULT 'COD',
+    bukti_pembayaran VARCHAR(255) NULL,
+    status_pembayaran ENUM(
+        'Belum Bayar',
+        'Menunggu Verifikasi',
+        'Terverifikasi',
+        'Ditolak'
+    ) DEFAULT 'Belum Bayar',
+    catatan_pembayaran TEXT NULL,
+    total_harga INT NOT NULL DEFAULT 0,
+    status ENUM('Pending','Diproses','Dikirim','Selesai') DEFAULT 'Pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (pelanggan_id) REFERENCES pelanggan(id) ON DELETE SET NULL
 );
+
+-- =========================
+-- DETAIL PESANAN IKAN
+-- =========================
 
 CREATE TABLE detail_pesanan (
- id INT AUTO_INCREMENT PRIMARY KEY,
- pesanan_id INT NOT NULL,
- ikan_id INT NOT NULL,
- jumlah INT NOT NULL,
- harga_satuan INT NOT NULL,
- FOREIGN KEY (pesanan_id) REFERENCES pesanan(id) ON DELETE CASCADE,
- FOREIGN KEY (ikan_id) REFERENCES ikan(id) ON DELETE CASCADE
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pesanan_id INT NOT NULL,
+    ikan_id INT NOT NULL,
+    jumlah INT NOT NULL DEFAULT 1,
+    harga_satuan INT NOT NULL DEFAULT 0,
+    FOREIGN KEY (pesanan_id) REFERENCES pesanan(id) ON DELETE CASCADE,
+    FOREIGN KEY (ikan_id) REFERENCES ikan(id) ON DELETE CASCADE
 );
+
+-- =========================
+-- DETAIL PESANAN PERLENGKAPAN
+-- =========================
+
+CREATE TABLE detail_pesanan_perlengkapan (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pesanan_id INT NOT NULL,
+    perlengkapan_id INT NOT NULL,
+    jumlah INT NOT NULL DEFAULT 1,
+    harga_satuan INT NOT NULL DEFAULT 0,
+    FOREIGN KEY (pesanan_id) REFERENCES pesanan(id) ON DELETE CASCADE,
+    FOREIGN KEY (perlengkapan_id) REFERENCES perlengkapan(id) ON DELETE CASCADE
+);
+
+-- =========================
+-- TABEL TANK / AQUARIUM
+-- =========================
+
+CREATE TABLE tank (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nama VARCHAR(100) NOT NULL,
+    ukuran VARCHAR(100),
+    kapasitas VARCHAR(100),
+    harga INT DEFAULT 0,
+    stok INT DEFAULT 0,
+    foto VARCHAR(255),
+    deskripsi TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- =========================
+-- TABEL PERAWATAN
+-- =========================
 
 CREATE TABLE perawatan (
- id INT AUTO_INCREMENT PRIMARY KEY,
- tank_id INT,
- nama_kegiatan VARCHAR(150),
- jadwal DATE,
- status ENUM('Pending','Selesai') DEFAULT 'Pending',
- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    judul VARCHAR(150) NOT NULL,
+    kategori VARCHAR(100),
+    isi TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- =========================
+-- TABEL PENGELUARAN
+-- =========================
 
 CREATE TABLE pengeluaran (
- id INT AUTO_INCREMENT PRIMARY KEY,
- kategori ENUM('Pakan','Obat','Aksesori','Listrik','Lainnya'),
- keterangan TEXT,
- jumlah INT,
- tanggal DATE,
- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tanggal DATE NOT NULL,
+    kategori VARCHAR(100),
+    keterangan TEXT,
+    jumlah INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO ikan (nama,nama_latin,kategori_air,kategori_sifat,kategori_jenis,harga,stok,ukuran_cm,tingkat_perawatan,foto,deskripsi,status) VALUES
-('Cupang Halfmoon','Betta splendens','Tawar','Non-Predator','Hias',35000,20,5,'Mudah','','Cupang cantik cocok untuk pemula.','Tersedia'),
-('Arwana Super Red','Scleropages formosus','Tawar','Predator','Langka',2500000,3,25,'Sulit','','Ikan predator premium.','Tersedia'),
-('Oscar Tiger','Astronotus ocellatus','Tawar','Predator','Hias',85000,8,12,'Sedang','','Oscar aktif dan kuat.','Tersedia'),
-('Guppy Cobra','Poecilia reticulata','Tawar','Non-Predator','Hias',15000,30,3,'Mudah','','Guppy warna cerah.','Tersedia'),
-('Molly Balon','Poecilia sphenops','Payau','Non-Predator','Hias',12000,25,4,'Mudah','','Molly mudah dirawat.','Tersedia'),
-('Clownfish','Amphiprioninae','Laut','Non-Predator','Hias',180000,10,6,'Sedang','','Ikan laut populer.','Tersedia'),
-('Blue Tang','Paracanthurus hepatus','Laut','Non-Predator','Hias',350000,5,8,'Sulit','','Ikan laut biru cantik.','Tersedia'),
-('Louhan Cencu','Flowerhorn','Tawar','Predator','Hias',450000,4,15,'Sedang','','Louhan jenong premium.','Tersedia'),
-('Discus Red','Symphysodon','Tawar','Non-Predator','Hias',275000,6,10,'Sulit','','Discus elegan.','Tersedia'),
-('Koi Kohaku','Cyprinus rubrofuscus','Tawar','Non-Predator','Hias',125000,12,18,'Sedang','','Koi cocok untuk kolam.','Tersedia'),
-('Pacu Albino','Piaractus brachypomus','Tawar','Predator','Konsumsi',95000,7,10,'Sedang','','Pacu aktif dan besar.','Tersedia'),
-('Mandarin Fish','Synchiropus splendidus','Laut','Non-Predator','Langka',500000,2,5,'Sulit','','Ikan laut langka.','Pre-order');
+-- =========================
+-- DATA CONTOH IKAN
+-- =========================
 
-INSERT INTO tank (nama,ukuran_liter,jenis_air,suhu,ph,kapasitas) VALUES
-('Tank Predator',500,'Tawar','27-29 C','6.5-7.5',10),
-('Tank Laut Premium',300,'Laut','25-27 C','8.0-8.4',15),
-('Tank Komunitas',200,'Tawar','26-28 C','6.8-7.4',40);
+INSERT INTO ikan
+(nama, jenis, harga, stok, ukuran, tingkat_perawatan, foto, deskripsi, tips_perawatan, status)
+VALUES
+(
+    'Cupang Halfmoon',
+    'Cupang',
+    35000,
+    15,
+    'Kecil',
+    'Mudah',
+    NULL,
+    'Ikan cupang hias dengan sirip lebar dan warna menarik.',
+    'Gunakan air bersih, ganti air secara rutin, dan beri pakan secukupnya.',
+    'Tersedia'
+),
+(
+    'Guppy Red Dragon',
+    'Guppy',
+    25000,
+    20,
+    'Kecil',
+    'Mudah',
+    NULL,
+    'Ikan guppy dengan warna merah cerah dan aktif berenang.',
+    'Cocok dipelihara berkelompok. Gunakan filter lembut dan pakan kecil.',
+    'Tersedia'
+),
+(
+    'Koi Kohaku',
+    'Koi',
+    150000,
+    8,
+    'Sedang',
+    'Sedang',
+    NULL,
+    'Ikan koi dengan pola putih dan merah yang elegan.',
+    'Butuh kolam luas, oksigen cukup, dan kualitas air stabil.',
+    'Tersedia'
+);
+
+-- =========================
+-- DATA CONTOH PERLENGKAPAN
+-- =========================
+
+INSERT INTO perlengkapan
+(nama, kategori, harga, stok, foto, deskripsi, status)
+VALUES
+(
+    'Pakan Ikan Premium',
+    'Pakan',
+    20000,
+    30,
+    NULL,
+    'Pakan ikan hias untuk mendukung pertumbuhan dan warna ikan.',
+    'Tersedia'
+),
+(
+    'Filter Aquarium Mini',
+    'Filter',
+    45000,
+    12,
+    NULL,
+    'Filter aquarium untuk menjaga air tetap bersih dan sehat.',
+    'Tersedia'
+),
+(
+    'Aerator Aquarium',
+    'Aerator',
+    55000,
+    10,
+    NULL,
+    'Aerator untuk menambah oksigen dalam aquarium.',
+    'Tersedia'
+);
+
+-- =========================
+-- DATA CONTOH PERAWATAN
+-- =========================
+
+INSERT INTO perawatan (judul, kategori, isi)
+VALUES
+(
+    'Cara Mengganti Air Aquarium',
+    'Air',
+    'Ganti sebagian air aquarium secara rutin, sekitar 20-30 persen, agar ikan tidak stres.'
+),
+(
+    'Tips Memberi Pakan Ikan',
+    'Pakan',
+    'Berikan pakan secukupnya 1-2 kali sehari dan hindari pemberian pakan berlebihan.'
+);
+
+-- =========================
+-- INDEX TAMBAHAN
+-- =========================
+
+CREATE INDEX idx_pesanan_pelanggan ON pesanan(pelanggan_id);
+CREATE INDEX idx_pesanan_status ON pesanan(status);
+CREATE INDEX idx_pesanan_status_pembayaran ON pesanan(status_pembayaran);
+CREATE INDEX idx_detail_pesanan_id ON detail_pesanan(pesanan_id);
+CREATE INDEX idx_detail_perlengkapan_pesanan_id ON detail_pesanan_perlengkapan(pesanan_id);
