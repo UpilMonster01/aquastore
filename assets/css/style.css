@@ -2963,3 +2963,64 @@ body.drawer-open {
     border-color: #fed7aa;
     color: #9a3412;
 }
+
+/* =========================
+   ACTIVE NAVBAR MENU
+========================= */
+
+.nav-link {
+    position: relative;
+    transition: .25s ease;
+}
+
+.nav-link.active {
+    color: var(--blue) !important;
+    font-weight: 900;
+}
+
+.nav-link.active::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -8px;
+    transform: translateX(-50%);
+    width: 28px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--blue);
+}
+
+.nav-link.active::before {
+    content: "";
+    position: absolute;
+    inset: -8px -13px;
+    border-radius: 999px;
+    background: rgba(22, 119, 255, .09);
+    z-index: -1;
+}
+
+.cart-link.active {
+    color: var(--blue) !important;
+}
+
+.account-button.account-active {
+    background: rgba(22, 119, 255, .10);
+    color: var(--blue);
+    border-color: rgba(22, 119, 255, .25);
+}
+
+.account-menu a.active {
+    color: var(--blue);
+    background: rgba(22, 119, 255, .09);
+    font-weight: 900;
+}
+
+@media(max-width: 768px) {
+    .nav-link.active::after {
+        bottom: -4px;
+    }
+
+    .nav-link.active::before {
+        inset: -6px -10px;
+    }
+}

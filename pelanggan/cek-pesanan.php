@@ -122,7 +122,7 @@ function tanggal_tracking($data)
 <head>
     <meta charset="UTF-8">
     <title>Cek Pesanan - AquaStore</title>
-    <link rel="stylesheet" href="../assets/css/style.css?v=320">
+    <link rel="stylesheet" href="../assets/css/style.css?v=340">
 </head>
 <body>
 
@@ -163,6 +163,7 @@ function tanggal_tracking($data)
         <?php
         $statusPembayaran = $pesanan['status_pembayaran'] ?? 'Belum Bayar';
         $buktiPembayaran = $pesanan['bukti_pembayaran'] ?? '';
+        $catatanPembayaran = $pesanan['catatan_pembayaran'] ?? '';
         ?>
 
         <div class="tracking-card">
@@ -276,18 +277,28 @@ function tanggal_tracking($data)
                         <p class="tracking-payment-note">
                             Pembayaran belum dikirim. Silakan upload bukti pembayaran melalui halaman <b>Pesanan Saya</b>.
                         </p>
+
                     <?php elseif ($statusPembayaran === 'Menunggu Verifikasi'): ?>
                         <p class="tracking-payment-note">
                             Bukti pembayaran sudah dikirim dan sedang menunggu verifikasi admin.
                         </p>
+
                     <?php elseif ($statusPembayaran === 'Terverifikasi'): ?>
                         <p class="tracking-payment-note success">
                             Pembayaran sudah diverifikasi oleh admin.
                         </p>
+
                     <?php elseif ($statusPembayaran === 'Ditolak'): ?>
                         <p class="tracking-payment-note rejected">
                             Bukti pembayaran ditolak. Silakan upload ulang bukti pembayaran yang benar melalui halaman Pesanan Saya.
                         </p>
+
+                        <?php if (!empty($catatanPembayaran)): ?>
+                            <div class="payment-reject-note customer-note">
+                                <b>Alasan Penolakan:</b>
+                                <p><?= e($catatanPembayaran) ?></p>
+                            </div>
+                        <?php endif; ?>
                     <?php endif; ?>
 
                     <?php if (!empty($buktiPembayaran)): ?>
