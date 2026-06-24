@@ -1,3 +1,23 @@
+<?php
+$baseUrl = '/aquastore';
+$currentFile = basename($_SERVER['PHP_SELF'] ?? 'index.php');
+
+function nav_active($files)
+{
+    global $currentFile;
+
+    if (!is_array($files)) {
+        $files = [$files];
+    }
+
+    return in_array($currentFile, $files, true) ? 'active' : '';
+}
+
+$jumlahIkan = !empty($_SESSION['keranjang']) ? array_sum($_SESSION['keranjang']) : 0;
+$jumlahPerlengkapan = !empty($_SESSION['keranjang_perlengkapan']) ? array_sum($_SESSION['keranjang_perlengkapan']) : 0;
+$jumlahKeranjang = $jumlahIkan + $jumlahPerlengkapan;
+?>
+
 <header class="topbar">
     <div class="brand">
         <div class="brand-icon">🐟</div>
@@ -8,33 +28,51 @@
     </div>
 
     <nav class="menu">
-        <a href="/aquastore/index.php">Beranda</a>
-        <a href="/aquastore/pelanggan/katalog.php">Katalog</a>
-        <a href="/aquastore/pelanggan/perawatan.php">Perlengkapan</a>
-        <a href="/aquastore/pelanggan/cek-pesanan.php">Cek Pesanan</a>
+        <a href="<?= $baseUrl ?>/index.php" class="<?= nav_active('index.php') ?>">
+            Beranda
+        </a>
+
+        <a href="<?= $baseUrl ?>/pelanggan/katalog.php" class="<?= nav_active(['katalog.php', 'detail.php']) ?>">
+            Katalog
+        </a>
+
+        <a href="<?= $baseUrl ?>/pelanggan/perawatan.php" class="<?= nav_active('perawatan.php') ?>">
+            Perlengkapan
+        </a>
+
+        <a href="<?= $baseUrl ?>/pelanggan/cek-pesanan.php" class="<?= nav_active('cek-pesanan.php') ?>">
+            Cek Pesanan
+        </a>
     </nav>
 
     <div class="header-actions">
-
         <?php if (!empty($_SESSION['user'])): ?>
 
             <div class="account-menu">
-                <button class="account-pill" onclick="toggleAccountMenu()" type="button">
+                <button class="account-pill" onclick="toggleAccountMenu(event)" type="button">
                     <span class="account-avatar">
-                        <?= e(strtoupper(substr($_SESSION['user']['nama'], 0, 1))) ?>
+                        <?= e(strtoupper(substr($_SESSION['user']['nama'] ?? 'U', 0, 1))) ?>
                     </span>
 
                     <span class="account-name">
-                        <?= e($_SESSION['user']['nama']) ?>
+                        <?= e($_SESSION['user']['nama'] ?? 'User') ?>
                     </span>
 
                     <span class="account-arrow">▾</span>
                 </button>
 
                 <div class="account-dropdown" id="accountDropdown">
-                    <a href="/aquastore/pelanggan/profil.php">Profil Saya</a>
-                    <a href="/aquastore/pelanggan/pesanan-saya.php">Pesanan Saya</a>
-                    <a href="/aquastore/pelanggan/logout.php" class="danger-link">Logout</a>
+                    <a href="<?= $baseUrl ?>/pelanggan/profil.php" class="<?= nav_active('profil.php') ?>">
+                        Profil Saya
+                    </a>
+
+                    <a href="<?= $baseUrl ?>/pelanggan/pesanan-saya.php" class="<?= nav_active('pesanan-saya.php') ?>">
+                        Pesanan Saya
+                    </a>
+
+                    <a href="<?= $baseUrl ?>/pelanggan/logout.php" class="danger-link">
+                        Logout
+                    </a>
                 </div>
             </div>
 
@@ -47,19 +85,7 @@
 
         <?php endif; ?>
 
-        <?php
-        $jumlahIkan = !empty($_SESSION['keranjang'])
-            ? array_sum($_SESSION['keranjang'])
-            : 0;
-
-        $jumlahPerlengkapan = !empty($_SESSION['keranjang_perlengkapan'])
-            ? array_sum($_SESSION['keranjang_perlengkapan'])
-            : 0;
-
-        $jumlahKeranjang = $jumlahIkan + $jumlahPerlengkapan;
-        ?>
-
-        <a href="/aquastore/pelanggan/keranjang.php" class="cart">
+        <a href="<?= $baseUrl ?>/pelanggan/keranjang.php" class="cart">
             🛒
 
             <?php if ($jumlahKeranjang > 0): ?>
@@ -95,8 +121,8 @@
     </div>
 
     <div class="auth-panel active" id="loginPanel">
-        <form action="/aquastore/proses/login-user.php" method="POST">
-            <input type="hidden" name="redirect" value="<?= e($_SERVER['REQUEST_URI'] ?? '/aquastore/index.php') ?>">
+        <form action="<?= $baseUrl ?>/proses/login-user.php" method="POST">
+            <input type="hidden" name="redirect" value="<?= e($_SERVER['REQUEST_URI'] ?? $baseUrl . '/index.php') ?>">
 
             <label>Email</label>
             <input type="email" name="email" placeholder="email@example.com" required>
@@ -111,13 +137,15 @@
 
         <p class="auth-switch-text">
             Belum punya akun?
-            <button type="button" onclick="showAuthTab('register')">Daftar di sini</button>
+            <button type="button" onclick="showAuthTab('register')">
+                Daftar di sini
+            </button>
         </p>
     </div>
 
     <div class="auth-panel" id="registerPanel">
-        <form action="/aquastore/proses/register-user.php" method="POST">
-            <input type="hidden" name="redirect" value="<?= e($_SERVER['REQUEST_URI'] ?? '/aquastore/index.php') ?>">
+        <form action="<?= $baseUrl ?>/proses/register-user.php" method="POST">
+            <input type="hidden" name="redirect" value="<?= e($_SERVER['REQUEST_URI'] ?? $baseUrl . '/index.php') ?>">
 
             <label>Nama Lengkap</label>
             <input type="text" name="nama" placeholder="Nama lengkap" required>
@@ -141,9 +169,96 @@
 
         <p class="auth-switch-text">
             Sudah punya akun?
-            <button type="button" onclick="showAuthTab('login')">Masuk di sini</button>
+            <button type="button" onclick="showAuthTab('login')">
+                Masuk di sini
+            </button>
         </p>
     </div>
 </aside>
 
 <?php endif; ?>
+
+<script>
+/* =========================
+   FALLBACK AUTH + ACCOUNT MENU
+   Supaya tombol Akun tetap jalan walau main.js tidak kebaca
+========================= */
+
+window.openAuthDrawer = function (tab = 'login') {
+    const overlay = document.getElementById('authOverlay');
+    const drawer = document.getElementById('authDrawer');
+
+    if (overlay) {
+        overlay.classList.add('show');
+    }
+
+    if (drawer) {
+        drawer.classList.add('show');
+    }
+
+    document.body.classList.add('drawer-open');
+
+    showAuthTab(tab);
+};
+
+window.closeAuthDrawer = function () {
+    const overlay = document.getElementById('authOverlay');
+    const drawer = document.getElementById('authDrawer');
+
+    if (overlay) {
+        overlay.classList.remove('show');
+    }
+
+    if (drawer) {
+        drawer.classList.remove('show');
+    }
+
+    document.body.classList.remove('drawer-open');
+};
+
+window.showAuthTab = function (tab) {
+    const loginTab = document.getElementById('loginTab');
+    const registerTab = document.getElementById('registerTab');
+    const loginPanel = document.getElementById('loginPanel');
+    const registerPanel = document.getElementById('registerPanel');
+
+    if (loginTab) loginTab.classList.remove('active');
+    if (registerTab) registerTab.classList.remove('active');
+    if (loginPanel) loginPanel.classList.remove('active');
+    if (registerPanel) registerPanel.classList.remove('active');
+
+    if (tab === 'register') {
+        if (registerTab) registerTab.classList.add('active');
+        if (registerPanel) registerPanel.classList.add('active');
+    } else {
+        if (loginTab) loginTab.classList.add('active');
+        if (loginPanel) loginPanel.classList.add('active');
+    }
+};
+
+window.toggleAccountMenu = function (event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
+    const dropdown = document.getElementById('accountDropdown');
+
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+    }
+};
+
+document.addEventListener('click', function (event) {
+    const dropdown = document.getElementById('accountDropdown');
+    const pill = document.querySelector('.account-pill');
+
+    if (!dropdown || !pill) {
+        return;
+    }
+
+    if (!pill.contains(event.target) && !dropdown.contains(event.target)) {
+        dropdown.classList.remove('show');
+    }
+});
+</script>

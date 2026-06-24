@@ -3024,3 +3024,130 @@ body.drawer-open {
         inset: -6px -10px;
     }
 }
+
+/* =========================
+   ACTIVE HEADER SIMPLE
+========================= */
+
+.nav-menu a.active-page,
+.nav-links a.active-page,
+.navbar-menu a.active-page,
+.navbar nav a.active-page,
+header nav a.active-page,
+.account-menu a.active-page {
+    color: var(--blue, #1677ff) !important;
+    font-weight: 900 !important;
+    border-bottom: 3px solid var(--blue, #1677ff);
+    padding-bottom: 5px;
+}
+
+.account-menu a.active-page {
+    border-bottom: none;
+    background: rgba(22, 119, 255, .10);
+    border-radius: 12px;
+}
+
+/* =========================
+   FIX ACCOUNT MENU SHOW
+========================= */
+
+.account-menu.show {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    z-index: 9999 !important;
+}
+
+/* =========================
+   FIX ACCOUNT DROPDOWN FINAL
+========================= */
+
+.topbar,
+.header-actions,
+.account-menu {
+    overflow: visible !important;
+}
+
+.account-menu {
+    position: relative !important;
+    z-index: 9999 !important;
+}
+
+.account-dropdown {
+    z-index: 999999 !important;
+}
+
+.account-dropdown.show {
+    display: block !important;
+}
+
+.account-dropdown a.active {
+    background: #f4fbff;
+    color: var(--blue);
+    font-weight: 900;
+}
+
+/* =========================
+   FIX ACTIVE MENU SERAGAM
+========================= */
+
+.menu a.active,
+.menu a.active-page,
+.menu a.nav-active-page,
+.menu a.aq-final-active,
+.menu a.aq-nav-active {
+    color: var(--blue, #1677ff) !important;
+    font-weight: 900 !important;
+    border-bottom: none !important;
+    padding-bottom: 0 !important;
+    transform: none !important;
+    position: relative !important;
+}
+
+.menu a.active::after,
+.menu a.active-page::after,
+.menu a.nav-active-page::after,
+.menu a.aq-final-active::after,
+.menu a.aq-nav-active::after {
+    content: "" !important;
+    position: absolute !important;
+    left: 50% !important;
+    bottom: -10px !important;
+    transform: translateX(-50%) !important;
+    width: 68px !important;
+    height: 3px !important;
+    border-radius: 999px !important;
+    background: var(--blue, #1677ff) !important;
+    display: block !important;
+}
+
+.menu a {
+    text-decoration: none !important;
+}
+
+/* =========================
+   FIX AKUN DROPDOWN
+========================= */
+
+.topbar,
+.header-actions,
+.account-menu {
+    overflow: visible !important;
+}
+
+.account-menu {
+    position: relative !important;
+    z-index: 99999 !important;
+}
+
+.account-dropdown {
+    z-index: 999999 !important;
+}
+
+.account-dropdown.show {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}

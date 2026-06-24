@@ -99,7 +99,12 @@ function showAuthTab(tab) {
     }
 }
 
-function toggleAccountMenu() {
+function toggleAccountMenu(event) {
+    if (event) {
+        event.preventDefault();
+        event.stopPropagation();
+    }
+
     document.getElementById('accountDropdown')?.classList.toggle('show');
 }
 
@@ -156,4 +161,48 @@ document.addEventListener('keydown', function (e) {
         const dropdown = document.getElementById('accountDropdown');
         dropdown?.classList.remove('show');
     }
+});
+
+/* =========================
+   ACTIVE MENU HEADER
+========================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+    const currentFile = window.location.pathname.split("/").pop() || "index.php";
+
+    const activeGroups = {
+        "index.php": ["index.php", ""],
+        "katalog.php": ["katalog.php", "detail.php"],
+        "perawatan.php": ["perawatan.php"],
+        "cek-pesanan.php": ["cek-pesanan.php"],
+        "keranjang.php": ["keranjang.php", "checkout.php"],
+        "profil.php": ["profil.php"],
+        "pesanan-saya.php": ["pesanan-saya.php"]
+    };
+
+    const menuLinks = document.querySelectorAll(
+        ".nav-menu a, .nav-links a, .navbar-menu a, .navbar nav a, header nav a, .account-menu a"
+    );
+
+    menuLinks.forEach(function (link) {
+        const href = link.getAttribute("href");
+
+        if (!href || href.startsWith("#") || href.startsWith("javascript:")) {
+            return;
+        }
+
+        let linkFile = href.split("?")[0].split("/").pop();
+
+        if (linkFile === "") {
+            linkFile = "index.php";
+        }
+
+        Object.keys(activeGroups).forEach(function (mainFile) {
+            const group = activeGroups[mainFile];
+
+            if (group.includes(currentFile) && group.includes(linkFile)) {
+                link.classList.add("active-page");
+            }
+        });
+    });
 });
