@@ -1,29 +1,40 @@
 <?php require "../config/db.php"; ?>
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Login Pelanggan - AquaStore</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
+
 <body>
 
-<section class="checkout-section">
-    <div class="login-box" style="margin:auto;">
-        <h2>Login Pelanggan</h2>
+    <section class="auth-section">
+        <div class="auth-card">
+            <div class="auth-icon">🐟</div>
 
-        <?php show_flash(); ?>
+            <h1>Login AquaStore</h1>
+            <p>Masuk untuk checkout lebih cepat dan melihat pesananmu.</p>
 
-        <form action="../proses/login-user.php" method="POST">
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Password" required>
+            <?php show_flash(); ?>
 
-            <button class="login-button">Login</button>
-        </form>
+            <form action="../proses/login-user.php" method="POST">
+                <input type="email" name="email" placeholder="Masukkan email" required>
+                <input type="password" name="password" placeholder="Masukkan password" required>
 
-        <p>Belum punya akun? <a href="register.php">Daftar</a></p>
-    </div>
-</section>
+                <button class="login-button full-button">
+                    Login Sekarang
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                Belum punya akun?
+                <a href="register.php">Daftar di sini</a>
+            </div>
+        </div>
+    </section>
 
 </body>
+
 </html>
