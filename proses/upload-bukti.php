@@ -7,36 +7,23 @@ if (empty($_SESSION['user'])) {
     exit;
 }
 
-$userId = $_SESSION['user']['id'];
-$pesananId = (int)($_POST['pesanan_id'] ?? 0);
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: ../pelanggan/pesanan-saya.php");
+    exit;
+}
 
-if ($pesananId <= 0) {
+csrf_check();
+
+$userId = (int) ($_SESSION['user']['id'] ?? 0);
+$pesananId = (int) ($_POST['pesanan_id'] ?? 0);
+
+if ($userId <= 0 || $pesananId <= 0) {
     flash('error', 'Pesanan tidak valid.');
     header("Location: ../pelanggan/pesanan-saya.php");
     exit;
 }
 
-$stmt = $pdo->prepare("
-    SELECT *
-    FROM pesanan
-    WHERE id = ? AND pelanggan_id = ?
-");
-$stmt->execute([$pesananId, $userId]);
-$pesanan = $stmt->fetch();
-
-if (!$pesanan) {
-    flash('error', 'Pesanan tidak ditemukan.');
-    header("Location: ../pelanggan/pesanan-saya.php");
-    exit;
-}
-
-if ($pesanan['metode_bayar'] === 'COD') {
-    flash('error', 'Pesanan COD tidak perlu upload bukti pembayaran.');
-    header("Location: ../pelanggan/pesanan-saya.php");
-    exit;
-}
-
-if (empty($_FILES['bukti']['name'])) {
+if (!isset($_FILES['bukti'])) {
     flash('error', 'Silakan pilih file bukti pembayaran.');
     header("Location: ../pelanggan/pesanan-saya.php");
     exit;
@@ -44,66 +31,329 @@ if (empty($_FILES['bukti']['name'])) {
 
 $file = $_FILES['bukti'];
 
-if ($file['error'] !== UPLOAD_ERR_OK) {
-    flash('error', 'Upload gagal. Silakan coba lagi.');
+$pesanUpload = [
+    UPLOAD_ERR_INI_SIZE =>
+        'Ukuran file melebihi batas server.',
+
+    UPLOAD_ERR_FORM_SIZE =>
+        'Ukuran file melebihi batas formulir.',
+
+    UPLOAD_ERR_PARTIAL =>
+        'File hanya terunggah sebagian.',
+
+    UPLOAD_ERR_NO_FILE =>
+        'Silakan pilih file bukti pembayaran.',
+
+    UPLOAD_ERR_NO_TMP_DIR =>
+        'Folder sementara server tidak tersedia.',
+
+    UPLOAD_ERR_CANT_WRITE =>
+        'Server gagal menyimpan file.',
+
+    UPLOAD_ERR_EXTENSION =>
+        'Upload dihentikan oleh ekstensi PHP.'
+];
+
+$kodeError = $file['error'] ?? UPLOAD_ERR_NO_FILE;
+
+if ($kodeError !== UPLOAD_ERR_OK) {
+    flash(
+        'error',
+        $pesanUpload[$kodeError]
+            ?? 'Upload gagal. Silakan coba kembali.'
+    );
+
     header("Location: ../pelanggan/pesanan-saya.php");
     exit;
 }
 
 $maxSize = 2 * 1024 * 1024;
+$ukuranFile = (int) ($file['size'] ?? 0);
 
-if ($file['size'] > $maxSize) {
-    flash('error', 'Ukuran file maksimal 2 MB.');
+if ($ukuranFile <= 0 || $ukuranFile > $maxSize) {
+    flash(
+        'error',
+        'Ukuran file harus lebih dari 0 dan maksimal 2 MB.'
+    );
+
     header("Location: ../pelanggan/pesanan-saya.php");
     exit;
 }
 
-$allowedExt = ['jpg', 'jpeg', 'png', 'webp', 'pdf'];
-$ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-
-if (!in_array($ext, $allowedExt, true)) {
-    flash('error', 'Format file harus JPG, JPEG, PNG, WEBP, atau PDF.');
+if (
+    empty($file['tmp_name']) ||
+    !is_uploaded_file($file['tmp_name'])
+) {
+    flash('error', 'File upload tidak valid.');
     header("Location: ../pelanggan/pesanan-saya.php");
     exit;
 }
 
-$uploadDir = "../uploads/bukti/";
+if (!class_exists('finfo')) {
+    flash(
+        'error',
+        'Fitur pemeriksaan file belum aktif pada server.'
+    );
 
-if (!is_dir($uploadDir)) {
-    mkdir($uploadDir, 0777, true);
-}
-
-$namaFile = "bukti_" . $pesananId . "_" . time() . "." . $ext;
-$target = $uploadDir . $namaFile;
-
-if (!move_uploaded_file($file['tmp_name'], $target)) {
-    flash('error', 'File gagal disimpan.');
     header("Location: ../pelanggan/pesanan-saya.php");
     exit;
 }
 
-if (!empty($pesanan['bukti_pembayaran'])) {
-    $oldFile = $uploadDir . $pesanan['bukti_pembayaran'];
+/*
+ * Memeriksa tipe file berdasarkan isi asli file,
+ * bukan hanya ekstensi nama file.
+ */
+$finfo = new finfo(FILEINFO_MIME_TYPE);
+$mime = $finfo->file($file['tmp_name']);
 
-    if (file_exists($oldFile)) {
-        unlink($oldFile);
+$allowedMime = [
+    'image/jpeg' => 'jpg',
+    'image/png' => 'png',
+    'image/webp' => 'webp',
+    'application/pdf' => 'pdf',
+    'application/x-pdf' => 'pdf'
+];
+
+if (!isset($allowedMime[$mime])) {
+    flash(
+        'error',
+        'Format file harus JPG, PNG, WEBP, atau PDF yang valid.'
+    );
+
+    header("Location: ../pelanggan/pesanan-saya.php");
+    exit;
+}
+
+$ext = $allowedMime[$mime];
+
+/*
+ * Memastikan file gambar benar-benar dapat dibaca
+ * sebagai gambar.
+ */
+if (strpos($mime, 'image/') === 0) {
+    $infoGambar = @getimagesize($file['tmp_name']);
+
+    if ($infoGambar === false) {
+        flash(
+            'error',
+            'File gambar tidak valid atau rusak.'
+        );
+
+        header("Location: ../pelanggan/pesanan-saya.php");
+        exit;
     }
 }
 
-$update = $pdo->prepare("
-    UPDATE pesanan
-    SET bukti_pembayaran = ?,
-        status_pembayaran = 'Menunggu Verifikasi',
-        catatan_pembayaran = NULL
-    WHERE id = ? AND pelanggan_id = ?
-");
+/*
+ * Memastikan file PDF memiliki signature PDF.
+ */
+if ($ext === 'pdf') {
+    $handle = @fopen($file['tmp_name'], 'rb');
+    $signature = $handle ? fread($handle, 5) : false;
 
-$update->execute([
-    $namaFile,
-    $pesananId,
-    $userId
-]);
+    if ($handle) {
+        fclose($handle);
+    }
 
-flash('success', 'Bukti pembayaran berhasil diupload. Admin akan memverifikasi pembayaran kamu.');
-header("Location: ../pelanggan/pesanan-saya.php");
-exit;
+    if ($signature !== '%PDF-') {
+        flash(
+            'error',
+            'File PDF tidak valid atau rusak.'
+        );
+
+        header("Location: ../pelanggan/pesanan-saya.php");
+        exit;
+    }
+}
+
+$uploadDir = __DIR__ . '/../uploads/bukti/';
+
+if (
+    !is_dir($uploadDir) &&
+    !mkdir($uploadDir, 0755, true)
+) {
+    flash(
+        'error',
+        'Folder penyimpanan bukti tidak dapat dibuat.'
+    );
+
+    header("Location: ../pelanggan/pesanan-saya.php");
+    exit;
+}
+
+/*
+ * Nama file dibuat acak agar tidak bertabrakan
+ * dan tidak menggunakan nama asli dari pengguna.
+ */
+$namaFile =
+    'bukti_' .
+    $pesananId .
+    '_' .
+    bin2hex(random_bytes(16)) .
+    '.' .
+    $ext;
+
+$targetBaru = $uploadDir . $namaFile;
+
+$fileBaruTersimpan = false;
+$fileLama = '';
+
+try {
+    $pdo->beginTransaction();
+
+    /*
+     * Mengunci data pesanan selama proses upload
+     * dan pembaruan database berlangsung.
+     */
+    $stmt = $pdo->prepare("
+        SELECT
+            id,
+            metode_bayar,
+            bukti_pembayaran,
+            status_pembayaran
+        FROM pesanan
+        WHERE id = ?
+          AND pelanggan_id = ?
+        LIMIT 1
+        FOR UPDATE
+    ");
+
+    $stmt->execute([
+        $pesananId,
+        $userId
+    ]);
+
+    $pesanan = $stmt->fetch();
+
+    if (!$pesanan) {
+        throw new DomainException(
+            'Pesanan tidak ditemukan.'
+        );
+    }
+
+    if ($pesanan['metode_bayar'] === 'COD') {
+        throw new DomainException(
+            'Pesanan COD tidak memerlukan bukti pembayaran.'
+        );
+    }
+
+    if (
+        $pesanan['status_pembayaran']
+        === 'Terverifikasi'
+    ) {
+        throw new DomainException(
+            'Pembayaran sudah diverifikasi dan bukti tidak dapat diganti.'
+        );
+    }
+
+    if (
+        !move_uploaded_file(
+            $file['tmp_name'],
+            $targetBaru
+        )
+    ) {
+        throw new RuntimeException(
+            'File gagal disimpan.'
+        );
+    }
+
+    $fileBaruTersimpan = true;
+
+    /*
+     * basename() mencegah nama file lama mengarah
+     * ke folder lain.
+     */
+    $fileLama = basename(
+        (string) (
+            $pesanan['bukti_pembayaran']
+            ?? ''
+        )
+    );
+
+    $update = $pdo->prepare("
+        UPDATE pesanan
+        SET
+            bukti_pembayaran = ?,
+            status_pembayaran =
+                'Menunggu Verifikasi',
+            catatan_pembayaran = NULL
+        WHERE id = ?
+          AND pelanggan_id = ?
+          AND status_pembayaran
+              <> 'Terverifikasi'
+    ");
+
+    $update->execute([
+        $namaFile,
+        $pesananId,
+        $userId
+    ]);
+
+    if ($update->rowCount() !== 1) {
+        throw new RuntimeException(
+            'Data pembayaran gagal diperbarui.'
+        );
+    }
+
+    $pdo->commit();
+
+    /*
+     * Bukti lama baru dihapus setelah perubahan
+     * database benar-benar berhasil.
+     */
+    if (
+        $fileLama !== '' &&
+        $fileLama !== $namaFile
+    ) {
+        $targetLama = $uploadDir . $fileLama;
+
+        if (is_file($targetLama)) {
+            @unlink($targetLama);
+        }
+    }
+
+    flash(
+        'success',
+        'Bukti pembayaran berhasil diunggah. Admin akan memverifikasinya.'
+    );
+
+    header("Location: ../pelanggan/pesanan-saya.php");
+    exit;
+
+} catch (DomainException $e) {
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
+
+    if (
+        $fileBaruTersimpan &&
+        is_file($targetBaru)
+    ) {
+        @unlink($targetBaru);
+    }
+
+    flash('error', $e->getMessage());
+
+    header("Location: ../pelanggan/pesanan-saya.php");
+    exit;
+
+} catch (Throwable $e) {
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
+
+    if (
+        $fileBaruTersimpan &&
+        is_file($targetBaru)
+    ) {
+        @unlink($targetBaru);
+    }
+
+    flash(
+        'error',
+        'Bukti pembayaran gagal diunggah. Silakan coba kembali.'
+    );
+
+    header("Location: ../pelanggan/pesanan-saya.php");
+    exit;
+}
