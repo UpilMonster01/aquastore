@@ -1,4 +1,12 @@
+## 🖥️ Tampilan Website
+
+![Preview Website](TAMPILAN.png)
+
+
+
 AquaStore Tutor instalasi 
+
+
 
 Cara pakai Laragon:
 1. Extract zip ini.
@@ -26,8 +34,3 @@ Catatan:
 - Gambar homepage ada di assets/img/hero.jpg.
 - Kalau mau ganti gambar beranda, cukup replace file hero.jpg.
 - Upload ikan tersimpan di uploads/ikan/.
-
-
-## 🖥️ Tampilan Website
-
-![Preview Website](TAMPILAN.png)
