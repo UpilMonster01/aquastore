@@ -1,26 +1,22 @@
 <?php
 require "../config/db.php";
 
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    redirect_to(url('index.php'));
+}
+
+csrf_check();
+
 $nama = trim($_POST['nama'] ?? '');
 $email = trim($_POST['email'] ?? '');
-$no_hp = trim($_POST['no_hp'] ?? '');
+$noHp = trim($_POST['no_hp'] ?? '');
 $alamat = trim($_POST['alamat'] ?? '');
 $password = trim($_POST['password'] ?? '');
-$redirect = $_POST['redirect'] ?? '/aquastore/index.php';
-
-if (
-    empty($redirect) ||
-    !is_string($redirect) ||
-    strpos($redirect, '/aquastore/') !== 0
-) {
-    $redirect = '/aquastore/index.php';
-}
+$redirect = safe_redirect_url($_POST['redirect'] ?? url('index.php'), url('index.php'));
 
 function redirect_register_error($redirect)
 {
-    $separator = strpos($redirect, '?') !== false ? '&' : '?';
-    header("Location: " . $redirect . $separator . "auth=register");
-    exit;
+    redirect_to(append_query($redirect, ['auth' => 'register']));
 }
 
 if ($nama === '' || $email === '' || $password === '') {
@@ -39,7 +35,7 @@ if (strlen($password) < 6) {
 }
 
 try {
-    $cek = $pdo->prepare("SELECT id FROM pelanggan WHERE email = ?");
+    $cek = $pdo->prepare("SELECT id FROM pelanggan WHERE email = ? LIMIT 1");
     $cek->execute([$email]);
 
     if ($cek->fetch()) {
@@ -50,32 +46,25 @@ try {
     $hash = password_hash($password, PASSWORD_DEFAULT);
 
     $stmt = $pdo->prepare("
-        INSERT INTO pelanggan
-        (nama, email, password, no_hp, alamat)
+        INSERT INTO pelanggan (nama, email, password, no_hp, alamat)
         VALUES (?, ?, ?, ?, ?)
     ");
 
-    $stmt->execute([
-        $nama,
-        $email,
-        $hash,
-        $no_hp,
-        $alamat
-    ]);
+    $stmt->execute([$nama, $email, $hash, $noHp, $alamat]);
+
+    session_regenerate_id(true);
 
     $_SESSION['user'] = [
         'id' => $pdo->lastInsertId(),
         'nama' => $nama,
         'email' => $email,
-        'no_hp' => $no_hp,
+        'no_hp' => $noHp,
         'alamat' => $alamat
     ];
 
     flash('success', 'Akun berhasil dibuat.');
-    header("Location: " . $redirect);
-    exit;
-
-} catch (Exception $e) {
+    redirect_to($redirect);
+} catch (Throwable $e) {
     flash('error', 'Registrasi gagal. Silakan coba lagi.');
     redirect_register_error($redirect);
 }

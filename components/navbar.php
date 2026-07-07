@@ -1,21 +1,24 @@
 <?php
-$baseUrl = '/aquastore';
+$baseUrl = url();
 $currentFile = basename($_SERVER['PHP_SELF'] ?? 'index.php');
 
-function nav_active($files)
-{
-    global $currentFile;
+if (!function_exists('nav_active')) {
+    function nav_active($files)
+    {
+        global $currentFile;
 
-    if (!is_array($files)) {
-        $files = [$files];
+        if (!is_array($files)) {
+            $files = [$files];
+        }
+
+        return in_array($currentFile, $files, true) ? 'active' : '';
     }
-
-    return in_array($currentFile, $files, true) ? 'active' : '';
 }
 
 $jumlahIkan = !empty($_SESSION['keranjang']) ? array_sum($_SESSION['keranjang']) : 0;
 $jumlahPerlengkapan = !empty($_SESSION['keranjang_perlengkapan']) ? array_sum($_SESSION['keranjang_perlengkapan']) : 0;
 $jumlahKeranjang = $jumlahIkan + $jumlahPerlengkapan;
+$redirectSekarang = safe_redirect_url($_SERVER['REQUEST_URI'] ?? url('index.php'), url('index.php'));
 ?>
 
 <header class="topbar">
@@ -28,26 +31,25 @@ $jumlahKeranjang = $jumlahIkan + $jumlahPerlengkapan;
     </div>
 
     <nav class="menu">
-        <a href="<?= $baseUrl ?>/index.php" class="<?= nav_active('index.php') ?>">
+        <a href="<?= e(url('index.php')) ?>" class="<?= nav_active('index.php') ?>">
             Beranda
         </a>
 
-        <a href="<?= $baseUrl ?>/pelanggan/katalog.php" class="<?= nav_active(['katalog.php', 'detail.php']) ?>">
+        <a href="<?= e(url('pelanggan/katalog.php')) ?>" class="<?= nav_active(['katalog.php', 'detail.php']) ?>">
             Katalog
         </a>
 
-        <a href="<?= $baseUrl ?>/pelanggan/perawatan.php" class="<?= nav_active('perawatan.php') ?>">
+        <a href="<?= e(url('pelanggan/perawatan.php')) ?>" class="<?= nav_active('perawatan.php') ?>">
             Perlengkapan
         </a>
 
-        <a href="<?= $baseUrl ?>/pelanggan/cek-pesanan.php" class="<?= nav_active('cek-pesanan.php') ?>">
+        <a href="<?= e(url('pelanggan/cek-pesanan.php')) ?>" class="<?= nav_active('cek-pesanan.php') ?>">
             Cek Pesanan
         </a>
     </nav>
 
     <div class="header-actions">
         <?php if (!empty($_SESSION['user'])): ?>
-
             <div class="account-menu">
                 <button class="account-pill" onclick="toggleAccountMenu(event)" type="button">
                     <span class="account-avatar">
@@ -62,142 +64,125 @@ $jumlahKeranjang = $jumlahIkan + $jumlahPerlengkapan;
                 </button>
 
                 <div class="account-dropdown" id="accountDropdown">
-                    <a href="<?= $baseUrl ?>/pelanggan/profil.php" class="<?= nav_active('profil.php') ?>">
+                    <a href="<?= e(url('pelanggan/profil.php')) ?>" class="<?= nav_active('profil.php') ?>">
                         Profil Saya
                     </a>
 
-                    <a href="<?= $baseUrl ?>/pelanggan/pesanan-saya.php" class="<?= nav_active('pesanan-saya.php') ?>">
+                    <a href="<?= e(url('pelanggan/pesanan-saya.php')) ?>" class="<?= nav_active('pesanan-saya.php') ?>">
                         Pesanan Saya
                     </a>
 
-                    <a href="<?= $baseUrl ?>/pelanggan/logout.php" class="danger-link">
+                    <a href="<?= e(url('pelanggan/logout.php')) ?>" class="danger-link">
                         Logout
                     </a>
                 </div>
             </div>
-
         <?php else: ?>
-
             <button class="account-open-btn" onclick="openAuthDrawer('login')" type="button">
                 <span>👤</span>
                 <b>Akun</b>
             </button>
-
         <?php endif; ?>
 
-        <a href="<?= $baseUrl ?>/pelanggan/keranjang.php" class="cart">
+        <a href="<?= e(url('pelanggan/keranjang.php')) ?>" class="cart <?= nav_active('keranjang.php') ?>">
             🛒
-
             <?php if ($jumlahKeranjang > 0): ?>
-                <span><?= $jumlahKeranjang ?></span>
+                <span><?= e($jumlahKeranjang) ?></span>
             <?php endif; ?>
         </a>
     </div>
 </header>
 
 <?php if (empty($_SESSION['user'])): ?>
+    <div class="auth-overlay" id="authOverlay" onclick="closeAuthDrawer()"></div>
 
-<div class="auth-overlay" id="authOverlay" onclick="closeAuthDrawer()"></div>
+    <aside class="auth-drawer" id="authDrawer">
+        <button class="auth-close" onclick="closeAuthDrawer()" type="button">×</button>
 
-<aside class="auth-drawer" id="authDrawer">
-    <button class="auth-close" onclick="closeAuthDrawer()" type="button">
-        ×
-    </button>
+        <div class="auth-drawer-header">
+            <div class="auth-logo">🐟</div>
+            <h2>AquaStore Account</h2>
+            <p>Masuk untuk checkout lebih cepat dan melihat status pesanan.</p>
+        </div>
 
-    <div class="auth-drawer-header">
-        <div class="auth-logo">🐟</div>
-        <h2>AquaStore Account</h2>
-        <p>Masuk untuk checkout lebih cepat dan melihat status pesanan.</p>
-    </div>
-
-    <div class="auth-tabs">
-        <button type="button" id="loginTab" class="active" onclick="showAuthTab('login')">
-            Masuk
-        </button>
-
-        <button type="button" id="registerTab" onclick="showAuthTab('register')">
-            Daftar
-        </button>
-    </div>
-
-    <div class="auth-panel active" id="loginPanel">
-        <form action="<?= $baseUrl ?>/proses/login-user.php" method="POST">
-            <input type="hidden" name="redirect" value="<?= e($_SERVER['REQUEST_URI'] ?? $baseUrl . '/index.php') ?>">
-
-            <label>Email</label>
-            <input type="email" name="email" placeholder="email@example.com" required>
-
-            <label>Password</label>
-            <input type="password" name="password" placeholder="Password akun" required>
-
-            <button class="auth-submit" type="submit">
-                Masuk Sekarang
+        <div class="auth-tabs">
+            <button type="button" id="loginTab" class="active" onclick="showAuthTab('login')">
+                Masuk
             </button>
-        </form>
 
-        <p class="auth-switch-text">
-            Belum punya akun?
-            <button type="button" onclick="showAuthTab('register')">
-                Daftar di sini
+            <button type="button" id="registerTab" onclick="showAuthTab('register')">
+                Daftar
             </button>
-        </p>
-    </div>
+        </div>
 
-    <div class="auth-panel" id="registerPanel">
-        <form action="<?= $baseUrl ?>/proses/register-user.php" method="POST">
-            <input type="hidden" name="redirect" value="<?= e($_SERVER['REQUEST_URI'] ?? $baseUrl . '/index.php') ?>">
+        <div class="auth-panel active" id="loginPanel">
+            <form action="<?= e(url('proses/login-user.php')) ?>" method="POST">
+                <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="redirect" value="<?= e($redirectSekarang) ?>">
 
-            <label>Nama Lengkap</label>
-            <input type="text" name="nama" placeholder="Nama lengkap" required>
+                <label>Email</label>
+                <input type="email" name="email" placeholder="email@example.com" required>
 
-            <label>Email</label>
-            <input type="email" name="email" placeholder="email@example.com" required>
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Password akun" required>
 
-            <label>No HP</label>
-            <input type="text" name="no_hp" placeholder="Nomor WhatsApp">
+                <button class="auth-submit" type="submit">
+                    Masuk Sekarang
+                </button>
+            </form>
 
-            <label>Alamat</label>
-            <textarea name="alamat" placeholder="Alamat lengkap"></textarea>
+            <p class="auth-switch-text">
+                Belum punya akun?
+                <button type="button" onclick="showAuthTab('register')">
+                    Daftar di sini
+                </button>
+            </p>
+        </div>
 
-            <label>Password</label>
-            <input type="password" name="password" placeholder="Minimal 6 karakter" required>
+        <div class="auth-panel" id="registerPanel">
+            <form action="<?= e(url('proses/register-user.php')) ?>" method="POST">
+                <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
+                <input type="hidden" name="redirect" value="<?= e($redirectSekarang) ?>">
 
-            <button class="auth-submit" type="submit">
-                Buat Akun
-            </button>
-        </form>
+                <label>Nama Lengkap</label>
+                <input type="text" name="nama" placeholder="Nama lengkap" required>
 
-        <p class="auth-switch-text">
-            Sudah punya akun?
-            <button type="button" onclick="showAuthTab('login')">
-                Masuk di sini
-            </button>
-        </p>
-    </div>
-</aside>
+                <label>Email</label>
+                <input type="email" name="email" placeholder="email@example.com" required>
 
+                <label>No HP</label>
+                <input type="text" name="no_hp" placeholder="Nomor WhatsApp">
+
+                <label>Alamat</label>
+                <textarea name="alamat" placeholder="Alamat lengkap"></textarea>
+
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Minimal 6 karakter" required>
+
+                <button class="auth-submit" type="submit">
+                    Buat Akun
+                </button>
+            </form>
+
+            <p class="auth-switch-text">
+                Sudah punya akun?
+                <button type="button" onclick="showAuthTab('login')">
+                    Masuk di sini
+                </button>
+            </p>
+        </div>
+    </aside>
 <?php endif; ?>
 
 <script>
-/* =========================
-   FALLBACK AUTH + ACCOUNT MENU
-   Supaya tombol Akun tetap jalan walau main.js tidak kebaca
-========================= */
-
 window.openAuthDrawer = function (tab = 'login') {
     const overlay = document.getElementById('authOverlay');
     const drawer = document.getElementById('authDrawer');
 
-    if (overlay) {
-        overlay.classList.add('show');
-    }
-
-    if (drawer) {
-        drawer.classList.add('show');
-    }
+    if (overlay) overlay.classList.add('show');
+    if (drawer) drawer.classList.add('show');
 
     document.body.classList.add('drawer-open');
-
     showAuthTab(tab);
 };
 
@@ -205,13 +190,8 @@ window.closeAuthDrawer = function () {
     const overlay = document.getElementById('authOverlay');
     const drawer = document.getElementById('authDrawer');
 
-    if (overlay) {
-        overlay.classList.remove('show');
-    }
-
-    if (drawer) {
-        drawer.classList.remove('show');
-    }
+    if (overlay) overlay.classList.remove('show');
+    if (drawer) drawer.classList.remove('show');
 
     document.body.classList.remove('drawer-open');
 };
@@ -243,22 +223,29 @@ window.toggleAccountMenu = function (event) {
     }
 
     const dropdown = document.getElementById('accountDropdown');
-
-    if (dropdown) {
-        dropdown.classList.toggle('show');
-    }
+    if (dropdown) dropdown.classList.toggle('show');
 };
 
 document.addEventListener('click', function (event) {
     const dropdown = document.getElementById('accountDropdown');
     const pill = document.querySelector('.account-pill');
 
-    if (!dropdown || !pill) {
-        return;
-    }
+    if (!dropdown || !pill) return;
 
     if (!pill.contains(event.target) && !dropdown.contains(event.target)) {
         dropdown.classList.remove('show');
     }
 });
+
+(function () {
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.get('auth') === 'login') {
+        openAuthDrawer('login');
+    }
+
+    if (params.get('auth') === 'register') {
+        openAuthDrawer('register');
+    }
+})();
 </script>
