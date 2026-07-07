@@ -1,0 +1,41 @@
+.table-box {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 22px;
+    background: white;
+    box-shadow: var(--shadow);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+th {
+    padding: 16px;
+    text-align: left;
+    color: white;
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid #e7f3ef;
+    color: var(--text);
+}
+
+.thumb {
+    width: 66px;
+    height: 66px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.emoji-table {
+    font-size: 38px;
+}
+
+.small-table {
+    margin-bottom: 12px;
+}

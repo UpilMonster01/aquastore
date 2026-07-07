@@ -56,7 +56,7 @@ $data = $pdo->query("SELECT * FROM perlengkapan ORDER BY id DESC")->fetchAll();
                 <td>
                     <button class="mini-button" onclick="openModal('edit<?= $p['id'] ?>')">Edit</button>
 
-                    <form action="../proses/hapus-perlengkapan.php" method="POST" style="display:inline;" onsubmit="return confirm('Hapus data ini?')">
+                    <form action="../proses/hapus-perlengkapan.php" method="POST" class="action-form-inline" onsubmit="return confirm('Hapus data ini?')">
                         <input type="hidden" name="id" value="<?= $p['id'] ?>">
                         <button class="delete-button">Hapus</button>
                     </form>

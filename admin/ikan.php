@@ -166,7 +166,7 @@ $data = $stmt->fetchAll();
                                 </button>
 
                                 <?php if (!empty($i['foto'])): ?>
-                                    <form action="../proses/hapus-foto-ikan.php" method="POST" style="display:inline-block;"
+                                    <form action="../proses/hapus-foto-ikan.php" method="POST" class="action-form-inline"
                                         onsubmit="return confirm('Hapus foto ikan ini?')">
                                         <input type="hidden" name="id" value="<?= $i['id'] ?>">
 
@@ -176,7 +176,7 @@ $data = $stmt->fetchAll();
                                     </form>
                                 <?php endif; ?>
 
-                                <form action="../proses/hapus-ikan.php" method="POST" style="display:inline-block;"
+                                <form action="../proses/hapus-ikan.php" method="POST" class="action-form-inline"
                                     onsubmit="return confirm('Hapus ikan ini?')">
 
                                     <input type="hidden" name="csrf" value="<?= csrf_token() ?>">

@@ -1,0 +1,140 @@
+.hero-home {
+    min-height: 100vh;
+    padding: 190px 6% 55px;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(90deg, rgba(3, 20, 38, .92) 0%, rgba(3, 20, 38, .7) 42%, rgba(3, 20, 38, .1) 100%), url("../img/hero.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-home::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 35% 10%, rgba(18, 214, 197, .28), transparent 30%), linear-gradient(to bottom, transparent 55%, rgba(3, 20, 38, .78));
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 680px;
+    color: white;
+}
+
+.hero-content h3 {
+    font-size: 42px;
+    font-weight: 900;
+}
+
+.hero-content h1 {
+    margin: 4px 0 18px;
+    font-size: 92px;
+    line-height: .95;
+    font-weight: 900;
+    color: var(--blue);
+}
+
+.hero-content h1 span {
+    color: var(--cyan);
+}
+
+.hero-content p {
+    max-width: 580px;
+    font-size: 23px;
+    line-height: 1.55;
+    color: #effbff;
+}
+
+.hero-benefits {
+    margin: 34px 0;
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+}
+
+.hero-benefits div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 800;
+}
+
+.hero-benefits b {
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .25);
+    font-size: 24px;
+}
+
+.category-home {
+    margin-top: 26px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 13px;
+}
+
+.category-home a {
+    padding: 12px 18px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .92);
+    color: var(--text);
+    font-weight: 900;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .17);
+    transition: .25s;
+}
+
+.category-home a:hover {
+    transform: translateY(-4px);
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    color: white;
+}
+
+.about-section {
+    padding: 50px 6% 90px;
+    text-align: center;
+    background: white;
+}
+
+.about-section span {
+    color: var(--blue);
+    font-weight: 900;
+}
+
+.about-section h2 {
+    margin: 10px 0 16px;
+    font-size: 42px;
+}
+
+.about-section p {
+    max-width: 760px;
+    margin: auto;
+    color: var(--muted);
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+.footer {
+    padding: 40px;
+    text-align: center;
+    background: var(--dark);
+    color: white;
+}
+
+.footer h2 {
+    color: var(--cyan);
+}
+
+.admin-secret {
+    margin-top: 14px;
+    border: none;
+    background: transparent;
+    color: white;
+    opacity: .35;
+    cursor: pointer;
+}

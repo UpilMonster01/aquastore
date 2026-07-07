@@ -31,25 +31,3 @@ if (!function_exists('admin_menu_active')) {
     <a href="<?= e(url('index.php')) ?>">🏠 Website</a>
     <a href="<?= e(url('proses/logout.php')) ?>">🚪 Logout</a>
 </aside>
-
-<style>
-.admin-sidebar a.admin-active-page {
-    background: rgba(22, 119, 255, .12) !important;
-    color: #1677ff !important;
-    font-weight: 900 !important;
-    border-radius: 14px;
-    position: relative;
-}
-
-.admin-sidebar a.admin-active-page::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 5px;
-    height: 60%;
-    border-radius: 999px;
-    background: #1677ff;
-}
-</style>

@@ -31,7 +31,7 @@
                     <h3>Upload Foto</h3>
                     <p>Klik untuk pilih gambar</p>
                 </div>
-                <img class="preview-image" style="display:none;">
+                <img class="preview-image preview-image-hidden">
             <?php endif; ?>
         </div>
 

@@ -1,0 +1,90 @@
+@media (max-width:1050px) {
+    .topbar {
+        height: auto;
+        padding: 18px;
+        flex-direction: column;
+        gap: 14px;
+        position: static;
+    }
+
+    .menu {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .menu a {
+        padding: 8px 0;
+    }
+
+    .hero-home {
+        padding-top: 70px;
+    }
+
+    .hero-content h3 {
+        font-size: 30px;
+    }
+
+    .hero-content h1 {
+        font-size: 58px;
+    }
+
+    .hero-content p {
+        font-size: 18px;
+    }
+
+    .glass-cards,
+    .fish-grid,
+    .detail-wrapper,
+    .checkout-grid,
+    .admin-stats,
+    .admin-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-title h2,
+    .about-section h2 {
+        font-size: 32px;
+    }
+
+    .cart-form {
+        flex-direction: column;
+    }
+
+    .cart-form input {
+        width: 100%;
+    }
+}
+
+@media (max-width: 900px) {
+    .header-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .account-name {
+        max-width: 80px;
+    }
+}
+
+@media (max-width: 520px) {
+    .auth-drawer {
+        width: 100vw;
+        right: -100vw;
+        padding: 28px 22px;
+    }
+
+    .auth-drawer.show {
+        right: 0;
+    }
+
+    .auth-drawer-header h2 {
+        font-size: 24px;
+    }
+
+    .auth-logo {
+        width: 56px;
+        height: 56px;
+        font-size: 30px;
+    }
+}

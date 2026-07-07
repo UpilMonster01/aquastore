@@ -271,7 +271,7 @@ $totalMenungguVerifikasi = $pdo->query("
                                                Lihat
                                                   </button>
 
-                                                  <a href="invoice.php?nomor=<?= urlencode($p['nomor_pesanan']) ?>" class="mini-button" style="margin-top: 6px; display: inline-flex;">
+                                                  <a href="invoice.php?nomor=<?= urlencode($p['nomor_pesanan']) ?>" class="mini-button order-action-link">
                                                Invoice
                                         </a>
                                     </td>

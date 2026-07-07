@@ -1,0 +1,364 @@
+.tracking-section .section-title p {
+    max-width: 720px;
+    margin: 12px auto 0;
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.tracking-form {
+    max-width: 760px;
+    margin: 0 auto 35px;
+    display: grid;
+    grid-template-columns: 1fr 180px;
+    gap: 14px;
+    padding: 18px;
+    border-radius: 24px;
+    background: white;
+    box-shadow: var(--shadow);
+}
+
+.tracking-form input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #d5e8f1;
+    border-radius: 16px;
+    outline: none;
+    font-family: inherit;
+}
+
+.tracking-form button {
+    border: none;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    color: white;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.tracking-card,
+.tracking-empty {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 30px;
+    border-radius: 28px;
+    background: white;
+    box-shadow: var(--shadow);
+}
+
+.tracking-empty {
+    text-align: center;
+}
+
+.tracking-empty div {
+    font-size: 64px;
+    margin-bottom: 12px;
+}
+
+.tracking-empty p {
+    color: var(--muted);
+    margin-top: 8px;
+}
+
+.tracking-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.tracking-header span {
+    color: var(--muted);
+    font-weight: 800;
+}
+
+.tracking-header h2 {
+    margin-top: 6px;
+    color: var(--text);
+}
+
+.status-badge {
+    padding: 12px 18px;
+    border-radius: 999px;
+    color: white;
+    font-weight: 900;
+}
+
+.status-pending {
+    background: #f59e0b;
+}
+
+.status-diproses {
+    background: #1677ff;
+}
+
+.status-dikirim {
+    background: #8b5cf6;
+}
+
+.status-selesai {
+    background: #16a34a;
+}
+
+.tracking-timeline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin: 28px 0;
+}
+
+.timeline-step {
+    position: relative;
+    padding: 18px;
+    border-radius: 18px;
+    background: #eef7ff;
+    text-align: center;
+    color: var(--muted);
+    font-weight: 900;
+}
+
+.timeline-step.active {
+    background: linear-gradient(135deg, rgba(18,214,197,.18), rgba(22,119,255,.18));
+    color: var(--blue);
+}
+
+.timeline-step .dot {
+    width: 18px;
+    height: 18px;
+    margin: 0 auto 8px;
+    border-radius: 50%;
+    background: #cbd5e1;
+}
+
+.timeline-step.active .dot {
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+}
+
+.tracking-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin: 28px 0;
+}
+
+.tracking-info-grid div {
+    padding: 18px;
+    border-radius: 18px;
+    background: #f4fbff;
+}
+
+.tracking-info-grid .wide {
+    grid-column: span 2;
+}
+
+.tracking-info-grid b {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--blue);
+}
+
+.tracking-info-grid span {
+    color: var(--muted);
+}
+
+.tracking-info-grid .total-price {
+    color: var(--blue);
+    font-weight: 900;
+    font-size: 20px;
+}
+
+.tracking-subtitle {
+    margin: 30px 0 15px;
+    color: var(--text);
+}
+
+.tracking-items {
+    display: grid;
+    gap: 14px;
+}
+
+.tracking-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 15px;
+    border-radius: 20px;
+    background: #f8fcff;
+}
+
+.tracking-img {
+    width: 80px;
+    height: 70px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #eef7ff;
+}
+
+.tracking-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.tracking-img span {
+    font-size: 36px;
+}
+
+.tracking-item h4 {
+    color: var(--text);
+}
+
+.tracking-item p {
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+.tracking-item b {
+    color: var(--blue);
+}
+
+.tracking-payment-box {
+    margin: 28px 0;
+    padding: 22px;
+    border-radius: 24px;
+    background: #f8fcff;
+    border: 1px solid #e3f2ff;
+}
+
+.tracking-payment-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.tracking-payment-header span {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.tracking-payment-header h3 {
+    color: var(--text);
+}
+
+.tracking-payment-note {
+    padding: 16px;
+    border-radius: 18px;
+    background: white;
+    color: var(--muted);
+    font-weight: 700;
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+.tracking-payment-note.success {
+    color: #16a34a;
+}
+
+.tracking-payment-note.rejected {
+    color: #ef4444;
+}
+
+.tracking-proof-preview {
+    margin-bottom: 16px;
+}
+
+.tracking-proof-img {
+    max-width: 280px;
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+}
+
+.payment-status {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 999px;
+    color: white !important;
+    font-size: 13px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.payment-unpaid {
+    background: #f59e0b;
+}
+
+.payment-waiting {
+    background: #3b82f6;
+}
+
+.payment-verified {
+    background: #16a34a;
+}
+
+.payment-rejected {
+    background: #ef4444;
+}
+
+.payment-reject-note {
+    margin: 14px 0 18px;
+    padding: 16px;
+    border-radius: 18px;
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    color: #991b1b;
+}
+
+.payment-reject-note b {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.payment-reject-note p {
+    line-height: 1.7;
+}
+
+.customer-note {
+    background: #fff7ed;
+    border-color: #fed7aa;
+    color: #9a3412;
+}
+
+@media(max-width: 768px) {
+    .tracking-form {
+        grid-template-columns: 1fr;
+    }
+
+    .tracking-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tracking-timeline,
+    .tracking-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tracking-info-grid .wide {
+        grid-column: span 1;
+    }
+
+    .tracking-item {
+        grid-template-columns: 70px 1fr;
+    }
+
+    .tracking-item b {
+        grid-column: 1 / -1;
+    }
+
+    .tracking-payment-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tracking-proof-img {
+        max-width: 100%;
+    }
+}

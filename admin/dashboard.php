@@ -112,7 +112,7 @@ $pesananBaru = $pdo->query("SELECT * FROM pesanan ORDER BY id DESC LIMIT 5")->fe
                                 <?php foreach ($ikanTipis as $i): ?>
                                     <tr>
                                         <td><?= e($i['nama']) ?></td>
-                                        <td><b style="color:red;"><?= e($i['stok']) ?></b></td>
+                                        <td><b class="stock-low-text"><?= e($i['stok']) ?></b></td>
                                         <td><?= e($i['status']) ?></td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -140,7 +140,7 @@ $pesananBaru = $pdo->query("SELECT * FROM pesanan ORDER BY id DESC LIMIT 5")->fe
                                 <?php foreach ($alatTipis as $a): ?>
                                     <tr>
                                         <td><?= e($a['nama']) ?></td>
-                                        <td><b style="color:red;"><?= e($a['stok']) ?></b></td>
+                                        <td><b class="stock-low-text"><?= e($a['stok']) ?></b></td>
                                         <td><?= e($a['status']) ?></td>
                                     </tr>
                                 <?php endforeach; ?>

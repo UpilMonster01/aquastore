@@ -85,13 +85,13 @@ $data = $pdo->query("SELECT p.*, t.nama AS tank FROM perawatan p LEFT JOIN tank 
                                 <td><?= e($p['status']) ?></td>
                                 <td>
                                     <?php if ($p['status'] === 'Pending'): ?>
-                                        <form method="POST" style="display:inline-block;">
+                                        <form method="POST" class="action-form-inline">
                                             <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
                                             <input type="hidden" name="id" value="<?= $p['id'] ?>">
                                             <button class="mini-button" name="selesai">Selesai</button>
                                         </form>
                                     <?php endif; ?>
-                                    <form method="POST" style="display:inline-block;">
+                                    <form method="POST" class="action-form-inline">
                                         <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
                                         <input type="hidden" name="id" value="<?= $p['id'] ?>">
                                         <button class="delete-button" name="hapus">Hapus</button>

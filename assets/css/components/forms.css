@@ -1,0 +1,71 @@
+.admin-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 12px;
+}
+
+.admin-form button {
+    min-height: 48px;
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    color: white;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.upload-box {
+    margin-bottom: 18px;
+}
+
+.upload-area {
+    width: 100%;
+    min-height: 250px;
+    display: grid;
+    place-items: center;
+    border: 2px dashed #b9d9f8;
+    border-radius: 28px;
+    overflow: hidden;
+    cursor: pointer;
+    background: linear-gradient(135deg, #f7fcff, #eef7ff);
+}
+
+.upload-area:hover {
+    border-color: #1677ff;
+}
+
+.upload-area input {
+    display: none;
+}
+
+.upload-placeholder {
+    text-align: center;
+    color: #5f7690;
+}
+
+.upload-placeholder span {
+    font-size: 64px;
+}
+
+.upload-placeholder h3 {
+    color: #09213d;
+    margin: 10px 0 5px;
+}
+
+.preview-image {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+}
+
+.preview-image-hidden {
+    display: none;
+}
+
+.action-form-inline {
+    display: inline-block;
+}
+
+.product-action-form {
+    margin-top: 12px;
+}

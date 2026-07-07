@@ -1,0 +1,260 @@
+.my-order-section {
+    min-height: 100vh;
+    padding: 150px 6% 80px;
+    background: var(--soft);
+}
+
+.my-order-section .section-title p {
+    max-width: 720px;
+    margin: 12px auto 0;
+    color: var(--muted);
+    line-height: 1.8;
+}
+
+.my-order-container {
+    max-width: 1050px;
+    margin: auto;
+    display: grid;
+    gap: 22px;
+}
+
+.my-order-card {
+    padding: 28px;
+    border-radius: 28px;
+    background: white;
+    box-shadow: var(--shadow);
+}
+
+.my-order-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.my-order-top span,
+.my-order-info span,
+.my-order-address span {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.my-order-top h3 {
+    color: var(--text);
+    font-size: 24px;
+}
+
+.my-order-info {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.my-order-info div,
+.my-order-address {
+    padding: 16px;
+    border-radius: 18px;
+    background: #f4fbff;
+}
+
+.my-order-info b {
+    color: var(--text);
+}
+
+.my-order-info .order-price {
+    color: var(--blue);
+    font-size: 18px;
+}
+
+.my-order-address p {
+    color: var(--text);
+    line-height: 1.7;
+}
+
+.my-order-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.order-detail-box {
+    margin-top: 22px;
+    border-radius: 22px;
+    background: #f8fcff;
+    overflow: hidden;
+    border: 1px solid #e3f2ff;
+}
+
+.order-detail-box summary {
+    padding: 18px 20px;
+    cursor: pointer;
+    font-weight: 900;
+    color: var(--blue);
+    background: #eef7ff;
+    list-style: none;
+}
+
+.order-detail-box summary::-webkit-details-marker {
+    display: none;
+}
+
+.order-detail-box summary::after {
+    content: "＋";
+    float: right;
+    font-weight: 900;
+}
+
+.order-detail-box[open] summary::after {
+    content: "−";
+}
+
+.order-detail-group {
+    padding: 20px;
+}
+
+.order-detail-group h4 {
+    margin-bottom: 14px;
+    color: var(--text);
+}
+
+.order-product-list {
+    display: grid;
+    gap: 12px;
+}
+
+.order-product-item {
+    display: grid;
+    grid-template-columns: 72px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 18px;
+    background: white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .04);
+}
+
+.order-product-img {
+    width: 72px;
+    height: 68px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 16px;
+    background: #eef7ff;
+}
+
+.order-product-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.order-product-img span {
+    font-size: 34px;
+}
+
+.order-product-info h5 {
+    color: var(--text);
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.order-product-info small {
+    display: inline-block;
+    margin-bottom: 5px;
+    color: var(--blue);
+    font-weight: 800;
+}
+
+.order-product-info p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.order-product-price {
+    color: var(--blue);
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.order-detail-total {
+    margin: 0 20px 20px;
+    padding: 18px;
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    border-radius: 18px;
+    background: white;
+    border: 2px dashed #d5e8f1;
+}
+
+.order-detail-total span {
+    color: var(--muted);
+    font-weight: 800;
+}
+
+.order-detail-total b {
+    color: var(--blue);
+    font-size: 20px;
+}
+
+.order-no-product {
+    margin: 20px;
+    padding: 18px;
+    border-radius: 18px;
+    background: white;
+    color: var(--muted);
+    text-align: center;
+    font-weight: 800;
+}
+
+.order-help-text {
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.order-help-text.success {
+    color: #16a34a;
+}
+
+@media(max-width: 900px) {
+    .my-order-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .my-order-info {
+        grid-template-columns: 1fr;
+    }
+
+    .my-order-actions {
+        justify-content: stretch;
+    }
+
+    .my-order-actions .hero-button {
+        width: 100%;
+    }
+}
+
+@media(max-width: 700px) {
+    .order-product-item {
+        grid-template-columns: 64px 1fr;
+    }
+
+    .order-product-price {
+        grid-column: 1 / -1;
+        text-align: right;
+    }
+
+    .order-detail-total {
+        flex-direction: column;
+    }
+}

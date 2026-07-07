@@ -1,0 +1,50 @@
+.hero-button,
+.login-button,
+.mini-button {
+    border: none;
+    cursor: pointer;
+    font-weight: 800;
+    border-radius: 16px;
+    transition: .25s;
+}
+
+.hero-button,
+.login-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 28px;
+    color: white;
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    box-shadow: 0 12px 32px rgba(22, 119, 255, .35);
+}
+
+.hero-button:hover,
+.login-button:hover,
+.mini-button:hover {
+    transform: translateY(-4px);
+}
+
+.mini-button {
+    display: inline-block;
+    padding: 10px 16px;
+    color: white;
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+}
+
+.delete-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 14px;
+    background: var(--danger);
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.hero-button:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    box-shadow: none;
+}

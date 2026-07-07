@@ -1,0 +1,52 @@
+.login-modal,
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    place-items: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, .65);
+    backdrop-filter: blur(8px);
+}
+
+.login-modal.show,
+.modal.show {
+    display: grid;
+}
+
+.login-box,
+.modal-box {
+    width: min(680px, 95%);
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    padding: 32px;
+    border-radius: var(--radius);
+    background: white;
+    box-shadow: 0 28px 90px rgba(0, 0, 0, .35);
+}
+
+.login-box {
+    width: min(430px, 92%);
+}
+
+.login-box h2,
+.modal-box h2 {
+    margin-bottom: 20px;
+    color: var(--text);
+}
+
+.close-btn {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: var(--danger);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}

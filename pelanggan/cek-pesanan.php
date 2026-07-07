@@ -169,8 +169,7 @@ function tanggal_tracking($data)
                         <h2><?= e($pesanan['nomor_pesanan']) ?></h2>
 
                         <?php if (!empty($_SESSION['user'])): ?>
-                            <a href="invoice.php?nomor=<?= urlencode($pesanan['nomor_pesanan']) ?>" class="mini-button"
-                                style="margin-top: 10px; display: inline-flex;">
+                            <a href="invoice.php?nomor=<?= urlencode($pesanan['nomor_pesanan']) ?>" class="mini-button tracking-invoice-link">
                                 Lihat Invoice
                             </a>
                         <?php endif; ?>
