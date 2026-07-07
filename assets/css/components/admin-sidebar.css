@@ -18,6 +18,20 @@
     color: var(--cyan);
 }
 
+.side-brand:has(.admin-brand-logo) .brand-text-wrap {
+    display: none;
+}
+
+.admin-brand-logo {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    border-radius: 18px;
+    background: white;
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+}
+
 .side-brand small {
     opacity: .75;
 }
@@ -30,6 +44,7 @@
     color: white;
     font-weight: 700;
     transition: .25s;
+    text-decoration: none;
 }
 
 .admin-sidebar a:hover {
@@ -38,11 +53,12 @@
 }
 
 .admin-sidebar a.admin-active-page {
-    background: rgba(22, 119, 255, .12);
-    color: #1677ff;
+    background: linear-gradient(90deg, rgba(22, 119, 255, .28), rgba(22, 119, 255, .16));
+    color: #ffffff;
     font-weight: 900;
     border-radius: 14px;
     position: relative;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .16);
 }
 
 .admin-sidebar a.admin-active-page::before {

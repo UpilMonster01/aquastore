@@ -17,7 +17,9 @@
 .brand {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
+    min-width: 0;
+    flex: 0 1 auto;
 }
 
 .brand-icon {
@@ -32,9 +34,26 @@
     box-shadow: 0 0 28px rgba(18, 214, 197, .35);
 }
 
+.brand-logo {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    object-fit: contain;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(3, 20, 38, .12);
+    background: white;
+    padding: 4px;
+}
+
+.brand-text-wrap {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
 .brand h2 {
-    font-size: 31px;
-    line-height: 1;
+    font-size: 26px;
+    line-height: 1.05;
     background: linear-gradient(90deg, var(--blue), var(--cyan));
     -webkit-background-clip: text;
     color: transparent;
@@ -43,12 +62,19 @@
 .brand small {
     color: var(--muted);
     font-size: 12px;
+    display: block;
+    margin-top: 3px;
+}
+
+.brand:has(.brand-logo) .brand-text-wrap {
+    display: none;
 }
 
 .menu {
     display: flex;
     align-items: center;
-    gap: 28px;
+    gap: 22px;
+    margin-left: 16px;
 }
 
 .menu a {

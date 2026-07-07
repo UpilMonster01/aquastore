@@ -22,13 +22,17 @@ $redirectSekarang = safe_redirect_url($_SERVER['REQUEST_URI'] ?? url('index.php'
 ?>
 
 <header class="topbar">
-    <div class="brand">
-        <div class="brand-icon">🐟</div>
-        <div>
+    <a href="<?= e(url('index.php')) ?>" class="brand" style="text-decoration:none;">
+        <?php if (file_exists(__DIR__ . '/../assets/img/logo.png')): ?>
+            <img src="<?= e(url('assets/img/logo.png')) ?>" alt="Logo AquaStore" class="brand-logo">
+        <?php else: ?>
+            <div class="brand-icon">🐟</div>
+        <?php endif; ?>
+        <div class="brand-text-wrap">
             <h2>AquaStore</h2>
             <small>Toko Ikan Hias & Perlengkapan</small>
         </div>
-    </div>
+    </a>
 
     <nav class="menu">
         <a href="<?= e(url('index.php')) ?>" class="<?= nav_active('index.php') ?>">

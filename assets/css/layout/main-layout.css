@@ -3,7 +3,7 @@
     padding: 190px 6% 55px;
     position: relative;
     overflow: hidden;
-    background: linear-gradient(90deg, rgba(3, 20, 38, .92) 0%, rgba(3, 20, 38, .7) 42%, rgba(3, 20, 38, .1) 100%), url("../img/hero.jpg");
+    background: linear-gradient(90deg, rgba(3, 20, 38, .92) 0%, rgba(3, 20, 38, .7) 42%, rgba(3, 20, 38, .1) 100%), url("../../img/hero.jpg");
     background-size: cover;
     background-position: center;
 }
