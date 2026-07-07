@@ -566,7 +566,11 @@ if (!empty($_GET['sukses'])):
                 </p>
 
                 <div class="success-actions">
-                    <a href="cek-pesanan.php?nomor=<?= urlencode($nomorSukses) ?>" class="hero-button">
+                    <a href="invoice.php?nomor=<?= urlencode($nomorSukses) ?>" class="hero-button">
+                        Lihat Invoice
+                    </a>
+
+                    <a href="cek-pesanan.php?nomor=<?= urlencode($nomorSukses) ?>" class="mini-button">
                         Cek Pesanan
                     </a>
 

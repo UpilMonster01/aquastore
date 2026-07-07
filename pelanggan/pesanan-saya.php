@@ -360,6 +360,10 @@ function is_image_file($file)
                         </details>
 
                         <div class="my-order-actions">
+                            <a href="invoice.php?nomor=<?= urlencode($p['nomor_pesanan']) ?>" class="mini-button">
+                                Lihat Invoice
+                            </a>
+
                             <a href="cek-pesanan.php?nomor=<?= urlencode($p['nomor_pesanan']) ?>" class="mini-button">
                                 Cek Status
                             </a>

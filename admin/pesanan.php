@@ -263,13 +263,17 @@ $totalMenungguVerifikasi = $pdo->query("
 
                                     <td><?= tanggal_admin($p) ?></td>
 
-                                    <td>
-                                        <button
-                                            class="mini-button"
-                                            onclick="openModal('detailPesanan<?= $p['id'] ?>')"
-                                        >
-                                            Lihat
-                                        </button>
+                                  <td>
+                                   <button
+                                    class="mini-button"
+                                         onclick="openModal('detailPesanan<?= $p['id'] ?>')"
+                                          >
+                                               Lihat
+                                                  </button>
+
+                                                  <a href="invoice.php?nomor=<?= urlencode($p['nomor_pesanan']) ?>" class="mini-button" style="margin-top: 6px; display: inline-flex;">
+                                               Invoice
+                                        </a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
