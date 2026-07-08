@@ -1,0 +1,237 @@
+.topbar {
+    width: 100%;
+    height: 96px;
+    padding: 0 6%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(2, 8, 23, .94);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .18);
+}
+
+.brand-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-decoration: none;
+}
+
+.brand-logo,
+.brand-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, .1);
+}
+
+.brand-icon {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    color: white;
+    font-size: 28px;
+    box-shadow: 0 0 32px rgba(18, 214, 197, .22);
+}
+
+.brand-text-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    line-height: 1;
+}
+
+.brand h2 {
+    font-size: 26px;
+    line-height: 1;
+    margin: 0;
+    background: linear-gradient(90deg, var(--blue), var(--cyan));
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.brand small {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.menu a {
+    color: var(--text);
+    font-weight: 800;
+    padding: 36px 0 32px;
+    border-bottom: 3px solid transparent;
+    transition: var(--transition);
+}
+
+.menu a:hover,
+.menu a.active {
+    color: var(--primary);
+    border-bottom-color: var(--primary);
+}
+
+.cart {
+    width: 54px;
+    height: 54px;
+    display: grid;
+    place-items: center;
+    position: relative;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(0, 184, 230, .9), rgba(10, 122, 209, .95));
+    color: white;
+    font-size: 24px;
+}
+
+.cart span {
+    position: absolute;
+    top: -7px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    border-radius: 999px;
+    background: rgba(56, 232, 255, .95);
+    color: #020817;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.account-open-btn {
+    height: 44px;
+    padding: 0 18px;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .08);
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .18);
+    cursor: pointer;
+    transition: .25s;
+}
+
+.account-open-btn:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, .13);
+}
+
+.account-pill {
+    height: 46px;
+    padding: 0 12px 0 6px;
+    border: 1px solid rgba(255, 255, 255, .12);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .06);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .16);
+    cursor: pointer;
+    transition: .25s;
+    color: var(--text);
+}
+
+.account-avatar {
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .12);
+    color: var(--text);
+    font-weight: 800;
+}
+
+.auth-brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.auth-logo {
+    width: 64px;
+    height: 64px;
+    display: grid;
+    place-items: center;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    color: white;
+    font-size: 34px;
+}
+
+.auth-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, .14);
+}
+
+.auth-brand-text h2 {
+    margin: 0;
+    font-size: 22px;
+    color: var(--text);
+}
+
+.auth-drawer-header {
+    margin-top: 20px;
+    margin-bottom: 26px;
+}
+
+.auth-drawer-header p {
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.auth-drawer {
+    background: #020817;
+    border-left: 1px solid rgba(255, 255, 255, .08);
+}
+
+.auth-close {
+    background: rgba(255, 255, 255, .08);
+    color: var(--text);
+}
+
+.auth-tabs {
+    background: rgba(255, 255, 255, .05);
+}
+
+.auth-tabs button {
+    color: var(--text);
+}
+
+.auth-tabs button.active {
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    color: #020817;
+}
+
+.auth-panel {
+    color: var(--text);
+}
+
+.auth-panel input,
+.auth-panel select,
+.auth-panel textarea {
+    background: rgba(255, 255, 255, .08);
+    border: 1px solid rgba(255, 255, 255, .12);
+    color: var(--text);
+}
+
+.auth-panel button.auth-submit {
+    background: linear-gradient(135deg, var(--cyan), var(--blue));
+    color: #020817;
+}

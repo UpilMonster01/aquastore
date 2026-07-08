@@ -22,7 +22,7 @@ $redirectSekarang = safe_redirect_url($_SERVER['REQUEST_URI'] ?? url('index.php'
 ?>
 
 <header class="topbar">
-    <a href="<?= e(url('index.php')) ?>" class="brand" style="text-decoration:none;">
+    <a href="<?= e(url('index.php')) ?>" class="brand brand-link">
         <?php if (file_exists(__DIR__ . '/../assets/img/logo.png')): ?>
             <img src="<?= e(url('assets/img/logo.png')) ?>" alt="Logo AquaStore" class="brand-logo">
         <?php else: ?>
@@ -104,9 +104,18 @@ $redirectSekarang = safe_redirect_url($_SERVER['REQUEST_URI'] ?? url('index.php'
         <button class="auth-close" onclick="closeAuthDrawer()" type="button">×</button>
 
         <div class="auth-drawer-header">
-            <div class="auth-logo">🐟</div>
-            <h2>AquaStore Account</h2>
-            <p>Masuk untuk checkout lebih cepat dan melihat status pesanan.</p>
+            <div class="auth-brand">
+                <?php if (file_exists(__DIR__ . '/../assets/img/logo.png')): ?>
+                    <img src="<?= e(url('assets/img/logo.png')) ?>" alt="Logo AquaStore" class="auth-logo">
+                <?php else: ?>
+                    <div class="auth-logo">🐟</div>
+                <?php endif; ?>
+
+                <div class="auth-brand-text">
+                    <h2>AquaStore Account</h2>
+                    <p>Masuk untuk checkout lebih cepat dan melihat status pesanan.</p>
+                </div>
+            </div>
         </div>
 
         <div class="auth-tabs">

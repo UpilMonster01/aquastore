@@ -1,0 +1,62 @@
+
+/* PRODUCT PAGES DEEP OCEAN */
+.popular-section,
+.detail-section,
+.checkout-section,
+.my-order-section {
+    background:#020817;
+    color:#f8fafc;
+}
+
+.section-title h2,
+.section-title span {
+    color:#f8fafc;
+}
+
+.filter-box,
+.premium-filter,
+.checkout-form,
+.checkout-summary-premium,
+.my-order-card,
+.detail-wrapper,
+.admin-panel {
+    background:#081426!important;
+    border:1px solid rgba(255,255,255,.12)!important;
+    color:#f8fafc;
+    border-radius:24px;
+}
+
+.fish-card h3,
+.fish-card h4,
+.detail-info h1,
+.detail-info h2 {
+    color:#f8fafc;
+}
+
+.fish-card p,
+.detail-info p {
+    color:#94a3b8;
+}
+
+.mini-button {
+    background:#00b8e6;
+    color:white!important;
+    border-radius:999px;
+    padding:10px 18px;
+    text-decoration:none;
+    font-weight:800;
+}
+
+input,select,textarea {
+    background:#10233d!important;
+    color:white!important;
+    border-color:rgba(255,255,255,.15)!important;
+}
+
+.order-detail-box,
+.payment-proof-box,
+.catalog-info {
+    background:#081426!important;
+    color:#f8fafc;
+    border-color:rgba(255,255,255,.12)!important;
+}

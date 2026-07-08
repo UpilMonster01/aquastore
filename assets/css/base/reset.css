@@ -1,22 +1,5 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
 body {
-    font-family: 'Poppins', Arial, sans-serif;
-    background: var(--soft);
-    color: var(--text);
-    overflow-x: hidden;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-img {
-    max-width: 100%;
-    display: block;
+ background:radial-gradient(circle at top,rgba(0,184,230,.18),transparent 35%),var(--secondary);
+ color:var(--text);
 }

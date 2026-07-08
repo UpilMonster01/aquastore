@@ -1,0 +1,96 @@
+
+/* FINAL DEEP OCEAN POLISH */
+
+* {
+    scroll-behavior:smooth;
+}
+
+body {
+    overflow-x:hidden;
+}
+
+.hero-button,
+.mini-button,
+.login-button,
+.search-button {
+    position:relative;
+    overflow:hidden;
+}
+
+.hero-button::after,
+.mini-button::after {
+    content:"";
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:100%;
+    height:100%;
+    background:rgba(255,255,255,.18);
+    transition:.4s;
+}
+
+.hero-button:hover::after,
+.mini-button:hover::after {
+    left:100%;
+}
+
+.fish-card,
+.ocean-product-card,
+.dash-card,
+.admin-panel {
+    animation: oceanFade .5s ease;
+}
+
+@keyframes oceanFade {
+    from {
+        opacity:0;
+        transform:translateY(15px);
+    }
+    to {
+        opacity:1;
+        transform:none;
+    }
+}
+
+/* bubble decoration */
+.ocean-hero::before {
+    content:"";
+    position:absolute;
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    background:rgba(0,184,230,.15);
+    filter:blur(5px);
+    animation:floatBubble 8s infinite ease-in-out;
+}
+
+@keyframes floatBubble {
+    50% { transform:translateY(-40px); }
+}
+
+img {
+    transition:.4s ease;
+}
+
+img:hover {
+    transform:scale(1.03);
+}
+
+@media(max-width:768px){
+    .menu {
+        display:none;
+    }
+
+    .hero-content-ocean h1 {
+        font-size:36px!important;
+    }
+
+    .hero-feature-row {
+        flex-direction:column;
+    }
+
+    .ocean-product-grid,
+    .category-grid-ocean {
+        grid-template-columns:1fr!important;
+    }
+}
