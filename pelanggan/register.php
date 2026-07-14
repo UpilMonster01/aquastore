@@ -20,6 +20,7 @@
             <?php show_flash(); ?>
 
             <form action="../proses/register-user.php" method="POST">
+                <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
                 <input type="text" name="nama" placeholder="Nama lengkap" required>
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="text" name="no_hp" placeholder="Nomor HP">

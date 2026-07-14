@@ -20,6 +20,7 @@
             <?php show_flash(); ?>
 
             <form action="../proses/login-user.php" method="POST">
+                <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
                 <input type="email" name="email" placeholder="Masukkan email" required>
                 <input type="password" name="password" placeholder="Masukkan password" required>
 
