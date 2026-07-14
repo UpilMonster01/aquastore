@@ -57,6 +57,7 @@ $data = $pdo->query("SELECT * FROM perlengkapan ORDER BY id DESC")->fetchAll();
                     <button class="mini-button" onclick="openModal('edit<?= $p['id'] ?>')">Edit</button>
 
                     <form action="../proses/hapus-perlengkapan.php" method="POST" class="action-form-inline" onsubmit="return confirm('Hapus data ini?')">
+                        <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
                         <input type="hidden" name="id" value="<?= $p['id'] ?>">
                         <button class="delete-button">Hapus</button>
                     </form>
@@ -69,6 +70,7 @@ $data = $pdo->query("SELECT * FROM perlengkapan ORDER BY id DESC")->fetchAll();
                     <h2>Edit Perlengkapan</h2>
 
                     <form action="../proses/edit-perlengkapan.php" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
                         <input type="hidden" name="id" value="<?= $p['id'] ?>">
                         <?php $item = $p; include "form-perlengkapan.php"; ?>
                         <button class="login-button">Simpan</button>
@@ -87,6 +89,7 @@ $data = $pdo->query("SELECT * FROM perlengkapan ORDER BY id DESC")->fetchAll();
         <h2>Tambah Perlengkapan</h2>
 
         <form action="../proses/tambah-perlengkapan.php" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
             <?php $item = []; include "form-perlengkapan.php"; ?>
             <button class="login-button">Tambah</button>
         </form>

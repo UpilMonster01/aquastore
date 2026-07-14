@@ -52,7 +52,7 @@ INSERT INTO `admin` (`id`, `username`, `password`, `nama`, `created_at`) VALUES
 CREATE TABLE `detail_pesanan` (
   `id` int(11) NOT NULL,
   `pesanan_id` int(11) NOT NULL,
-  `ikan_id` int(11) NOT NULL,
+  `ikan_id` int(11) DEFAULT NULL,
   `jumlah` int(11) NOT NULL,
   `harga_satuan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -77,7 +77,7 @@ INSERT INTO `detail_pesanan` (`id`, `pesanan_id`, `ikan_id`, `jumlah`, `harga_sa
 CREATE TABLE `detail_pesanan_perlengkapan` (
   `id` int(11) NOT NULL,
   `pesanan_id` int(11) NOT NULL,
-  `perlengkapan_id` int(11) NOT NULL,
+  `perlengkapan_id` int(11) DEFAULT NULL,
   `jumlah` int(11) NOT NULL,
   `harga_satuan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -488,14 +488,14 @@ ALTER TABLE `tank`
 --
 ALTER TABLE `detail_pesanan`
   ADD CONSTRAINT `detail_pesanan_ibfk_1` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `detail_pesanan_ibfk_2` FOREIGN KEY (`ikan_id`) REFERENCES `ikan` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `detail_pesanan_ibfk_2` FOREIGN KEY (`ikan_id`) REFERENCES `ikan` (`id`) ON DELETE SET NULL;
 
 --
 -- Ketidakleluasaan untuk tabel `detail_pesanan_perlengkapan`
 --
 ALTER TABLE `detail_pesanan_perlengkapan`
   ADD CONSTRAINT `detail_pesanan_perlengkapan_ibfk_1` FOREIGN KEY (`pesanan_id`) REFERENCES `pesanan` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `detail_pesanan_perlengkapan_ibfk_2` FOREIGN KEY (`perlengkapan_id`) REFERENCES `perlengkapan` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `detail_pesanan_perlengkapan_ibfk_2` FOREIGN KEY (`perlengkapan_id`) REFERENCES `perlengkapan` (`id`) ON DELETE SET NULL;
 
 --
 -- Ketidakleluasaan untuk tabel `ikan_gambar`

@@ -1,6 +1,7 @@
 <?php
 require "../config/db.php";
 admin_only();
+csrf_check();
 
 $id = (int)($_POST['id'] ?? 0);
 
