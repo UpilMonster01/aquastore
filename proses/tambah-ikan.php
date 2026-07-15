@@ -12,18 +12,35 @@ function uploadFotoIkan()
         return '';
     }
 
-    $allowed = ['jpg', 'jpeg', 'png', 'webp'];
+    $allowedMime = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp',
+    ];
 
-    $ext = strtolower(
-        pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION)
-    );
+    if (!class_exists('finfo')) {
+        flash('error', 'Fitur pemeriksaan file belum aktif pada server.');
+        header("Location: ../admin/ikan.php");
+        exit;
+    }
 
-    if (!in_array($ext, $allowed, true)) {
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mime = $finfo->file($_FILES['foto']['tmp_name']);
+
+    if (!isset($allowedMime[$mime])) {
         flash(
             'error',
             'Format foto harus JPG, JPEG, PNG, atau WEBP.'
         );
 
+        header("Location: ../admin/ikan.php");
+        exit;
+    }
+
+    $ext = $allowedMime[$mime];
+
+    if (@getimagesize($_FILES['foto']['tmp_name']) === false) {
+        flash('error', 'File gambar tidak valid atau rusak.');
         header("Location: ../admin/ikan.php");
         exit;
     }

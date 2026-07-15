@@ -12,12 +12,25 @@ if (!is_dir($uploadDir)) {
 $foto = "";
 
 if (!empty($_FILES['foto']['name']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-    $allowed = ['jpg', 'jpeg', 'png', 'webp'];
-    $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+    $allowedMime = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp',
+    ];
 
-    if (in_array($ext, $allowed) && $_FILES['foto']['size'] <= 2 * 1024 * 1024) {
-        $foto = uniqid('alat_', true) . "." . $ext;
-        move_uploaded_file($_FILES['foto']['tmp_name'], $uploadDir . $foto);
+    if ($_FILES['foto']['size'] <= 2 * 1024 * 1024 && class_exists('finfo')) {
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->file($_FILES['foto']['tmp_name']);
+
+        if (isset($allowedMime[$mime]) && @getimagesize($_FILES['foto']['tmp_name']) !== false) {
+            $ext = $allowedMime[$mime];
+            $foto = uniqid('alat_', true) . "." . $ext;
+            move_uploaded_file($_FILES['foto']['tmp_name'], $uploadDir . $foto);
+        } else {
+            flash('error', 'Format foto harus JPG, PNG, atau WEBP yang valid.');
+            header("Location: ../admin/perlengkapan.php");
+            exit;
+        }
     }
 }
 

@@ -23,11 +23,31 @@ if (!is_dir($uploadDir)) {
 }
 
 if (!empty($_FILES['foto']['name']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-    $allowed = ['jpg', 'jpeg', 'png', 'webp'];
-    $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+    $allowedMime = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp',
+    ];
 
-    if (!in_array($ext, $allowed)) {
+    if (!class_exists('finfo')) {
+        flash('error', 'Fitur pemeriksaan file belum aktif pada server.');
+        header("Location: ../admin/ikan.php");
+        exit;
+    }
+
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mime = $finfo->file($_FILES['foto']['tmp_name']);
+
+    if (!isset($allowedMime[$mime])) {
         flash('error', 'Format foto harus JPG, PNG, JPEG, atau WEBP.');
+        header("Location: ../admin/ikan.php");
+        exit;
+    }
+
+    $ext = $allowedMime[$mime];
+
+    if (@getimagesize($_FILES['foto']['tmp_name']) === false) {
+        flash('error', 'File gambar tidak valid atau rusak.');
         header("Location: ../admin/ikan.php");
         exit;
     }

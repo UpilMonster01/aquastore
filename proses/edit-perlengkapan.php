@@ -24,19 +24,36 @@ if (!$data) {
 $foto = $data['foto'];
 
 if (!empty($_FILES['foto']['name']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-    $allowed = ['jpg', 'jpeg', 'png', 'webp'];
-    $ext = strtolower(pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION));
+    $allowedMime = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/webp' => 'webp',
+    ];
 
-    if (in_array($ext, $allowed) && $_FILES['foto']['size'] <= 2 * 1024 * 1024) {
-        $fotoBaru = uniqid('alat_', true) . "." . $ext;
+    if ($_FILES['foto']['size'] > 2 * 1024 * 1024 || !class_exists('finfo')) {
+        flash('error', 'Ukuran foto maksimal 2MB atau server tidak mendukung pemeriksaan file.');
+        header("Location: ../admin/perlengkapan.php");
+        exit;
+    }
 
-        if (move_uploaded_file($_FILES['foto']['tmp_name'], $uploadDir . $fotoBaru)) {
-            if (!empty($foto) && file_exists($uploadDir . $foto)) {
-                unlink($uploadDir . $foto);
-            }
+    $finfo = new finfo(FILEINFO_MIME_TYPE);
+    $mime = $finfo->file($_FILES['foto']['tmp_name']);
 
-            $foto = $fotoBaru;
+    if (!isset($allowedMime[$mime]) || @getimagesize($_FILES['foto']['tmp_name']) === false) {
+        flash('error', 'Format foto harus JPG, PNG, atau WEBP yang valid.');
+        header("Location: ../admin/perlengkapan.php");
+        exit;
+    }
+
+    $ext = $allowedMime[$mime];
+    $fotoBaru = uniqid('alat_', true) . "." . $ext;
+
+    if (move_uploaded_file($_FILES['foto']['tmp_name'], $uploadDir . $fotoBaru)) {
+        if (!empty($foto) && file_exists($uploadDir . $foto)) {
+            unlink($uploadDir . $foto);
         }
+
+        $foto = $fotoBaru;
     }
 }
 
