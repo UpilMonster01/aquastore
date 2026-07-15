@@ -71,12 +71,12 @@ $update = $pdo->prepare("
 
 $update->execute([
     trim($_POST['nama']),
-    $_POST['kategori'],
+    pilih_valid($_POST['kategori'] ?? '', ['Pakan', 'Filter', 'Aerator', 'Heater', 'Obat', 'Lampu', 'Substrate', 'Dekorasi', 'Lainnya'], 'Lainnya'),
     (int)$_POST['harga'],
     (int)$_POST['stok'],
     $foto,
     trim($_POST['deskripsi']),
-    $_POST['status'],
+    pilih_valid($_POST['status'] ?? '', ['Tersedia', 'Habis'], 'Tersedia'),
     $id
 ]);
 

@@ -2,6 +2,8 @@
 require "../config/db.php";
 admin_only();
 
+define('AQUASTORE_ADMIN_VIEW', true);
+
 $data = $pdo->query("SELECT * FROM perlengkapan ORDER BY id DESC")->fetchAll();
 ?>
 <!DOCTYPE html>

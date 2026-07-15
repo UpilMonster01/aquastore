@@ -16,6 +16,10 @@ function redirect_login_error($redirect)
     redirect_to(append_query($redirect, ['auth' => 'login']));
 }
 
+if (!login_rate_limit_check($pdo, 'pelanggan')) {
+    redirect_login_error($redirect);
+}
+
 if ($email === '' || $password === '') {
     flash('error', 'Email dan password wajib diisi.');
     redirect_login_error($redirect);
@@ -26,6 +30,7 @@ $stmt->execute([$email]);
 $user = $stmt->fetch();
 
 if ($user && password_verify($password, $user['password'])) {
+    login_rate_limit_reset($pdo, 'pelanggan');
     session_regenerate_id(true);
 
     $_SESSION['user'] = [
@@ -41,4 +46,5 @@ if ($user && password_verify($password, $user['password'])) {
 }
 
 flash('error', 'Email atau password salah.');
+login_rate_limit_record_fail($pdo, 'pelanggan');
 redirect_login_error($redirect);

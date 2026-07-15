@@ -1,0 +1,31 @@
+# Folder ini hanya untuk menyimpan file yang diunggah pengguna
+# (foto ikan, foto perlengkapan, bukti transfer).
+#
+# Jaga-jaga (defense in depth): walaupun validasi upload di
+# kode PHP sudah memeriksa isi file, folder ini tetap dikunci
+# supaya PHP TIDAK PERNAH dieksekusi dari sini, seandainya ada
+# file berbahaya yang lolos.
+
+# Apache 2.4+
+<IfModule mod_authz_core.c>
+    <FilesMatch "\.(php|php3|php4|php5|php7|phtml|pl|py|cgi|sh|asp|aspx)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+# Apache 2.2 (fallback)
+<IfModule !mod_authz_core.c>
+    <FilesMatch "\.(php|php3|php4|php5|php7|phtml|pl|py|cgi|sh|asp|aspx)$">
+        Order allow,deny
+        Deny from all
+    </FilesMatch>
+</IfModule>
+
+# Matikan juga eksekusi lewat handler PHP (untuk konfigurasi
+# server yang menjalankan PHP sebagai handler, bukan mod_php)
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>

@@ -1,3 +1,9 @@
+<?php
+if (!defined('AQUASTORE_ADMIN_VIEW')) {
+    http_response_code(403);
+    exit('Akses langsung tidak diizinkan.');
+}
+?>
 <input type="text" name="nama" placeholder="Nama ikan" value="<?= e($i['nama'] ?? '') ?>" required>
 
 <input type="text" name="nama_latin" placeholder="Nama latin" value="<?= e($i['nama_latin'] ?? '') ?>">

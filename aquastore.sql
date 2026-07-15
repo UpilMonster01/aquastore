@@ -163,6 +163,21 @@ CREATE TABLE `log_kesehatan` (
 -- --------------------------------------------------------
 
 --
+-- Struktur dari tabel `login_attempts`
+-- Menyimpan percobaan login gagal per IP untuk rate limiting
+--
+
+CREATE TABLE `login_attempts` (
+  `id` int(11) NOT NULL,
+  `ip_scope` varchar(150) NOT NULL,
+  `attempts` int(11) NOT NULL DEFAULT 1,
+  `last_attempt` timestamp NOT NULL DEFAULT current_timestamp(),
+  `locked_until` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Struktur dari tabel `pelanggan`
 --
 
@@ -365,6 +380,13 @@ ALTER TABLE `log_kesehatan`
   ADD KEY `ikan_id` (`ikan_id`);
 
 --
+-- Indeks untuk tabel `login_attempts`
+--
+ALTER TABLE `login_attempts`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `ip_scope` (`ip_scope`);
+
+--
 -- Indeks untuk tabel `pelanggan`
 --
 ALTER TABLE `pelanggan`
@@ -441,6 +463,12 @@ ALTER TABLE `ikan_gambar`
 -- AUTO_INCREMENT untuk tabel `log_kesehatan`
 --
 ALTER TABLE `log_kesehatan`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT untuk tabel `login_attempts`
+--
+ALTER TABLE `login_attempts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --

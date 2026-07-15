@@ -1,3 +1,9 @@
+<?php
+if (!defined('AQUASTORE_ADMIN_VIEW')) {
+    http_response_code(403);
+    exit('Akses langsung tidak diizinkan.');
+}
+?>
 <input type="text" name="nama" placeholder="Nama perlengkapan" value="<?= e($item['nama'] ?? '') ?>" required>
 
 <select name="kategori" required>

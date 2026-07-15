@@ -8,6 +8,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 
 csrf_check();
 
+if (!login_rate_limit_check($pdo, 'admin')) {
+    header("Location: ../index.php");
+    exit;
+}
+
 $username = trim($_POST['username'] ?? '');
 $password = $_POST['password'] ?? '';
 
@@ -28,6 +33,7 @@ $stmt->execute([$username]);
 $admin = $stmt->fetch();
 
 if ($admin && password_verify($password, $admin['password'])) {
+    login_rate_limit_reset($pdo, 'admin');
     session_regenerate_id(true);
 
     $_SESSION['admin'] = [
@@ -54,6 +60,7 @@ if ($admin && password_verify($password, $admin['password'])) {
 }
 
 flash('error', 'Username atau password salah.');
+login_rate_limit_record_fail($pdo, 'admin');
 
 header("Location: ../index.php");
 exit;

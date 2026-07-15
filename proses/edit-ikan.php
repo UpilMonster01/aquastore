@@ -98,17 +98,17 @@ $update = $pdo->prepare("
 $update->execute([
     trim($_POST['nama'] ?? ''),
     trim($_POST['nama_latin'] ?? ''),
-    $_POST['kategori_air'] ?? 'Tawar',
-    $_POST['kategori_sifat'] ?? 'Non-Predator',
-    $_POST['kategori_jenis'] ?? 'Hias',
+    pilih_valid($_POST['kategori_air'] ?? '', ['Laut', 'Tawar', 'Payau'], 'Tawar'),
+    pilih_valid($_POST['kategori_sifat'] ?? '', ['Predator', 'Non-Predator'], 'Non-Predator'),
+    pilih_valid($_POST['kategori_jenis'] ?? '', ['Hias', 'Konsumsi', 'Langka'], 'Hias'),
     (int)($_POST['harga'] ?? 0),
     (int)($_POST['stok'] ?? 0),
     $_POST['ukuran_cm'] ?? 0,
-    $_POST['tingkat_perawatan'] ?? 'Mudah',
+    pilih_valid($_POST['tingkat_perawatan'] ?? '', ['Mudah', 'Sedang', 'Sulit'], 'Mudah'),
     $foto,
     trim($_POST['deskripsi'] ?? ''),
     trim($_POST['tips_perawatan'] ?? ''),
-    $_POST['status'] ?? 'Tersedia',
+    pilih_valid($_POST['status'] ?? '', ['Tersedia', 'Habis', 'Pre-order'], 'Tersedia'),
     $id
 ]);
 

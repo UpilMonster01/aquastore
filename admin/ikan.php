@@ -3,6 +3,8 @@ require "../config/db.php";
 
 admin_only();
 
+define('AQUASTORE_ADMIN_VIEW', true);
+
 $cari = trim($_GET['cari'] ?? '');
 
 if ($cari != '') {
