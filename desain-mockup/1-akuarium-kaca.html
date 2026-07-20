@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>AquaStore — Akuarium Kaca</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --water-1:#eaf7fb;
+    --water-2:#cdeef8;
+    --ink:#0b2436;
+    --ink-soft:#4b6577;
+    --teal:#0891a8;
+    --teal-deep:#066374;
+    --koi:#f2a531;
+    --glass:rgba(255,255,255,.55);
+    --glass-border:rgba(255,255,255,.8);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 500px at 15% -10%, #ffffff 0%, transparent 60%),
+      linear-gradient(180deg, var(--water-1), var(--water-2) 55%, #b7e3f2 100%);
+    min-height:100vh;
+    padding-bottom:60px;
+  }
+  nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 48px;
+  }
+  .logo{font-family:'Bricolage Grotesque';font-weight:600;font-size:22px;letter-spacing:-.02em;}
+  .logo span{color:var(--teal);}
+  .navlinks{display:flex;gap:32px;font-size:14px;color:var(--ink-soft);font-weight:500;}
+  .cart-pill{
+    background:var(--glass);border:1px solid var(--glass-border);
+    backdrop-filter:blur(14px);
+    padding:9px 18px;border-radius:100px;font-size:13px;font-weight:600;
+    display:flex;align-items:center;gap:8px;
+  }
+  .hero{
+    padding:60px 48px 20px;
+    display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.06em;
+    color:var(--teal-deep);background:rgba(8,145,168,.1);
+    padding:6px 14px;border-radius:100px;margin-bottom:22px;
+  }
+  .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--teal);}
+  h1{
+    font-family:'Bricolage Grotesque';font-weight:600;
+    font-size:56px;line-height:1.02;letter-spacing:-.03em;
+    color:var(--ink);
+  }
+  h1 em{font-style:normal;color:var(--teal);}
+  .sub{margin-top:22px;font-size:17px;color:var(--ink-soft);max-width:480px;line-height:1.6;}
+  .hero-actions{margin-top:34px;display:flex;gap:14px;}
+  .btn-primary{
+    background:var(--teal);color:#fff;border:none;
+    padding:16px 30px;border-radius:14px;font-weight:600;font-size:15px;
+    box-shadow:0 16px 30px -12px rgba(8,145,168,.55);
+  }
+  .btn-ghost{
+    background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(10px);
+    padding:16px 26px;border-radius:14px;font-weight:600;font-size:15px;color:var(--ink);
+  }
+  .tank{
+    position:relative;border-radius:32px;overflow:hidden;height:420px;
+    background:linear-gradient(160deg,#0891a8,#043847);
+    box-shadow:0 40px 70px -30px rgba(6,99,116,.45);
+  }
+  .tank::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 30% 20%, rgba(255,255,255,.25), transparent 45%);
+  }
+  .tank-label{
+    position:absolute;bottom:20px;left:20px;right:20px;
+    background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--glass-border);
+    border-radius:18px;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;
+  }
+  .tank-label b{font-family:'Bricolage Grotesque';font-size:16px;}
+  .tank-label span{font-family:'IBM Plex Mono';font-size:12px;color:var(--teal-deep);}
+  section.cats{padding:50px 48px 10px;}
+  .cats h2{font-family:'Bricolage Grotesque';font-size:24px;font-weight:600;margin-bottom:20px;}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  .card{
+    background:var(--glass);border:1px solid var(--glass-border);backdrop-filter:blur(14px);
+    border-radius:22px;padding:0;overflow:hidden;
+    transition:.25s;
+  }
+  .card-img{
+    height:150px;background:linear-gradient(150deg,#7fd7e8,#0891a8);
+    position:relative;
+  }
+  .card-img span{position:absolute;top:12px;right:12px;background:var(--koi);color:#3a2200;
+    font-size:11px;font-weight:700;padding:4px 10px;border-radius:100px;font-family:'IBM Plex Mono';}
+  .card-body{padding:18px 18px 20px;}
+  .card-body b{font-family:'Bricolage Grotesque';font-size:16px;}
+  .card-body p{font-size:12px;color:var(--ink-soft);margin:6px 0 14px;font-family:'IBM Plex Mono';}
+  .price-row{display:flex;justify-content:space-between;align-items:center;}
+  .price{font-weight:700;color:var(--teal-deep);}
+  .add{
+    width:34px;height:34px;border-radius:10px;background:var(--teal);color:#fff;
+    border:none;font-size:18px;display:flex;align-items:center;justify-content:center;
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="logo">Aqua<span>Store</span></div>
+  <div class="navlinks">
+    <span>Beranda</span><span>Katalog Ikan</span><span>Perlengkapan</span><span>Perawatan</span>
+  </div>
+  <div class="cart-pill">🛒 Keranjang · 3</div>
+</nav>
+
+<div class="hero">
+  <div>
+    <div class="eyebrow">STOK BARU MINGGU INI</div>
+    <h1>Bawa pulang<br>keindahan <em>air jernih</em></h1>
+    <p class="sub">Ikan hias sehat, perlengkapan aquascape lengkap, dan tips perawatan dari komunitas akuaris — semua dalam satu tempat.</p>
+    <div class="hero-actions">
+      <button class="btn-primary">Lihat katalog ikan</button>
+      <button class="btn-ghost">Konsultasi perawatan</button>
+    </div>
+  </div>
+  <div class="tank">
+    <div class="tank-label">
+      <b>Discus Blue Diamond</b>
+      <span>pH 6.5 · 28°C</span>
+    </div>
+  </div>
+</div>
+
+<section class="cats">
+  <h2>Rekomendasi untukmu</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="card-img"><span>TAWAR</span></div>
+      <div class="card-body">
+        <b>Neon Tetra</b>
+        <p>NON-PREDATOR · MUDAH</p>
+        <div class="price-row"><span class="price">Rp 8.500</span><button class="add">+</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img" style="background:linear-gradient(150deg,#8fe3c7,#0e8f6e)"><span>LAUT</span></div>
+      <div class="card-body">
+        <b>Clownfish Nemo</b>
+        <p>NON-PREDATOR · SEDANG</p>
+        <div class="price-row"><span class="price">Rp 65.000</span><button class="add">+</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img" style="background:linear-gradient(150deg,#f3c98a,#c97a1c)"><span>TAWAR</span></div>
+      <div class="card-body">
+        <b>Koi Kohaku 20cm</b>
+        <p>NON-PREDATOR · SULIT</p>
+        <div class="price-row"><span class="price">Rp 450.000</span><button class="add">+</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img" style="background:linear-gradient(150deg,#c9b6f2,#6a3fc9)"><span>ALAT</span></div>
+      <div class="card-body">
+        <b>Filter Canister 800L</b>
+        <p>PERLENGKAPAN · FILTER</p>
+        <div class="price-row"><span class="price">Rp 320.000</span><button class="add">+</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

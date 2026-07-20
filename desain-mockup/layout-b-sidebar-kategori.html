@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Layout B — Sidebar Kategori</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{--primary:#0891A8;--koi:#F2A531;--ink:#0B2436;--ink-soft:#4B6577;--glass:rgba(255,255,255,.6);--glass-border:rgba(255,255,255,.8);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',sans-serif;color:var(--ink);
+    background:radial-gradient(1200px 500px at 15% -10%,#fff 0,transparent 60%),linear-gradient(180deg,#eaf7fb,#cdeef8 55%,#b7e3f2 100%);}
+  .label{text-align:center;font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.1em;color:var(--primary);padding:14px;opacity:.7;}
+  nav{display:flex;justify-content:space-between;align-items:center;padding:16px 40px;background:rgba(255,255,255,.5);backdrop-filter:blur(14px);}
+  .brand{font-family:'Bricolage Grotesque';font-weight:700;font-size:19px;}
+  .brand span{color:var(--primary);}
+  .search-bar{flex:1;max-width:420px;margin:0 30px;background:var(--glass);border:1px solid var(--glass-border);border-radius:100px;padding:10px 18px;font-size:13px;color:var(--ink-soft);}
+  .pill{background:var(--glass);border:1px solid var(--glass-border);padding:8px 16px;border-radius:100px;font-size:13px;font-weight:600;}
+
+  .layout{display:grid;grid-template-columns:230px 1fr;gap:24px;padding:24px 40px 60px;max-width:1300px;margin:auto;}
+  aside{background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:20px;backdrop-filter:blur(14px);height:fit-content;}
+  aside h4{font-family:'Bricolage Grotesque';font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);margin-bottom:12px;}
+  aside .item{padding:10px 12px;border-radius:10px;font-size:14px;margin-bottom:4px;color:var(--ink);}
+  aside .item.active{background:var(--primary);color:#fff;font-weight:600;}
+  aside .divider{height:1px;background:var(--glass-border);margin:16px 0;}
+
+  main{display:flex;flex-direction:column;gap:22px;}
+  .banner{border-radius:24px;padding:36px;background:linear-gradient(120deg,#0891a8,#043847);color:#fff;display:flex;justify-content:space-between;align-items:center;}
+  .banner h1{font-family:'Bricolage Grotesque';font-size:30px;max-width:340px;}
+  .banner span{font-family:'IBM Plex Mono';font-size:12px;opacity:.8;}
+  .banner .btn{margin-top:14px;background:#fff;color:#066374;border:none;padding:12px 22px;border-radius:12px;font-weight:700;font-size:13px;}
+
+  .toolbar{display:flex;justify-content:space-between;align-items:center;}
+  .toolbar h2{font-family:'Bricolage Grotesque';font-size:19px;}
+  .toolbar select{background:var(--glass);border:1px solid var(--glass-border);border-radius:10px;padding:8px 12px;font-size:13px;}
+
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  .card{background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;overflow:hidden;backdrop-filter:blur(14px);}
+  .img{height:120px;background:linear-gradient(150deg,#7fd7e8,#0891a8);}
+  .body{padding:14px;}
+  .body b{font-family:'Bricolage Grotesque';font-size:14px;}
+  .price{color:#066374;font-weight:700;margin-top:6px;display:block;font-size:14px;}
+</style>
+</head>
+<body>
+<div class="label">LAYOUT B — SIDEBAR KATEGORI (gaya marketplace: navigasi & filter selalu terlihat)</div>
+<nav>
+  <div class="brand">Aqua<span>Store</span></div>
+  <div class="search-bar">🔍 Cari ikan, perlengkapan...</div>
+  <div class="pill">🛒 Keranjang · 3</div>
+</nav>
+
+<div class="layout">
+  <aside>
+    <h4>Kategori</h4>
+    <div class="item active">Semua Produk</div>
+    <div class="item">Ikan Air Tawar</div>
+    <div class="item">Ikan Air Laut</div>
+    <div class="item">Perlengkapan</div>
+    <div class="item">Obat & Vitamin</div>
+    <div class="divider"></div>
+    <h4>Tingkat Perawatan</h4>
+    <div class="item">Mudah</div>
+    <div class="item">Sedang</div>
+    <div class="item">Sulit</div>
+    <div class="divider"></div>
+    <h4>Rentang Harga</h4>
+    <div class="item">Di bawah Rp 50rb</div>
+    <div class="item">Rp 50rb – 300rb</div>
+    <div class="item">Di atas Rp 300rb</div>
+  </aside>
+
+  <main>
+    <div class="banner">
+      <div>
+        <span>PROMO MINGGU INI</span>
+        <h1>Diskon 20% semua perlengkapan filter</h1>
+        <button class="btn">Belanja sekarang</button>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <h2>Semua Produk (14)</h2>
+      <select><option>Terbaru</option></select>
+    </div>
+
+    <div class="grid">
+      <div class="card"><div class="img"></div><div class="body"><b>Neon Tetra</b><span class="price">Rp 8.500</span></div></div>
+      <div class="card"><div class="img" style="background:linear-gradient(150deg,#8fe3c7,#0e8f6e)"></div><div class="body"><b>Clownfish Nemo</b><span class="price">Rp 65.000</span></div></div>
+      <div class="card"><div class="img" style="background:linear-gradient(150deg,#f3c98a,#c97a1c)"></div><div class="body"><b>Koi Kohaku</b><span class="price">Rp 450.000</span></div></div>
+      <div class="card"><div class="img" style="background:linear-gradient(150deg,#c9b6f2,#6a3fc9)"></div><div class="body"><b>Filter Canister</b><span class="price">Rp 320.000</span></div></div>
+      <div class="card"><div class="img"></div><div class="body"><b>Guppy Fancy</b><span class="price">Rp 12.000</span></div></div>
+      <div class="card"><div class="img" style="background:linear-gradient(150deg,#8fe3c7,#0e8f6e)"></div><div class="body"><b>Blue Tang</b><span class="price">Rp 180.000</span></div></div>
+      <div class="card"><div class="img" style="background:linear-gradient(150deg,#f3c98a,#c97a1c)"></div><div class="body"><b>Arwana Silver</b><span class="price">Rp 850.000</span></div></div>
+      <div class="card"><div class="img" style="background:linear-gradient(150deg,#c9b6f2,#6a3fc9)"></div><div class="body"><b>Heater 100W</b><span class="price">Rp 95.000</span></div></div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

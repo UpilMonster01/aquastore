@@ -1,0 +1,537 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
+
+/* =========================================================
+   TEMA: AKUARIUM KACA
+   File ini di-import PALING TERAKHIR di style.css supaya
+   konsisten menimpa gaya lama (legacy.css & dark override)
+   di semua halaman, tanpa perlu menulis ulang tiap file.
+========================================================= */
+
+:root {
+    /* Timpa token warna lama dari legacy.css (--dark, --blue, --cyan, dst)
+       supaya SEMUA elemen yang masih memakainya (119 tempat di berbagai
+       file) otomatis ikut tema baru, tanpa perlu diedit satu per satu. */
+    --dark: #eaf7fb;
+    --dark2: #cdeef8;
+    --blue: #0891A8;
+    --cyan: #0AA8C2;
+    --white: #ffffff;
+    --soft: #f4fbfe;
+    --danger: #EF4444;
+    --shadow: 0 20px 50px rgba(8,145,168,.18);
+    --radius: 24px;
+}
+
+html, body {
+    background: radial-gradient(1200px 500px at 15% -10%, #ffffff 0%, transparent 60%),
+                linear-gradient(180deg, #eaf7fb, #cdeef8 55%, #b7e3f2 100%) !important;
+    color: var(--text) !important;
+    font-family: var(--font-body) !important;
+    min-height: 100vh;
+}
+
+h1, h2, h3, .brand, .brand-link, .side-brand, .section-title {
+    font-family: var(--font-display) !important;
+    letter-spacing: -.02em;
+    color: var(--text) !important;
+}
+
+/* ---------- Pola umum: berlaku ke semua halaman lain
+   (checkout, invoice, profil, tracking, login/register, dsb)
+   supaya tidak perlu menyebut tiap nama class satu-satu ---------- */
+[class*="-card"], [class*="-box"], [class*="-panel"], [class*="summary-premium"] {
+    background: rgba(255,255,255,.6) !important;
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 20px !important;
+    color: var(--text) !important;
+}
+
+[class*="-header"]:not(.topbar) {
+    border-bottom: 1px solid var(--border) !important;
+    color: var(--text) !important;
+    background: transparent !important;
+}
+
+[class*="-header"] h1, [class*="-header"] h2, [class*="-header"] h3 {
+    font-family: var(--font-display) !important;
+}
+
+span[class*="badge"], div[class*="badge"], span[class*="status"], div[class*="status"] {
+    font-family: var(--font-mono) !important;
+    font-size: 11px;
+    background: rgba(8,145,168,.1) !important;
+    color: #066374 !important;
+    border: none !important;
+    border-radius: 100px !important;
+}
+
+span[class*="badge-success"], span[class*="status"].success,
+span[class*="status"].verified, span[class*="status"].selesai {
+    background: rgba(34,197,94,.12) !important;
+    color: #15803d !important;
+}
+
+span[class*="status"].rejected, span[class*="status"].ditolak {
+    background: rgba(239,68,68,.12) !important;
+    color: #b91c1c !important;
+}
+
+span[class*="status"].pending {
+    background: rgba(242,165,49,.15) !important;
+    color: #b45309 !important;
+}
+
+a[class*="button"], button[class*="button"], a[class*="btn-"], button[class*="btn-"] {
+    background: rgba(255,255,255,.55) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text) !important;
+    border-radius: var(--radius-sm) !important;
+    backdrop-filter: blur(8px);
+}
+
+form[class*="-form"] {
+    background: rgba(255,255,255,.5) !important;
+    border-radius: 20px !important;
+}
+
+/* ---------- Timpa product-dark.css: section besar yang
+   masih dipaksa gelap (nama class-nya tidak ketangkep pola
+   umum di atas karena tidak mengandung "box/card/panel") ---------- */
+.popular-section,
+.detail-section,
+.checkout-section,
+.my-order-section {
+    background: transparent !important;
+    color: var(--text) !important;
+}
+
+.catalog-info,
+.detail-wrapper,
+.filter-box,
+.premium-filter {
+    background: rgba(255,255,255,.6) !important;
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 22px !important;
+    color: var(--text) !important;
+}
+
+.catalog-info h3, .detail-info h1, .detail-info h2,
+.section-title h2, .section-title span {
+    color: var(--text) !important;
+}
+
+.catalog-info p, .detail-info p, .fish-card p {
+    color: var(--text-muted) !important;
+}
+
+/* ---------- Navbar ---------- */
+.topbar {
+    background: rgba(255,255,255,.55) !important;
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--glass-border) !important;
+    box-shadow: none !important;
+}
+
+.brand, .brand-link, .brand-text-wrap {
+    color: var(--text) !important;
+}
+
+.menu a, .menu span {
+    color: var(--text-muted) !important;
+    font-weight: 500;
+}
+
+.menu a.active, .menu a:hover {
+    color: var(--primary) !important;
+}
+
+.account-pill, .cart, .account-open-btn {
+    background: rgba(255,255,255,.6) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text) !important;
+    backdrop-filter: blur(10px);
+}
+
+.account-dropdown, .account-menu {
+    background: rgba(255,255,255,.9) !important;
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.auth-drawer, .auth-panel {
+    background: rgba(255,255,255,.85) !important;
+    backdrop-filter: blur(24px);
+    color: var(--text) !important;
+}
+
+.auth-drawer input, .auth-drawer select {
+    background: rgba(255,255,255,.7) !important;
+    color: var(--text) !important;
+    border: 1px solid var(--border) !important;
+}
+
+/* ---------- Tombol ---------- */
+.hero-button, .login-button, .auth-submit, .search-button {
+    background: var(--primary) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: var(--radius-sm) !important;
+    box-shadow: 0 16px 30px -14px rgba(8,145,168,.6) !important;
+    font-weight: 600;
+}
+
+.auth-tabs button.active {
+    background: var(--primary) !important;
+    color: #fff !important;
+}
+
+.auth-tabs {
+    background: rgba(8,145,168,.08) !important;
+}
+
+.hero-button:hover, .login-button:hover, .search-button:hover {
+    background: var(--primary-hover) !important;
+}
+
+.outline-button, .reset-button, .mini-button {
+    background: rgba(255,255,255,.55) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text) !important;
+    border-radius: var(--radius-sm) !important;
+    backdrop-filter: blur(8px);
+}
+
+.delete-button {
+    background: rgba(239,68,68,.1) !important;
+    color: #b91c1c !important;
+    border: 1px solid rgba(239,68,68,.3) !important;
+}
+
+/* ---------- Hero beranda ---------- */
+.ocean-hero {
+    background: transparent !important;
+}
+
+.ocean-section {
+    background: transparent !important;
+    color: var(--text) !important;
+}
+
+.ocean-section h2 {
+    color: var(--text) !important;
+}
+
+.category-grid-ocean a {
+    background: rgba(255,255,255,.6) !important;
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text) !important;
+}
+
+.hero-label {
+    font-family: var(--font-mono) !important;
+    font-size: 12px;
+    letter-spacing: .06em;
+    color: var(--primary) !important;
+    background: rgba(8,145,168,.1) !important;
+    padding: 6px 14px;
+    border-radius: 100px;
+    display: inline-flex;
+}
+
+.hero-content-ocean h1 {
+    font-size: 48px;
+    color: var(--text) !important;
+}
+
+.hero-content-ocean p {
+    color: var(--text-muted) !important;
+}
+
+.hero-fish-box {
+    border-radius: 28px !important;
+    overflow: hidden;
+    box-shadow: 0 40px 70px -30px rgba(8,145,168,.35) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+
+/* ---------- Kartu produk (home + katalog + admin) ---------- */
+.ocean-product-card, .fish-card, .dash-card, .admin-panel, .card, .modal-box, .table-box {
+    background: rgba(255,255,255,.6) !important;
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 22px !important;
+    color: var(--text) !important;
+    box-shadow: 0 20px 40px -28px rgba(8,145,168,.25) !important;
+}
+
+.ocean-product-card h3, .fish-card h3, .fish-card b {
+    font-family: var(--font-display) !important;
+    color: var(--text) !important;
+}
+
+.ocean-product-card strong, .fish-card .price, .price {
+    color: #066374 !important;
+    font-weight: 700;
+}
+
+.product-image-ocean, .fish-image {
+    background: linear-gradient(150deg, #7fd7e8, #0891a8) !important;
+    border-radius: 16px !important;
+    color: #fff !important;
+}
+
+/* ---------- Badge & status ---------- */
+.fish-badge, .fish-status {
+    font-family: var(--font-mono) !important;
+    font-size: 11px;
+    background: rgba(8,145,168,.1) !important;
+    color: #066374 !important;
+    border: none !important;
+    border-radius: 100px !important;
+}
+
+.fish-status.tersedia {
+    background: rgba(34,197,94,.12) !important;
+    color: #15803d !important;
+}
+
+.fish-status.habis {
+    background: rgba(239,68,68,.12) !important;
+    color: #b91c1c !important;
+}
+
+.fish-status.preorder {
+    background: rgba(242,165,49,.15) !important;
+    color: #b45309 !important;
+}
+
+/* ---------- Form & input ---------- */
+input, select, textarea {
+    background: rgba(255,255,255,.7) !important;
+    border: 1px solid var(--border) !important;
+    color: var(--text) !important;
+    border-radius: var(--radius-sm) !important;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary) !important;
+    outline: none;
+}
+
+/* ---------- Tabel ---------- */
+table {
+    color: var(--text) !important;
+}
+
+th {
+    color: var(--text-muted) !important;
+    font-family: var(--font-mono) !important;
+    font-size: 12px;
+    letter-spacing: .04em;
+}
+
+td, tr {
+    border-color: var(--border) !important;
+}
+
+tr:hover {
+    background: rgba(8,145,168,.05) !important;
+}
+
+/* ---------- Admin sidebar ---------- */
+.admin-sidebar {
+    background: rgba(255,255,255,.55) !important;
+    backdrop-filter: blur(20px);
+    border-right: 1px solid var(--glass-border) !important;
+}
+
+.admin-sidebar a {
+    color: var(--text-muted) !important;
+}
+
+.admin-sidebar a.active, .admin-sidebar a[aria-current="page"] {
+    background: rgba(8,145,168,.1) !important;
+    color: var(--primary) !important;
+}
+
+.admin-layout, .admin-content {
+    background: transparent !important;
+}
+
+/* ---------- Flash message ---------- */
+.flash {
+    background: rgba(255,255,255,.7) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--text) !important;
+    backdrop-filter: blur(10px);
+}
+
+.flash.success { border-left: 3px solid var(--success) !important; }
+.flash.error { border-left: 3px solid var(--danger) !important; }
+
+/* ---------- Footer ---------- */
+.ocean-footer, footer {
+    background: transparent !important;
+    color: var(--text-muted) !important;
+}
+
+/* ---------- Beranda: Cerita Bertahap ---------- */
+.section-title-home {
+    text-align: center;
+    max-width: 1180px;
+    margin: 0 auto 26px;
+}
+
+.section-title-home span {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .08em;
+    color: var(--primary);
+}
+
+.section-title-home h2 {
+    font-family: var(--font-display);
+    font-size: 28px;
+    margin-top: 8px;
+    color: var(--text);
+}
+
+.trust-strip-wrap {
+    padding: 0 8% 40px;
+}
+
+.trust-strip {
+    max-width: 1180px;
+    margin: -40px auto 0;
+    display: flex;
+    background: rgba(255,255,255,.6);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--glass-border);
+    border-radius: 22px;
+    box-shadow: 0 20px 40px -28px rgba(8,145,168,.25);
+}
+
+.trust-strip > div {
+    flex: 1;
+    text-align: center;
+    padding: 24px 12px;
+    border-right: 1px solid var(--border);
+}
+
+.trust-strip > div:last-child {
+    border-right: none;
+}
+
+.trust-strip b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--primary);
+}
+
+.trust-strip span {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.cat-section {
+    padding: 50px 8% 20px;
+}
+
+.cat-carousel {
+    max-width: 1180px;
+    margin: auto;
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+}
+
+.cat-item {
+    min-width: 150px;
+    background: rgba(255,255,255,.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    padding: 22px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text);
+    transition: var(--transition);
+}
+
+.cat-item:hover {
+    border-color: var(--primary);
+    transform: translateY(-3px);
+}
+
+.cat-item .ic {
+    font-size: 28px;
+}
+
+.cat-item b {
+    display: block;
+    margin-top: 10px;
+    font-family: var(--font-display);
+    font-size: 14px;
+}
+
+.cta-section {
+    padding: 30px 8% 70px;
+}
+
+.cta-box {
+    max-width: 1180px;
+    margin: auto;
+    text-align: center;
+    background: linear-gradient(120deg, #0891a8, #043847) !important;
+    border-radius: 28px !important;
+    color: #fff !important;
+    padding: 60px 30px;
+    backdrop-filter: none !important;
+    border: none !important;
+}
+
+.cta-box h2 {
+    font-family: var(--font-display);
+    font-size: 30px;
+    color: #fff !important;
+}
+
+.cta-box p {
+    opacity: .85;
+    margin-top: 10px;
+    color: #fff !important;
+}
+
+.cta-button {
+    display: inline-block;
+    margin-top: 24px;
+    background: #fff;
+    color: #066374;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+/* ---------- Cetak invoice tetap bersih, bukan versi kaca ---------- */
+@media print {
+    html, body {
+        background: #fff !important;
+    }
+
+    .invoice-card, .invoice-admin-card, [class*="-card"] {
+        background: #fff !important;
+        backdrop-filter: none !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+}

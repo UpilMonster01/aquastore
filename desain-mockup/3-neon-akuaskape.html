@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>AquaStore — Neon Akuaskape</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07080d;
+    --panel:#0e1018;
+    --line:rgba(255,255,255,.08);
+    --text:#eef0f6;
+    --text-soft:#8b90a3;
+    --cyan:#25e6c9;
+    --magenta:#ff3fa4;
+    --violet:#8b5cf6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;}
+  .ledbar{height:5px;background:linear-gradient(90deg,var(--violet),var(--magenta),var(--cyan),var(--violet));}
+  nav{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:22px 48px;border-bottom:1px solid var(--line);
+  }
+  .brand{font-family:'Space Grotesk';font-weight:700;font-size:19px;}
+  .brand span{color:var(--cyan);}
+  .navlinks{display:flex;gap:30px;font-size:14px;color:var(--text-soft);}
+  .modebar{display:flex;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:100px;padding:5px;}
+  .modebar span{font-size:12px;padding:7px 14px;border-radius:100px;color:var(--text-soft);}
+  .modebar span.active{background:var(--cyan);color:#00302a;font-weight:600;}
+  .hero{padding:64px 48px 30px;display:grid;grid-template-columns:1.1fr .9fr;gap:44px;align-items:center;}
+  .eyebrow{font-size:12px;letter-spacing:.08em;color:var(--magenta);font-weight:600;margin-bottom:16px;}
+  h1{font-family:'Space Grotesk';font-weight:700;font-size:52px;line-height:1.05;letter-spacing:-.02em;}
+  h1 span{background:linear-gradient(90deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .sub{margin-top:20px;font-size:16px;color:var(--text-soft);max-width:460px;line-height:1.7;}
+  .actions{margin-top:32px;display:flex;gap:14px;}
+  .btn-solid{
+    background:var(--cyan);color:#00302a;border:none;font-weight:600;font-size:14px;
+    padding:15px 28px;border-radius:12px;
+  }
+  .btn-line{
+    background:transparent;border:1px solid var(--line);color:var(--text);font-weight:500;font-size:14px;
+    padding:15px 24px;border-radius:12px;
+  }
+  .tank{
+    position:relative;height:400px;border-radius:20px;overflow:hidden;
+    background:linear-gradient(200deg,#141826,#05070b 70%);border:1px solid var(--line);
+  }
+  .tank::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(circle at 25% 15%, rgba(37,230,201,.18), transparent 45%),
+               radial-gradient(circle at 80% 70%, rgba(255,63,164,.14), transparent 50%);
+  }
+  .tank-tag{
+    position:absolute;top:18px;left:18px;font-size:11px;color:var(--cyan);
+    border:1px solid rgba(37,230,201,.4);padding:5px 12px;border-radius:100px;background:rgba(37,230,201,.08);
+  }
+  .tank-info{
+    position:absolute;bottom:0;left:0;right:0;padding:20px;
+    background:linear-gradient(0deg,rgba(7,8,13,.92),transparent);
+  }
+  .tank-info b{font-family:'Space Grotesk';font-size:17px;display:block;}
+  .tank-info span{font-size:12px;color:var(--text-soft);}
+  section.grid-wrap{padding:20px 48px 60px;}
+  .grid-wrap h2{font-family:'Space Grotesk';font-size:21px;margin-bottom:22px;}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    position:relative;
+  }
+  .card::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;
+    background:linear-gradient(90deg,var(--cyan),var(--violet));opacity:.7;}
+  .card-img{height:130px;background:radial-gradient(circle at 30% 30%, rgba(37,230,201,.25), #10131c 70%);}
+  .card-body{padding:16px 16px 18px;}
+  .card-body .tag{font-size:10px;color:var(--cyan);letter-spacing:.05em;margin-bottom:8px;display:block;}
+  .card-body b{font-family:'Space Grotesk';font-size:15px;}
+  .card-body p{font-size:12px;color:var(--text-soft);margin:6px 0 14px;}
+  .price-row{display:flex;justify-content:space-between;align-items:center;}
+  .price{font-weight:700;color:var(--text);}
+  .add{
+    width:32px;height:32px;border-radius:9px;background:var(--cyan);color:#00302a;
+    border:none;font-size:17px;font-weight:700;
+  }
+</style>
+</head>
+<body>
+<div class="ledbar"></div>
+<nav>
+  <div class="brand">AQUA<span>STORE</span></div>
+  <div class="navlinks"><span>Beranda</span><span>Katalog Ikan</span><span>Perlengkapan</span><span>Perawatan</span></div>
+  <div class="modebar"><span>Pagi</span><span>Siang</span><span class="active">Malam</span></div>
+</nav>
+
+<div class="hero">
+  <div>
+    <div class="eyebrow">MODE PENCAHAYAAN: MALAM</div>
+    <h1>Tangki yang menyala,<br><span>koleksi yang hidup</span></h1>
+    <p class="sub">Ikan hias premium dan perlengkapan aquascape untuk kamu yang serius membangun tangki impian — lengkap dengan panduan pencahayaan dan parameter air.</p>
+    <div class="actions">
+      <button class="btn-solid">Jelajahi katalog</button>
+      <button class="btn-line">Atur jadwal LED</button>
+    </div>
+  </div>
+  <div class="tank">
+    <div class="tank-tag">● LIVE · TANGKI PAJANGAN 02</div>
+    <div class="tank-info">
+      <b>Betta Halfmoon Galaxy</b>
+      <span>Perawatan sedang · Air tawar · Non-predator</span>
+    </div>
+  </div>
+</div>
+
+<section class="grid-wrap">
+  <h2>Terpopuler minggu ini</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="card-img"></div>
+      <div class="card-body">
+        <span class="tag">TAWAR · MUDAH</span>
+        <b>Neon Tetra</b>
+        <p>Non-predator</p>
+        <div class="price-row"><span class="price">Rp 8.500</span><button class="add">+</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img" style="background:radial-gradient(circle at 30% 30%, rgba(255,63,164,.25), #10131c 70%);"></div>
+      <div class="card-body">
+        <span class="tag">LAUT · SEDANG</span>
+        <b>Clownfish Nemo</b>
+        <p>Non-predator</p>
+        <div class="price-row"><span class="price">Rp 65.000</span><button class="add">+</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img" style="background:radial-gradient(circle at 30% 30%, rgba(139,92,246,.25), #10131c 70%);"></div>
+      <div class="card-body">
+        <span class="tag">TAWAR · SULIT</span>
+        <b>Koi Kohaku 20cm</b>
+        <p>Non-predator</p>
+        <div class="price-row"><span class="price">Rp 450.000</span><button class="add">+</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-img" style="background:radial-gradient(circle at 30% 30%, rgba(37,230,201,.3), #10131c 70%);"></div>
+      <div class="card-body">
+        <span class="tag">ALAT · FILTER</span>
+        <b>Filter Canister 800L</b>
+        <p>Tersedia · 12 unit</p>
+        <div class="price-row"><span class="price">Rp 320.000</span><button class="add">+</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Layout C — Cerita Bertahap</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{--primary:#0891A8;--koi:#F2A531;--ink:#0B2436;--ink-soft:#4B6577;--glass:rgba(255,255,255,.6);--glass-border:rgba(255,255,255,.8);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',sans-serif;color:var(--ink);
+    background:radial-gradient(1200px 500px at 15% -10%,#fff 0,transparent 60%),linear-gradient(180deg,#eaf7fb,#cdeef8 55%,#b7e3f2 100%);}
+  .label{text-align:center;font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.1em;color:var(--primary);padding:14px;opacity:.7;}
+  nav{display:flex;justify-content:space-between;align-items:center;padding:18px 48px;background:rgba(255,255,255,.5);backdrop-filter:blur(14px);}
+  .brand{font-family:'Bricolage Grotesque';font-weight:700;font-size:19px;}
+  .brand span{color:var(--primary);}
+  .navlinks{display:flex;gap:28px;font-size:14px;color:var(--ink-soft);}
+  .pill{background:var(--glass);border:1px solid var(--glass-border);padding:8px 16px;border-radius:100px;font-size:13px;font-weight:600;}
+
+  section{padding:60px 48px;max-width:1180px;margin:auto;}
+
+  .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;}
+  .hero h1{font-family:'Bricolage Grotesque';font-size:46px;line-height:1.1;}
+  .hero p{color:var(--ink-soft);margin-top:16px;max-width:420px;}
+  .btn{padding:15px 28px;border-radius:14px;font-weight:600;font-size:14px;border:none;background:var(--primary);color:#fff;margin-top:24px;}
+  .hero-visual{height:320px;border-radius:28px;background:linear-gradient(160deg,#0891a8,#043847);}
+
+  .trust-strip{display:flex;gap:0;background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:0;backdrop-filter:blur(14px);}
+  .trust-strip div{flex:1;text-align:center;padding:22px;border-right:1px solid var(--glass-border);}
+  .trust-strip div:last-child{border-right:none;}
+  .trust-strip b{display:block;font-family:'Bricolage Grotesque';font-size:20px;color:var(--primary);}
+  .trust-strip span{font-size:12px;color:var(--ink-soft);}
+
+  .section-title{text-align:center;margin-bottom:30px;}
+  .section-title span{font-family:'IBM Plex Mono';font-size:12px;color:var(--primary);}
+  .section-title h2{font-family:'Bricolage Grotesque';font-size:28px;margin-top:8px;}
+
+  .cat-carousel{display:flex;gap:16px;overflow:auto;}
+  .cat-item{min-width:150px;background:var(--glass);border:1px solid var(--glass-border);border-radius:18px;padding:20px;text-align:center;backdrop-filter:blur(10px);}
+  .cat-item .ic{font-size:28px;}
+  .cat-item b{display:block;margin-top:10px;font-family:'Bricolage Grotesque';font-size:14px;}
+
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  .card{background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;overflow:hidden;backdrop-filter:blur(14px);}
+  .img{height:130px;background:linear-gradient(150deg,#7fd7e8,#0891a8);}
+  .body{padding:14px;}
+  .body b{font-family:'Bricolage Grotesque';font-size:14px;}
+  .price{color:#066374;font-weight:700;margin-top:6px;display:block;font-size:14px;}
+
+  .testi{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .testi div{background:var(--glass);border:1px solid var(--glass-border);border-radius:20px;padding:22px;backdrop-filter:blur(10px);}
+  .testi p{font-size:14px;color:var(--ink-soft);line-height:1.6;}
+  .testi b{display:block;margin-top:14px;font-family:'Bricolage Grotesque';font-size:14px;}
+
+  .cta{text-align:center;background:linear-gradient(120deg,#0891a8,#043847);border-radius:28px;color:#fff;padding:60px;}
+  .cta h2{font-family:'Bricolage Grotesque';font-size:30px;}
+  .cta p{opacity:.85;margin-top:10px;}
+  .cta .btn{background:#fff;color:#066374;}
+</style>
+</head>
+<body>
+<div class="label">LAYOUT C — CERITA BERTAHAP (landing page marketing: banyak section, cocok untuk membangun kepercayaan)</div>
+<nav>
+  <div class="brand">Aqua<span>Store</span></div>
+  <div class="navlinks"><span>Beranda</span><span>Katalog</span><span>Perlengkapan</span><span>Cek Pesanan</span></div>
+  <div class="pill">🛒 Keranjang</div>
+</nav>
+
+<section class="hero">
+  <div>
+    <h1>Setiap tangki punya cerita, mulai dari sini</h1>
+    <p>Ikan hias sehat dari peternak terpercaya, perlengkapan aquascape lengkap, dan panduan perawatan dari komunitas akuaris.</p>
+    <button class="btn">Mulai belanja</button>
+  </div>
+  <div class="hero-visual"></div>
+</section>
+
+<section style="padding-top:0;">
+  <div class="trust-strip">
+    <div><b>500+</b><span>Ikan terjual/bulan</span></div>
+    <div><b>4.9★</b><span>Rating pelanggan</span></div>
+    <div><b>24 Jam</b><span>Garansi ikan sehat</span></div>
+    <div><b>15+</b><span>Kota terjangkau</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-title"><span>JELAJAHI</span><h2>Kategori pilihan</h2></div>
+  <div class="cat-carousel">
+    <div class="cat-item"><div class="ic">🐟</div><b>Air Tawar</b></div>
+    <div class="cat-item"><div class="ic">🐠</div><b>Air Laut</b></div>
+    <div class="cat-item"><div class="ic">🦈</div><b>Predator</b></div>
+    <div class="cat-item"><div class="ic">🌿</div><b>Aquascape</b></div>
+    <div class="cat-item"><div class="ic">💊</div><b>Obat Ikan</b></div>
+    <div class="cat-item"><div class="ic">🔧</div><b>Perlengkapan</b></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-title"><span>TERPOPULER</span><h2>Produk unggulan minggu ini</h2></div>
+  <div class="grid">
+    <div class="card"><div class="img"></div><div class="body"><b>Neon Tetra</b><span class="price">Rp 8.500</span></div></div>
+    <div class="card"><div class="img" style="background:linear-gradient(150deg,#8fe3c7,#0e8f6e)"></div><div class="body"><b>Clownfish Nemo</b><span class="price">Rp 65.000</span></div></div>
+    <div class="card"><div class="img" style="background:linear-gradient(150deg,#f3c98a,#c97a1c)"></div><div class="body"><b>Koi Kohaku</b><span class="price">Rp 450.000</span></div></div>
+    <div class="card"><div class="img" style="background:linear-gradient(150deg,#c9b6f2,#6a3fc9)"></div><div class="body"><b>Filter Canister</b><span class="price">Rp 320.000</span></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-title"><span>TESTIMONI</span><h2>Apa kata pelanggan</h2></div>
+  <div class="testi">
+    <div><p>"Ikan sampai dengan selamat, dikemas rapi dan langsung sehat di tangki baru."</p><b>— Dimas, Bandung</b></div>
+    <div><p>"Admin responsif banget kalau tanya-tanya soal perawatan sebelum beli."</p><b>— Sari, Surabaya</b></div>
+    <div><p>"Perlengkapan aquascape lengkap, harga juga bersaing dibanding toko lain."</p><b>— Reza, Medan</b></div>
+  </div>
+</section>
+
+<section>
+  <div class="cta">
+    <h2>Siap membangun tangki impianmu?</h2>
+    <p>Jelajahi ratusan ikan hias dan perlengkapan aquascape pilihan.</p>
+    <button class="btn">Lihat katalog sekarang</button>
+  </div>
+</section>
+</body>
+</html>

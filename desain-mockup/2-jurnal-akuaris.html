@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>AquaStore — Jurnal Akuaris</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#0e2b2c;
+    --paper-2:#0a2223;
+    --ink:#ecf3ef;
+    --ink-soft:#9db8b2;
+    --line:rgba(236,243,239,.18);
+    --mint:#5fd6ae;
+    --amber:#e8b24d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Serif 4',serif;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:38px 38px;
+    background-color:var(--paper);
+  }
+  header{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:26px 50px;border-bottom:1px solid var(--line);
+    font-family:'Space Grotesk';
+  }
+  .brand{font-weight:700;font-size:18px;letter-spacing:.02em;}
+  .brand span{color:var(--mint);}
+  .meta-nav{display:flex;gap:28px;font-family:'JetBrains Mono';font-size:12px;color:var(--ink-soft);}
+  .stamp{
+    font-family:'JetBrains Mono';font-size:11px;border:1px solid var(--mint);color:var(--mint);
+    padding:6px 12px;border-radius:2px;letter-spacing:.05em;
+  }
+  .hero{padding:60px 50px 40px;display:grid;grid-template-columns:1.2fr .8fr;gap:50px;}
+  .log-id{font-family:'JetBrains Mono';font-size:12px;color:var(--mint);letter-spacing:.08em;margin-bottom:18px;}
+  h1{
+    font-family:'Space Grotesk';font-weight:700;font-size:46px;line-height:1.08;letter-spacing:-.01em;
+    max-width:560px;
+  }
+  .sub{font-size:17px;color:var(--ink-soft);margin-top:20px;max-width:480px;line-height:1.7;}
+  .params{
+    margin-top:34px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    padding:18px 0;display:flex;gap:36px;font-family:'JetBrains Mono';
+  }
+  .params div span{display:block;font-size:11px;color:var(--ink-soft);margin-bottom:4px;letter-spacing:.05em;}
+  .params div b{font-size:20px;color:var(--mint);font-weight:500;}
+  .actions{margin-top:30px;display:flex;gap:14px;font-family:'Space Grotesk';}
+  .btn{
+    padding:14px 26px;font-size:14px;font-weight:500;border-radius:2px;
+    border:1px solid var(--mint);color:var(--mint);background:transparent;
+  }
+  .btn.solid{background:var(--mint);color:#04231d;border:none;}
+  .panel{
+    border:1px solid var(--line);background:var(--paper-2);padding:26px;position:relative;
+  }
+  .panel .tag{position:absolute;top:-1px;right:-1px;background:var(--amber);color:#3a2600;
+    font-family:'JetBrains Mono';font-size:10px;padding:5px 10px;letter-spacing:.05em;}
+  .panel h3{font-family:'Space Grotesk';font-size:15px;margin-bottom:14px;}
+  .panel-row{display:flex;justify-content:space-between;font-family:'JetBrains Mono';font-size:12px;
+    color:var(--ink-soft);padding:8px 0;border-bottom:1px dashed var(--line);}
+  .panel-row b{color:var(--ink);font-weight:500;}
+  section.entries{padding:10px 50px 60px;}
+  .entries h2{font-family:'Space Grotesk';font-size:20px;margin-bottom:22px;
+    display:flex;align-items:center;gap:12px;}
+  .entries h2::before{content:"";width:24px;height:1px;background:var(--mint);}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .entry{background:var(--paper);padding:20px;}
+  .entry .no{font-family:'JetBrains Mono';font-size:11px;color:var(--mint);margin-bottom:10px;}
+  .entry b{font-family:'Space Grotesk';font-size:15px;display:block;margin-bottom:6px;}
+  .entry .species{font-size:11px;font-style:italic;color:var(--ink-soft);margin-bottom:14px;}
+  .entry .data{font-family:'JetBrains Mono';font-size:11px;color:var(--ink-soft);line-height:1.9;}
+  .entry .data b{display:inline;font-family:'JetBrains Mono';font-size:11px;color:var(--ink);}
+  .entry .price{margin-top:14px;font-family:'Space Grotesk';font-weight:700;color:var(--amber);font-size:15px;}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">AQUA<span>STORE</span> · LOG</div>
+  <div class="meta-nav"><span>BERANDA</span><span>KATALOG</span><span>PERLENGKAPAN</span><span>ARSIP PERAWATAN</span></div>
+  <div class="stamp">ENTRI #0842</div>
+</header>
+
+<div class="hero">
+  <div>
+    <div class="log-id">JURNAL AKUARIS — MASUKAN TERBARU</div>
+    <h1>Setiap tangki punya cerita. Kami mencatatnya.</h1>
+    <p class="sub">Dari air masuk sampai ikan siap dikirim, setiap batch punya catatan parameter sendiri — supaya kamu tahu persis kondisi yang kamu bawa pulang.</p>
+    <div class="params">
+      <div><span>SUHU RATA-RATA</span><b>27.4°C</b></div>
+      <div><span>pH TANGKI</span><b>6.8</b></div>
+      <div><span>STOK AKTIF</span><b>184 EKOR</b></div>
+    </div>
+    <div class="actions">
+      <button class="btn solid">Buka katalog</button>
+      <button class="btn">Baca arsip perawatan</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="tag">TANGKI 04</div>
+    <h3>Discus Blue Diamond</h3>
+    <div class="panel-row"><span>Asal</span><b>Peternakan Lokal, Bogor</b></div>
+    <div class="panel-row"><span>Ukuran</span><b>9–11 cm</b></div>
+    <div class="panel-row"><span>Tingkat perawatan</span><b>Sulit</b></div>
+    <div class="panel-row"><span>Karantina</span><b>14 hari selesai</b></div>
+    <div class="panel-row" style="border-bottom:none"><span>Status</span><b style="color:#5fd6ae">Siap kirim</b></div>
+  </div>
+</div>
+
+<section class="entries">
+  <h2>Katalog terbaru</h2>
+  <div class="grid">
+    <div class="entry">
+      <div class="no">NO. 118</div>
+      <b>Neon Tetra</b>
+      <div class="species">Paracheirodon innesi</div>
+      <div class="data">Air <b>Tawar</b><br>Sifat <b>Non-Predator</b><br>Perawatan <b>Mudah</b></div>
+      <div class="price">Rp 8.500</div>
+    </div>
+    <div class="entry">
+      <div class="no">NO. 119</div>
+      <b>Clownfish Nemo</b>
+      <div class="species">Amphiprion ocellaris</div>
+      <div class="data">Air <b>Laut</b><br>Sifat <b>Non-Predator</b><br>Perawatan <b>Sedang</b></div>
+      <div class="price">Rp 65.000</div>
+    </div>
+    <div class="entry">
+      <div class="no">NO. 120</div>
+      <b>Koi Kohaku 20cm</b>
+      <div class="species">Cyprinus rubrofuscus</div>
+      <div class="data">Air <b>Tawar</b><br>Sifat <b>Non-Predator</b><br>Perawatan <b>Sulit</b></div>
+      <div class="price">Rp 450.000</div>
+    </div>
+    <div class="entry">
+      <div class="no">ALT. 07</div>
+      <b>Filter Canister 800L</b>
+      <div class="species">Perlengkapan · Filter</div>
+      <div class="data">Kategori <b>Filter</b><br>Stok <b>12 unit</b><br>Status <b>Tersedia</b></div>
+      <div class="price">Rp 320.000</div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

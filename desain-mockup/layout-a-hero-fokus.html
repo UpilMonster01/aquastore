@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Layout A — Hero Fokus</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{--primary:#0891A8;--primary-hover:#0aa8c2;--koi:#F2A531;--ink:#0B2436;--ink-soft:#4B6577;--glass:rgba(255,255,255,.6);--glass-border:rgba(255,255,255,.8);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',sans-serif;color:var(--ink);
+    background:radial-gradient(1200px 500px at 15% -10%,#fff 0,transparent 60%),linear-gradient(180deg,#eaf7fb,#cdeef8 55%,#b7e3f2 100%);}
+  .label{text-align:center;font-family:'IBM Plex Mono';font-size:11px;letter-spacing:.1em;color:var(--primary);padding:14px;opacity:.7;}
+  nav{display:flex;justify-content:space-between;align-items:center;padding:18px 48px;background:rgba(255,255,255,.5);backdrop-filter:blur(14px);}
+  .brand{font-family:'Bricolage Grotesque';font-weight:700;font-size:19px;}
+  .brand span{color:var(--primary);}
+  .navlinks{display:flex;gap:28px;font-size:14px;color:var(--ink-soft);}
+  .pill{background:var(--glass);border:1px solid var(--glass-border);padding:8px 16px;border-radius:100px;font-size:13px;font-weight:600;}
+
+  .hero{padding:70px 48px 40px;text-align:center;}
+  .hero span.tag{font-family:'IBM Plex Mono';font-size:12px;color:var(--primary);background:rgba(8,145,168,.1);padding:6px 14px;border-radius:100px;}
+  .hero h1{font-family:'Bricolage Grotesque';font-size:52px;margin-top:20px;max-width:700px;margin-inline:auto;line-height:1.1;}
+  .hero p{color:var(--ink-soft);margin-top:16px;max-width:480px;margin-inline:auto;}
+  .hero-actions{margin-top:28px;display:flex;gap:14px;justify-content:center;}
+  .btn{padding:15px 30px;border-radius:14px;font-weight:600;font-size:14px;border:none;}
+  .btn.solid{background:var(--primary);color:#fff;box-shadow:0 16px 30px -14px rgba(8,145,168,.6);}
+  .btn.ghost{background:var(--glass);border:1px solid var(--glass-border);color:var(--ink);}
+
+  .trust{display:flex;justify-content:center;gap:50px;padding:30px 48px;flex-wrap:wrap;}
+  .trust div{text-align:center;}
+  .trust b{display:block;font-family:'Bricolage Grotesque';font-size:22px;color:var(--primary);}
+  .trust span{font-size:12px;color:var(--ink-soft);}
+
+  .cat-strip{display:flex;gap:14px;padding:20px 48px 10px;overflow:auto;justify-content:center;flex-wrap:wrap;}
+  .cat-pill{background:var(--glass);border:1px solid var(--glass-border);padding:10px 20px;border-radius:100px;font-size:13px;font-weight:600;backdrop-filter:blur(10px);}
+  .cat-pill.active{background:var(--primary);color:#fff;border:none;}
+
+  section.products{padding:36px 48px 70px;}
+  .products h2{font-family:'Bricolage Grotesque';font-size:24px;text-align:center;margin-bottom:26px;}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:1180px;margin:auto;}
+  .card{background:var(--glass);border:1px solid var(--glass-border);border-radius:22px;overflow:hidden;backdrop-filter:blur(14px);}
+  .img{height:140px;background:linear-gradient(150deg,#7fd7e8,#0891a8);}
+  .body{padding:16px;}
+  .body b{font-family:'Bricolage Grotesque';font-size:15px;}
+  .price{color:#066374;font-weight:700;margin-top:6px;display:block;}
+</style>
+</head>
+<body>
+<div class="label">LAYOUT A — HERO FOKUS (fokus konversi cepat: 1 CTA besar di atas)</div>
+<nav>
+  <div class="brand">Aqua<span>Store</span></div>
+  <div class="navlinks"><span>Beranda</span><span>Katalog</span><span>Perlengkapan</span><span>Cek Pesanan</span></div>
+  <div class="pill">🛒 Keranjang</div>
+</nav>
+
+<div class="hero">
+  <span class="tag">STOK BARU MINGGU INI</span>
+  <h1>Bawa pulang keindahan air jernih</h1>
+  <p>Ikan hias sehat, perlengkapan aquascape lengkap, dan tips perawatan — semua dalam satu tempat.</p>
+  <div class="hero-actions">
+    <button class="btn solid">Lihat katalog ikan</button>
+    <button class="btn ghost">Perlengkapan aquascape</button>
+  </div>
+</div>
+
+<div class="trust">
+  <div><b>500+</b><span>Ikan terjual/bulan</span></div>
+  <div><b>4.9★</b><span>Rating pelanggan</span></div>
+  <div><b>24 Jam</b><span>Garansi ikan sehat</span></div>
+  <div><b>15+</b><span>Kota terjangkau</span></div>
+</div>
+
+<div class="cat-strip">
+  <div class="cat-pill active">Semua</div>
+  <div class="cat-pill">Air Tawar</div>
+  <div class="cat-pill">Air Laut</div>
+  <div class="cat-pill">Predator</div>
+  <div class="cat-pill">Perlengkapan</div>
+  <div class="cat-pill">Diskon</div>
+</div>
+
+<section class="products">
+  <h2>Rekomendasi untukmu</h2>
+  <div class="grid">
+    <div class="card"><div class="img"></div><div class="body"><b>Neon Tetra</b><span class="price">Rp 8.500</span></div></div>
+    <div class="card"><div class="img" style="background:linear-gradient(150deg,#8fe3c7,#0e8f6e)"></div><div class="body"><b>Clownfish Nemo</b><span class="price">Rp 65.000</span></div></div>
+    <div class="card"><div class="img" style="background:linear-gradient(150deg,#f3c98a,#c97a1c)"></div><div class="body"><b>Koi Kohaku</b><span class="price">Rp 450.000</span></div></div>
+    <div class="card"><div class="img" style="background:linear-gradient(150deg,#c9b6f2,#6a3fc9)"></div><div class="body"><b>Filter Canister</b><span class="price">Rp 320.000</span></div></div>
+  </div>
+</section>
+</body>
+</html>
