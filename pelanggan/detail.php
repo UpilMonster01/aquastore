@@ -61,6 +61,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?= e($ikan['kategori_air']) ?> • <?= e($ikan['kategori_sifat']) ?>
                 </span>
 
+                <?php if (!empty($_SESSION['admin'])): ?>
+                    <a href="<?= e(url('admin/ikan.php?edit_modal=edit' . $ikan['id'])) ?>" class="admin-quick-edit-link">
+                        ✏️ Edit produk ini
+                    </a>
+                <?php endif; ?>
+
                 <h1><?= e($ikan['nama']) ?></h1>
 
                 <p>

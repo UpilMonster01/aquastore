@@ -128,6 +128,12 @@ document.addEventListener('DOMContentLoaded', function () {
     if (params.get('auth') === 'register') {
         openAuthDrawer('register');
     }
+
+    const editModalId = params.get('edit_modal');
+
+    if (editModalId) {
+        openModal(editModalId);
+    }
 });
 
 window.addEventListener('click', function (e) {

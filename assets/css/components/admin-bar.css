@@ -1,0 +1,82 @@
+.admin-mode-bar {
+    background: linear-gradient(90deg, #031426, #0b5f8a);
+    color: #f8fafc;
+    font-size: 13px;
+}
+
+.admin-mode-bar-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 8px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.admin-mode-bar-label b {
+    color: #7fe3ff;
+}
+
+.admin-mode-bar-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.admin-mode-bar-badge {
+    background: rgba(255, 176, 32, .18);
+    color: #ffce6b;
+    border: 1px solid rgba(255, 206, 107, .4);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.admin-mode-bar-badge:hover {
+    background: rgba(255, 176, 32, .3);
+}
+
+.admin-mode-bar-link {
+    color: #f8fafc;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.admin-mode-bar-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 600px) {
+    .admin-mode-bar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* Tombol "Edit produk ini" yang muncul di halaman publik (background
+   terang) saat admin sedang login — dibuat terpisah dari admin-mode-bar
+   karena warnanya didesain untuk background gelap. */
+.admin-quick-edit-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 12px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(242, 165, 49, .15);
+    color: #b45309;
+    border: 1px solid rgba(242, 165, 49, .4);
+    font-weight: 700;
+    font-size: 13px;
+    text-decoration: none;
+    width: fit-content;
+}
+
+.admin-quick-edit-link:hover {
+    background: rgba(242, 165, 49, .25);
+}

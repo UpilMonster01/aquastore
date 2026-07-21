@@ -1,3 +1,4 @@
+<?php include __DIR__ . '/admin-bar.php'; ?>
 <?php
 $baseUrl = url();
 $currentFile = basename($_SERVER['PHP_SELF'] ?? 'index.php');

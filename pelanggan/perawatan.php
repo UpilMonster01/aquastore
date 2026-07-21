@@ -214,6 +214,12 @@ function selected_equipment_filter($value, $current)
 
                         <h3><?= e($p['nama']) ?></h3>
 
+                        <?php if (!empty($_SESSION['admin'])): ?>
+                            <a href="<?= e(url('admin/perlengkapan.php?edit_modal=edit' . $p['id'])) ?>" class="admin-quick-edit-link">
+                                ✏️ Edit produk ini
+                            </a>
+                        <?php endif; ?>
+
                         <div class="equipment-badge-row">
                             <span class="equipment-badge"><?= e($p['kategori']) ?></span>
                             <span class="equipment-badge">Stok <?= e($p['stok']) ?></span>
