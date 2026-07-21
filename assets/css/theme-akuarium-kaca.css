@@ -343,21 +343,9 @@ tr:hover {
     background: rgba(8,145,168,.05) !important;
 }
 
-/* ---------- Admin sidebar ---------- */
-.admin-sidebar {
-    background: rgba(255,255,255,.55) !important;
-    backdrop-filter: blur(20px);
-    border-right: 1px solid var(--glass-border) !important;
-}
-
-.admin-sidebar a {
-    color: var(--text-muted) !important;
-}
-
-.admin-sidebar a.active, .admin-sidebar a[aria-current="page"] {
-    background: rgba(8,145,168,.1) !important;
-    color: var(--primary) !important;
-}
+/* Catatan: styling .admin-sidebar sepenuhnya dipegang oleh
+   components/admin-sidebar.css (termasuk state aktif memakai
+   class admin-active-page) — tidak diduplikasi di sini lagi. */
 
 .admin-layout, .admin-content {
     background: transparent !important;

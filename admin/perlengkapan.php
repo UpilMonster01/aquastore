@@ -4,7 +4,51 @@ admin_only();
 
 define('AQUASTORE_ADMIN_VIEW', true);
 
-$data = $pdo->query("SELECT * FROM perlengkapan ORDER BY id DESC")->fetchAll();
+$cari = trim($_GET['cari'] ?? '');
+$filterKategori = trim($_GET['kategori'] ?? '');
+$filterStatus = trim($_GET['status'] ?? '');
+
+$kategoriOptions = ['Pakan', 'Filter', 'Aerator', 'Heater', 'Obat', 'Lampu', 'Substrate', 'Dekorasi', 'Lainnya'];
+$statusOptions = ['Tersedia', 'Habis'];
+
+if (!in_array($filterKategori, $kategoriOptions, true)) {
+    $filterKategori = '';
+}
+
+if (!in_array($filterStatus, $statusOptions, true)) {
+    $filterStatus = '';
+}
+
+$where = [];
+$params = [];
+
+if ($cari !== '') {
+    $where[] = "(nama LIKE ? OR deskripsi LIKE ?)";
+    $params[] = "%$cari%";
+    $params[] = "%$cari%";
+}
+
+if ($filterKategori !== '') {
+    $where[] = "kategori = ?";
+    $params[] = $filterKategori;
+}
+
+if ($filterStatus !== '') {
+    $where[] = "status = ?";
+    $params[] = $filterStatus;
+}
+
+$sql = "SELECT * FROM perlengkapan";
+
+if ($where) {
+    $sql .= " WHERE " . implode(" AND ", $where);
+}
+
+$sql .= " ORDER BY id DESC";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
+$data = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -29,6 +73,32 @@ $data = $pdo->query("SELECT * FROM perlengkapan ORDER BY id DESC")->fetchAll();
 
     <?php show_flash(); ?>
 
+    <div class="admin-panel">
+        <form method="GET" class="admin-form">
+            <input type="text" name="cari" placeholder="Cari nama/deskripsi perlengkapan..." value="<?= e($cari) ?>">
+
+            <select name="kategori">
+                <option value="">Semua Kategori</option>
+                <?php foreach ($kategoriOptions as $opt): ?>
+                    <option value="<?= e($opt) ?>" <?= $filterKategori === $opt ? 'selected' : '' ?>><?= e($opt) ?></option>
+                <?php endforeach; ?>
+            </select>
+
+            <select name="status">
+                <option value="">Semua Status</option>
+                <?php foreach ($statusOptions as $opt): ?>
+                    <option value="<?= e($opt) ?>" <?= $filterStatus === $opt ? 'selected' : '' ?>><?= e($opt) ?></option>
+                <?php endforeach; ?>
+            </select>
+
+            <button>Cari</button>
+
+            <?php if ($cari !== '' || $filterKategori !== '' || $filterStatus !== ''): ?>
+                <a href="perlengkapan.php" class="mini-button">Reset</a>
+            <?php endif; ?>
+        </form>
+    </div>
+
     <div class="table-box">
         <table>
             <tr>
@@ -40,6 +110,12 @@ $data = $pdo->query("SELECT * FROM perlengkapan ORDER BY id DESC")->fetchAll();
                 <th>Status</th>
                 <th>Aksi</th>
             </tr>
+
+            <?php if (!$data): ?>
+                <tr>
+                    <td colspan="7">Tidak ada perlengkapan yang cocok dengan pencarian/filter.</td>
+                </tr>
+            <?php endif; ?>
 
             <?php foreach($data as $p): ?>
             <tr>

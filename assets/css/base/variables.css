@@ -21,4 +21,15 @@
     --font-display: 'Bricolage Grotesque', sans-serif;
     --font-body: 'Inter', sans-serif;
     --font-mono: 'IBM Plex Mono', monospace;
+
+    /* Alias kompatibilitas — nama variabel lama sebelum tema
+       "Akuarium Kaca" ini dirapikan. Banyak file CSS lain di
+       proyek ini masih memakai nama-nama berikut; didefinisikan
+       di sini supaya tidak render sebagai warna kosong/hitam. */
+    --blue: var(--primary);
+    --cyan: var(--primary-hover);
+    --soft: var(--secondary);
+    --muted: var(--text-muted);
+    --dark: var(--text);
+    --radius: var(--radius-lg);
 }

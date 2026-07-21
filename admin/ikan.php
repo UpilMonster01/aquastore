@@ -6,34 +6,83 @@ admin_only();
 define('AQUASTORE_ADMIN_VIEW', true);
 
 $cari = trim($_GET['cari'] ?? '');
+$filterAir = trim($_GET['kategori_air'] ?? '');
+$filterSifat = trim($_GET['kategori_sifat'] ?? '');
+$filterJenis = trim($_GET['kategori_jenis'] ?? '');
+$filterPerawatan = trim($_GET['tingkat_perawatan'] ?? '');
+$filterStatus = trim($_GET['status'] ?? '');
 
-if ($cari != '') {
+$airOptions = ['Laut', 'Tawar', 'Payau'];
+$sifatOptions = ['Predator', 'Non-Predator'];
+$jenisOptions = ['Hias', 'Konsumsi', 'Langka'];
+$perawatanOptions = ['Mudah', 'Sedang', 'Sulit'];
+$statusOptions = ['Tersedia', 'Habis', 'Pre-order'];
 
-    $stmt = $pdo->prepare("
-        SELECT * FROM ikan
-        WHERE 
-            nama LIKE ?
-            OR nama_latin LIKE ?
-            OR kategori_air LIKE ?
-            OR kategori_sifat LIKE ?
-        ORDER BY id DESC
-    ");
-
-    $stmt->execute([
-        "%$cari%",
-        "%$cari%",
-        "%$cari%",
-        "%$cari%"
-    ]);
-
-} else {
-
-    $stmt = $pdo->query("
-        SELECT * FROM ikan
-        ORDER BY id DESC
-    ");
+if (!in_array($filterAir, $airOptions, true)) {
+    $filterAir = '';
 }
 
+if (!in_array($filterSifat, $sifatOptions, true)) {
+    $filterSifat = '';
+}
+
+if (!in_array($filterJenis, $jenisOptions, true)) {
+    $filterJenis = '';
+}
+
+if (!in_array($filterPerawatan, $perawatanOptions, true)) {
+    $filterPerawatan = '';
+}
+
+if (!in_array($filterStatus, $statusOptions, true)) {
+    $filterStatus = '';
+}
+
+$where = [];
+$params = [];
+
+if ($cari !== '') {
+    $where[] = "(nama LIKE ? OR nama_latin LIKE ? OR deskripsi LIKE ?)";
+    $params[] = "%$cari%";
+    $params[] = "%$cari%";
+    $params[] = "%$cari%";
+}
+
+if ($filterAir !== '') {
+    $where[] = "kategori_air = ?";
+    $params[] = $filterAir;
+}
+
+if ($filterSifat !== '') {
+    $where[] = "kategori_sifat = ?";
+    $params[] = $filterSifat;
+}
+
+if ($filterJenis !== '') {
+    $where[] = "kategori_jenis = ?";
+    $params[] = $filterJenis;
+}
+
+if ($filterPerawatan !== '') {
+    $where[] = "tingkat_perawatan = ?";
+    $params[] = $filterPerawatan;
+}
+
+if ($filterStatus !== '') {
+    $where[] = "status = ?";
+    $params[] = $filterStatus;
+}
+
+$sql = "SELECT * FROM ikan";
+
+if ($where) {
+    $sql .= " WHERE " . implode(" AND ", $where);
+}
+
+$sql .= " ORDER BY id DESC";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
 $data = $stmt->fetchAll();
 ?>
 
@@ -70,15 +119,54 @@ $data = $stmt->fetchAll();
 
             <?php show_flash(); ?>
 
-            <!-- SEARCH -->
+            <!-- SEARCH & FILTER -->
 
             <div class="admin-panel">
 
                 <form method="GET" class="admin-form">
 
-                    <input type="text" name="cari" placeholder="Cari ikan..." value="<?= e($cari) ?>">
+                    <input type="text" name="cari" placeholder="Cari nama/nama latin/deskripsi..." value="<?= e($cari) ?>">
+
+                    <select name="kategori_air">
+                        <option value="">Semua Air</option>
+                        <?php foreach ($airOptions as $opt): ?>
+                            <option value="<?= e($opt) ?>" <?= $filterAir === $opt ? 'selected' : '' ?>><?= e($opt) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <select name="kategori_sifat">
+                        <option value="">Semua Sifat</option>
+                        <?php foreach ($sifatOptions as $opt): ?>
+                            <option value="<?= e($opt) ?>" <?= $filterSifat === $opt ? 'selected' : '' ?>><?= e($opt) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <select name="kategori_jenis">
+                        <option value="">Semua Jenis</option>
+                        <?php foreach ($jenisOptions as $opt): ?>
+                            <option value="<?= e($opt) ?>" <?= $filterJenis === $opt ? 'selected' : '' ?>><?= e($opt) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <select name="tingkat_perawatan">
+                        <option value="">Semua Perawatan</option>
+                        <?php foreach ($perawatanOptions as $opt): ?>
+                            <option value="<?= e($opt) ?>" <?= $filterPerawatan === $opt ? 'selected' : '' ?>><?= e($opt) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <select name="status">
+                        <option value="">Semua Status</option>
+                        <?php foreach ($statusOptions as $opt): ?>
+                            <option value="<?= e($opt) ?>" <?= $filterStatus === $opt ? 'selected' : '' ?>><?= e($opt) ?></option>
+                        <?php endforeach; ?>
+                    </select>
 
                     <button>Cari</button>
+
+                    <?php if ($cari !== '' || $filterAir !== '' || $filterSifat !== '' || $filterJenis !== '' || $filterPerawatan !== '' || $filterStatus !== ''): ?>
+                        <a href="ikan.php" class="mini-button">Reset</a>
+                    <?php endif; ?>
 
                 </form>
 
@@ -99,6 +187,12 @@ $data = $stmt->fetchAll();
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
+
+                    <?php if (!$data): ?>
+                        <tr>
+                            <td colspan="7">Tidak ada ikan yang cocok dengan pencarian/filter.</td>
+                        </tr>
+                    <?php endif; ?>
 
                     <?php foreach ($data as $i): ?>
 

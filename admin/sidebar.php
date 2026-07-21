@@ -43,6 +43,7 @@ if (!function_exists('admin_menu_active')) {
     <a href="pesanan.php" class="<?= admin_menu_active('pesanan.php') ?>" <?= admin_menu_active('pesanan.php') ? 'aria-current="page"' : '' ?>>🛒 Pesanan</a>
     <a href="perawatan.php" class="<?= admin_menu_active('perawatan.php') ?>" <?= admin_menu_active('perawatan.php') ? 'aria-current="page"' : '' ?>>💧 Perawatan</a>
     <a href="keuangan.php" class="<?= admin_menu_active('keuangan.php') ?>" <?= admin_menu_active('keuangan.php') ? 'aria-current="page"' : '' ?>>💰 Keuangan</a>
+    <a href="akun.php" class="<?= admin_menu_active('akun.php') ?>" <?= admin_menu_active('akun.php') ? 'aria-current="page"' : '' ?>>🔑 Akun Admin</a>
     <a href="<?= e(url('index.php')) ?>">🏠 Website</a>
     <a href="<?= e(url('proses/logout.php')) ?>">🚪 Logout</a>
 </aside>

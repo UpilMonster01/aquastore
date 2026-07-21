@@ -1,7 +1,7 @@
 .admin-layout {
     display: flex;
     min-height: 100vh;
-    background: var(--soft);
+    background: var(--secondary);
 }
 
 .admin-content {
@@ -18,7 +18,7 @@
 }
 
 .admin-header span {
-    color: var(--blue);
+    color: var(--primary);
     font-weight: 900;
 }
 
@@ -28,7 +28,7 @@
 
 .admin-header b {
     padding: 12px 18px;
-    border-radius: 16px;
+    border-radius: var(--radius-sm);
     background: white;
     box-shadow: var(--shadow);
 }
@@ -40,16 +40,21 @@
     gap: 22px;
 }
 
+.admin-order-stats {
+    grid-template-columns: repeat(4, 1fr);
+}
+
 .dash-card,
 .admin-panel {
+    /* Warna, border, bayangan, dan radius kartu ini sengaja TIDAK
+       diatur di sini — sudah dipegang penuh oleh theme-akuarium-kaca.css
+       (satu sumber kebenaran untuk tampilan kartu "kaca") supaya tidak
+       ada dua file saling menimpa lagi. Di sini cukup layout/spacing. */
     padding: 24px;
-    border-radius: var(--radius);
-    background: white;
-    box-shadow: var(--shadow);
 }
 
 .dash-card {
-    transition: .25s;
+    transition: var(--transition);
 }
 
 .dash-card:hover {
@@ -62,11 +67,11 @@
 
 .dash-card p {
     margin: 10px 0 6px;
-    color: var(--muted);
+    color: var(--text-muted);
 }
 
 .dash-card h2 {
-    color: var(--blue);
+    color: var(--primary);
     font-size: 28px;
 }
 
@@ -82,6 +87,10 @@
 
 .admin-panel h2 {
     margin-bottom: 18px;
+}
+
+.stock-low-text {
+    color: var(--danger);
 }
 
 @media(max-width:1050px) {
@@ -108,7 +117,8 @@
     }
 
     .admin-stats,
-    .admin-grid {
+    .admin-grid,
+    .admin-order-stats {
         grid-template-columns: 1fr;
     }
 }

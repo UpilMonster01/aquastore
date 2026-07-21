@@ -5,8 +5,9 @@
     position: fixed;
     top: 0;
     left: 0;
-    background: linear-gradient(180deg, #031426, #0b5f8a);
-    color: white;
+    background: rgba(255, 255, 255, .55);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid var(--glass-border);
 }
 
 .side-brand {
@@ -15,7 +16,7 @@
 
 .side-brand h2 {
     margin-top: 12px;
-    color: var(--cyan);
+    color: var(--primary);
 }
 
 .side-brand:has(.admin-brand-logo) .brand-text-wrap {
@@ -29,11 +30,11 @@
     border-radius: 18px;
     background: white;
     padding: 6px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+    box-shadow: var(--shadow);
 }
 
 .side-brand small {
-    opacity: .75;
+    color: var(--text-muted);
 }
 
 .admin-sidebar a {
@@ -41,24 +42,25 @@
     margin-bottom: 10px;
     padding: 14px 16px;
     border-radius: 16px;
-    color: white;
+    color: var(--text-muted);
     font-weight: 700;
-    transition: .25s;
+    transition: var(--transition);
     text-decoration: none;
 }
 
 .admin-sidebar a:hover {
     transform: translateX(6px);
-    background: rgba(255, 255, 255, .13);
+    background: rgba(8, 145, 168, .08);
+    color: var(--text);
 }
 
 .admin-sidebar a.admin-active-page {
-    background: linear-gradient(90deg, rgba(22, 119, 255, .28), rgba(22, 119, 255, .16));
-    color: #ffffff;
+    background: rgba(8, 145, 168, .12);
+    color: var(--primary);
     font-weight: 900;
     border-radius: 14px;
     position: relative;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .16);
+    box-shadow: inset 0 0 0 1px rgba(8, 145, 168, .18);
 }
 
 .admin-sidebar a.admin-active-page::before {
@@ -70,5 +72,13 @@
     width: 5px;
     height: 60%;
     border-radius: 999px;
-    background: #1677ff;
+    background: var(--primary);
+}
+
+@media(max-width:1050px) {
+    .admin-sidebar {
+        position: static;
+        width: 100%;
+        min-height: auto;
+    }
 }
