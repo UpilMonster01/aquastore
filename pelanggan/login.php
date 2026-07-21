@@ -21,8 +21,8 @@
 
             <form action="../proses/login-user.php" method="POST">
                 <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
-                <input type="email" name="email" placeholder="Masukkan email" required>
-                <input type="password" name="password" placeholder="Masukkan password" required>
+                <input type="text" name="identifier" placeholder="Email (pelanggan) atau username (admin)" required autocomplete="username">
+                <input type="password" name="password" placeholder="Masukkan password" required autocomplete="current-password">
 
                 <button class="login-button full-button">
                     Login Sekarang

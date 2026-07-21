@@ -3,6 +3,8 @@ require "../config/db.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    csrf_check();
+
     if (isset($_POST['hapus_ikan'])) {
         $id = (int)$_POST['id'];
         unset($_SESSION['keranjang'][$id]);
@@ -97,6 +99,7 @@ $jumlahKeranjang =
     <?php else: ?>
 
     <form method="POST">
+        <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
         <input type="hidden" name="id" id="hapusId">
 
         <?php if (!empty($ikanItems)): ?>
