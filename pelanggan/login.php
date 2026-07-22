@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Login Pelanggan - AquaStore</title>
+    <title>Login - AquaStore</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 

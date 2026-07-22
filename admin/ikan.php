@@ -290,36 +290,6 @@ $data = $stmt->fetchAll();
 
                         </tr>
 
-                        <!-- MODAL EDIT -->
-
-                        <div class="modal" id="edit<?= $i['id'] ?>">
-
-                            <div class="modal-box">
-
-                                <button class="close-btn" onclick="closeModal('edit<?= $i['id'] ?>')">
-                                    ×
-                                </button>
-
-                                <h2>Edit Ikan</h2>
-
-                                <form action="../proses/edit-ikan.php" method="POST" enctype="multipart/form-data">
-
-                                    <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
-
-                                    <input type="hidden" name="id" value="<?= $i['id'] ?>">
-
-                                    <?php include "form-ikan.php"; ?>
-
-                                    <button class="login-button">
-                                        Simpan Perubahan
-                                    </button>
-
-                                </form>
-
-                            </div>
-
-                        </div>
-
                     <?php endforeach; ?>
 
                 </table>
@@ -329,6 +299,42 @@ $data = $stmt->fetchAll();
         </main>
 
     </div>
+
+    <!-- MODAL EDIT (di luar <table> — div di dalam <table> bukan anak yang
+         valid, browser akan otomatis memindahkannya sehingga tampilan modal
+         bisa rusak/tidak konsisten) -->
+
+    <?php foreach ($data as $i): ?>
+
+        <div class="modal" id="edit<?= $i['id'] ?>">
+
+            <div class="modal-box">
+
+                <button class="close-btn" onclick="closeModal('edit<?= $i['id'] ?>')">
+                    ×
+                </button>
+
+                <h2>Edit Ikan</h2>
+
+                <form action="../proses/edit-ikan.php" method="POST" enctype="multipart/form-data">
+
+                    <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
+
+                    <input type="hidden" name="id" value="<?= $i['id'] ?>">
+
+                    <?php include "form-ikan.php"; ?>
+
+                    <button class="login-button">
+                        Simpan Perubahan
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    <?php endforeach; ?>
 
     <!-- MODAL TAMBAH -->
 

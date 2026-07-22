@@ -113,5 +113,6 @@ $update->execute([
 ]);
 
 flash('success', 'Data ikan berhasil diperbarui.');
-header("Location: ../admin/ikan.php?v=" . time());
-exit;
+
+$kembali = safe_redirect_url($_POST['kembali'] ?? '', url('admin/ikan.php?v=' . time()));
+redirect_to($kembali);

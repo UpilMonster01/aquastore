@@ -62,9 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </span>
 
                 <?php if (!empty($_SESSION['admin'])): ?>
-                    <a href="<?= e(url('admin/ikan.php?edit_modal=edit' . $ikan['id'])) ?>" class="admin-quick-edit-link">
+                    <button type="button" class="admin-quick-edit-link" onclick="openModal('editIkanInline')">
                         ✏️ Edit produk ini
-                    </a>
+                    </button>
                 <?php endif; ?>
 
                 <h1><?= e($ikan['nama']) ?></h1>
@@ -137,6 +137,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </section>
+
+    <?php if (!empty($_SESSION['admin'])): ?>
+        <!-- MODAL EDIT (inline di halaman publik, supaya admin tidak perlu
+             pindah ke panel admin cuma buat edit produk ini) -->
+        <div class="modal" id="editIkanInline">
+            <div class="modal-box">
+                <button class="close-btn" onclick="closeModal('editIkanInline')">×</button>
+                <h2>Edit Ikan</h2>
+
+                <form action="../proses/edit-ikan.php" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
+                    <input type="hidden" name="id" value="<?= (int) $ikan['id'] ?>">
+                    <input type="hidden" name="kembali" value="<?= e($_SERVER['REQUEST_URI'] ?? '') ?>">
+
+                    <?php
+                    define('AQUASTORE_ADMIN_VIEW', true);
+                    $i = $ikan;
+                    include "../admin/form-ikan.php";
+                    ?>
+
+                    <button class="login-button">Simpan Perubahan</button>
+                </form>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <script src="../assets/js/main.js"></script>
 </body>
 
 </html>

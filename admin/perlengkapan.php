@@ -141,25 +141,28 @@ $data = $stmt->fetchAll();
                     </form>
                 </td>
             </tr>
-
-            <div class="modal" id="edit<?= $p['id'] ?>">
-                <div class="modal-box">
-                    <button class="close-btn" onclick="closeModal('edit<?= $p['id'] ?>')">×</button>
-                    <h2>Edit Perlengkapan</h2>
-
-                    <form action="../proses/edit-perlengkapan.php" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
-                        <input type="hidden" name="id" value="<?= $p['id'] ?>">
-                        <?php $item = $p; include "form-perlengkapan.php"; ?>
-                        <button class="login-button">Simpan</button>
-                    </form>
-                </div>
-            </div>
             <?php endforeach; ?>
         </table>
     </div>
 </main>
 </div>
+
+<!-- MODAL EDIT (di luar <table>, sama seperti perbaikan di ikan.php) -->
+<?php foreach ($data as $p): ?>
+    <div class="modal" id="edit<?= $p['id'] ?>">
+        <div class="modal-box">
+            <button class="close-btn" onclick="closeModal('edit<?= $p['id'] ?>')">×</button>
+            <h2>Edit Perlengkapan</h2>
+
+            <form action="../proses/edit-perlengkapan.php" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="csrf" value="<?= csrf_token() ?>">
+                <input type="hidden" name="id" value="<?= $p['id'] ?>">
+                <?php $item = $p; include "form-perlengkapan.php"; ?>
+                <button class="login-button">Simpan</button>
+            </form>
+        </div>
+    </div>
+<?php endforeach; ?>
 
 <div class="modal" id="modalTambah">
     <div class="modal-box">

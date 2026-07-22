@@ -215,9 +215,9 @@ function selected_equipment_filter($value, $current)
                         <h3><?= e($p['nama']) ?></h3>
 
                         <?php if (!empty($_SESSION['admin'])): ?>
-                            <a href="<?= e(url('admin/perlengkapan.php?edit_modal=edit' . $p['id'])) ?>" class="admin-quick-edit-link">
+                            <button type="button" class="admin-quick-edit-link" onclick="openModal('editPerlengkapanInline<?= (int) $p['id'] ?>')">
                                 ✏️ Edit produk ini
-                            </a>
+                            </button>
                         <?php endif; ?>
 
                         <div class="equipment-badge-row">
@@ -257,6 +257,36 @@ function selected_equipment_filter($value, $current)
         <?php endif; ?>
     </section>
 
+    <?php if (!empty($_SESSION['admin'])): ?>
+        <!-- MODAL EDIT (inline di halaman publik per item, supaya admin
+             tidak perlu pindah ke panel admin cuma buat edit produk ini) -->
+        <?php foreach ($data as $p): ?>
+            <div class="modal" id="editPerlengkapanInline<?= (int) $p['id'] ?>">
+                <div class="modal-box">
+                    <button class="close-btn" onclick="closeModal('editPerlengkapanInline<?= (int) $p['id'] ?>')">×</button>
+                    <h2>Edit Perlengkapan</h2>
+
+                    <form action="../proses/edit-perlengkapan.php" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="csrf" value="<?= e(csrf_token()) ?>">
+                        <input type="hidden" name="id" value="<?= (int) $p['id'] ?>">
+                        <input type="hidden" name="kembali" value="<?= e($_SERVER['REQUEST_URI'] ?? '') ?>">
+
+                        <?php
+                        if (!defined('AQUASTORE_ADMIN_VIEW')) {
+                            define('AQUASTORE_ADMIN_VIEW', true);
+                        }
+                        $item = $p;
+                        include "../admin/form-perlengkapan.php";
+                        ?>
+
+                        <button class="login-button">Simpan</button>
+                    </form>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+
+    <script src="../assets/js/main.js"></script>
 </body>
 
 </html>

@@ -81,5 +81,6 @@ $update->execute([
 ]);
 
 flash('success', 'Perlengkapan berhasil diperbarui.');
-header("Location: ../admin/perlengkapan.php?v=" . time());
-exit;
+
+$kembali = safe_redirect_url($_POST['kembali'] ?? '', url('admin/perlengkapan.php?v=' . time()));
+redirect_to($kembali);
