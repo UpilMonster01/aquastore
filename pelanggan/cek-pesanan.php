@@ -116,6 +116,18 @@ function tanggal_tracking($data)
 
     return '-';
 }
+
+function status_desc_tracking($status)
+{
+    $deskripsi = [
+        'Pending'  => 'Pesanan kamu sudah diterima dan sedang menunggu diproses toko.',
+        'Diproses' => 'Toko sedang menyiapkan dan mengemas pesanan kamu.',
+        'Dikirim'  => 'Pesanan sedang dalam perjalanan menuju alamat tujuan.',
+        'Selesai'  => 'Pesanan telah selesai / sampai ke tujuan.',
+    ];
+
+    return $deskripsi[$status] ?? '';
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -124,6 +136,7 @@ function tanggal_tracking($data)
     <meta charset="UTF-8">
     <title>Cek Pesanan - AquaStore</title>
     <link rel="stylesheet" href="../assets/css/style.css?v=340">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 
 <body>
@@ -202,6 +215,14 @@ function tanggal_tracking($data)
                     </div>
                 </div>
 
+                <p class="tracking-status-desc">
+                    <?php if ($pesanan['metode_pengiriman'] === 'Ambil Sendiri' && $pesanan['status'] === 'Dikirim'): ?>
+                        Pesanan siap diambil di toko.
+                    <?php else: ?>
+                        <?= e(status_desc_tracking($pesanan['status'])) ?>
+                    <?php endif; ?>
+                </p>
+
                 <div class="tracking-info-grid">
                     <div>
                         <b>Nama Pelanggan</b>
@@ -250,6 +271,18 @@ function tanggal_tracking($data)
                         <span class="total-price"><?= rupiah($pesanan['total_harga']) ?></span>
                     </div>
                 </div>
+
+                <?php if ($pesanan['metode_pengiriman'] === 'Kurir'): ?>
+                    <div class="tracking-map-box">
+                        <b>📍 Perkiraan Lokasi Tujuan</b>
+                        <p class="tracking-map-note">
+                            Peta di bawah ini menampilkan perkiraan lokasi berdasarkan alamat yang
+                            dimasukkan saat checkout — bukan posisi kurir secara real-time, karena
+                            AquaStore belum terhubung ke sistem pelacakan resmi jasa pengiriman.
+                        </p>
+                        <div id="trackingMap" data-alamat="<?= e($pesanan['alamat']) ?>"></div>
+                    </div>
+                <?php endif; ?>
 
                 <div class="tracking-payment-box">
                     <div class="tracking-payment-header">
@@ -395,6 +428,49 @@ function tanggal_tracking($data)
     </section>
 
     <script src="../assets/js/main.js"></script>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        (function () {
+            var mapEl = document.getElementById('trackingMap');
+
+            if (!mapEl) {
+                return;
+            }
+
+            var alamat = mapEl.getAttribute('data-alamat') || '';
+
+            mapEl.innerHTML = '<p class="tracking-map-loading">Memuat peta...</p>';
+
+            fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(alamat))
+                .then(function (res) { return res.json(); })
+                .then(function (hasil) {
+                    if (!hasil || !hasil.length) {
+                        mapEl.innerHTML = '<p class="tracking-map-loading">Lokasi tidak dapat ditemukan di peta untuk alamat ini.</p>';
+                        return;
+                    }
+
+                    var lat = parseFloat(hasil[0].lat);
+                    var lon = parseFloat(hasil[0].lon);
+
+                    mapEl.innerHTML = '';
+
+                    var map = L.map(mapEl).setView([lat, lon], 14);
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors',
+                        maxZoom: 18
+                    }).addTo(map);
+
+                    L.marker([lat, lon]).addTo(map)
+                        .bindPopup('Perkiraan lokasi tujuan')
+                        .openPopup();
+                })
+                .catch(function () {
+                    mapEl.innerHTML = '<p class="tracking-map-loading">Gagal memuat peta. Coba muat ulang halaman.</p>';
+                });
+        })();
+    </script>
 </body>
 
 </html>
