@@ -264,6 +264,9 @@ function status_desc_tracking($status)
                     <div class="wide">
                         <b>Alamat</b>
                         <span><?= e($pesanan['alamat']) ?></span>
+                        <?php if (!empty($pesanan['catatan_alamat'])): ?>
+                            <span class="alamat-catatan">📌 <?= e($pesanan['catatan_alamat']) ?></span>
+                        <?php endif; ?>
                     </div>
 
                     <div class="wide">
@@ -274,13 +277,27 @@ function status_desc_tracking($status)
 
                 <?php if ($pesanan['metode_pengiriman'] === 'Kurir'): ?>
                     <div class="tracking-map-box">
-                        <b>📍 Perkiraan Lokasi Tujuan</b>
-                        <p class="tracking-map-note">
-                            Peta di bawah ini menampilkan perkiraan lokasi berdasarkan alamat yang
-                            dimasukkan saat checkout — bukan posisi kurir secara real-time, karena
-                            AquaStore belum terhubung ke sistem pelacakan resmi jasa pengiriman.
-                        </p>
-                        <div id="trackingMap" data-alamat="<?= e($pesanan['alamat']) ?>"></div>
+                        <b>📍 Lokasi Tujuan</b>
+
+                        <?php if (!empty($pesanan['lat']) && !empty($pesanan['lng'])): ?>
+                            <p class="tracking-map-note">
+                                Titik ini dipilih langsung oleh pelanggan di peta saat checkout,
+                                jadi lebih akurat dibanding perkiraan dari teks alamat.
+                            </p>
+                            <div
+                                id="trackingMap"
+                                data-lat="<?= e($pesanan['lat']) ?>"
+                                data-lng="<?= e($pesanan['lng']) ?>"
+                            ></div>
+                        <?php else: ?>
+                            <p class="tracking-map-note">
+                                Pesanan ini dibuat sebelum fitur pin lokasi tersedia, jadi peta di
+                                bawah cuma perkiraan berdasarkan teks alamat — bukan posisi kurir
+                                real-time, karena AquaStore belum terhubung ke sistem pelacakan
+                                resmi jasa pengiriman.
+                            </p>
+                            <div id="trackingMap" data-alamat="<?= e($pesanan['alamat']) ?>"></div>
+                        <?php endif; ?>
                     </div>
                 <?php endif; ?>
 
@@ -438,6 +455,32 @@ function status_desc_tracking($status)
                 return;
             }
 
+            function tampilkanPeta(lat, lon, label) {
+                mapEl.innerHTML = '';
+
+                var map = L.map(mapEl).setView([lat, lon], 15);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; OpenStreetMap contributors',
+                    maxZoom: 18
+                }).addTo(map);
+
+                L.marker([lat, lon]).addTo(map)
+                    .bindPopup(label)
+                    .openPopup();
+            }
+
+            var latTersimpan = mapEl.getAttribute('data-lat');
+            var lngTersimpan = mapEl.getAttribute('data-lng');
+
+            if (latTersimpan && lngTersimpan) {
+                // Titik pasti dari pelanggan saat checkout — tidak perlu geocoding lagi.
+                tampilkanPeta(parseFloat(latTersimpan), parseFloat(lngTersimpan), 'Lokasi tujuan pengiriman');
+                return;
+            }
+
+            // Fallback untuk pesanan lama (sebelum fitur pin lokasi ada):
+            // tebak lokasi dari teks alamat lewat geocoding gratis.
             var alamat = mapEl.getAttribute('data-alamat') || '';
 
             mapEl.innerHTML = '<p class="tracking-map-loading">Memuat peta...</p>';
@@ -450,21 +493,7 @@ function status_desc_tracking($status)
                         return;
                     }
 
-                    var lat = parseFloat(hasil[0].lat);
-                    var lon = parseFloat(hasil[0].lon);
-
-                    mapEl.innerHTML = '';
-
-                    var map = L.map(mapEl).setView([lat, lon], 14);
-
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        attribution: '&copy; OpenStreetMap contributors',
-                        maxZoom: 18
-                    }).addTo(map);
-
-                    L.marker([lat, lon]).addTo(map)
-                        .bindPopup('Perkiraan lokasi tujuan')
-                        .openPopup();
+                    tampilkanPeta(parseFloat(hasil[0].lat), parseFloat(hasil[0].lon), 'Perkiraan lokasi tujuan');
                 })
                 .catch(function () {
                     mapEl.innerHTML = '<p class="tracking-map-loading">Gagal memuat peta. Coba muat ulang halaman.</p>';

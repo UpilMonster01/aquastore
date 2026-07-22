@@ -236,3 +236,39 @@
         flex-direction: column;
     }
 }
+
+.lokasi-picker-box {
+    padding: 16px;
+    border-radius: 16px;
+    background: var(--secondary);
+    border: 1px solid var(--border);
+}
+
+.lokasi-picker-box b {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--primary);
+}
+
+.lokasi-picker-note {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+#lokasiPickerMap {
+    width: 100%;
+    height: 240px;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 12px;
+    background: #e7f3fb;
+    cursor: crosshair;
+}
+
+.lokasi-picker-status {
+    margin-top: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--primary);
+}

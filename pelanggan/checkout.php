@@ -67,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nama = trim($_POST['nama_pelanggan'] ?? '');
     $hp = trim($_POST['no_hp'] ?? '');
     $alamat = trim($_POST['alamat'] ?? '');
+    $catatanAlamat = trim($_POST['catatan_alamat'] ?? '');
     $pengiriman = $_POST['metode_pengiriman'] ?? 'Ambil Sendiri';
     $bayar = $_POST['metode_bayar'] ?? 'COD';
 
@@ -99,6 +100,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         flash('error', 'Alamat terlalu pendek.');
         header("Location: checkout.php");
         exit;
+    }
+
+    $lat = null;
+    $lng = null;
+
+    if ($pengiriman === 'Kurir') {
+        $latRaw = $_POST['lat'] ?? '';
+        $lngRaw = $_POST['lng'] ?? '';
+
+        if ($latRaw === '' || $lngRaw === '' || !is_numeric($latRaw) || !is_numeric($lngRaw)) {
+            flash('error', 'Silakan pilih titik lokasi pengiriman di peta terlebih dahulu.');
+            header("Location: checkout.php");
+            exit;
+        }
+
+        $lat = (float) $latRaw;
+        $lng = (float) $lngRaw;
+
+        if ($lat < -90 || $lat > 90 || $lng < -180 || $lng > 180) {
+            flash('error', 'Titik lokasi tidak valid. Silakan pilih ulang di peta.');
+            header("Location: checkout.php");
+            exit;
+        }
     }
 
     /*
@@ -321,12 +345,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 nama_pelanggan,
                 no_hp,
                 alamat,
+                lat,
+                lng,
+                catatan_alamat,
                 metode_pengiriman,
                 metode_bayar,
                 total_harga,
                 status
             ) VALUES (
-                ?, ?, ?, ?, ?, ?, ?, ?, 'Pending'
+                ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending'
             )
         ");
 
@@ -336,6 +363,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nama,
             $hp,
             $alamat,
+            $lat,
+            $lng,
+            $catatanAlamat !== '' ? $catatanAlamat : null,
             $pengiriman,
             $bayar,
             $total
@@ -593,6 +623,7 @@ if (!empty($_GET['sukses'])):
     <meta charset="UTF-8">
     <title>Checkout - AquaStore</title>
     <link rel="stylesheet" href="../assets/css/style.css?v=250">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 
 <body>
@@ -621,12 +652,33 @@ if (!empty($_GET['sukses'])):
 
                 <textarea name="alamat" placeholder="Alamat lengkap" required><?= e($user['alamat'] ?? '') ?></textarea>
 
+                <input type="text" name="catatan_alamat" placeholder="Catatan/patokan alamat (opsional): dekat masjid, pagar hijau, dll">
+
                 <h3>Pengiriman & Pembayaran</h3>
 
-                <select name="metode_pengiriman" id="pengiriman" onchange="hitungTotal()">
+                <select name="metode_pengiriman" id="pengiriman" onchange="hitungTotal(); toggleLokasiPicker();">
                     <option value="Ambil Sendiri">Ambil Sendiri - Gratis</option>
                     <option value="Kurir">Kurir - Rp 15.000</option>
                 </select>
+
+                <div id="lokasiPickerBox" class="lokasi-picker-box" style="display:none;">
+                    <b>📍 Titik Lokasi Pengiriman (wajib)</b>
+                    <p class="lokasi-picker-note">
+                        Klik peta atau geser pin ke titik lokasi pengiriman yang tepat,
+                        supaya pesanan kamu bisa dilacak akurat.
+                    </p>
+
+                    <button type="button" class="mini-button" onclick="gunakanLokasiSaya()">
+                        📡 Gunakan Lokasi Saya
+                    </button>
+
+                    <div id="lokasiPickerMap"></div>
+
+                    <p id="lokasiPickerStatus" class="lokasi-picker-status">Belum memilih titik lokasi.</p>
+
+                    <input type="hidden" name="lat" id="inputLat">
+                    <input type="hidden" name="lng" id="inputLng">
+                </div>
 
                 <select name="metode_bayar">
                     <option value="Transfer Bank">Transfer Bank</option>
@@ -709,6 +761,89 @@ if (!empty($_GET['sukses'])):
     </section>
 
     <script src="../assets/js/main.js"></script>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        (function () {
+            var map = null;
+            var marker = null;
+            var defaultCenter = [-8.5833, 116.1167]; // NTB, sekadar titik awal peta sebelum user pilih lokasi
+
+            function pasangTitik(lat, lng) {
+                document.getElementById('inputLat').value = lat;
+                document.getElementById('inputLng').value = lng;
+                document.getElementById('lokasiPickerStatus').textContent =
+                    'Titik lokasi dipilih (' + lat.toFixed(5) + ', ' + lng.toFixed(5) + ')';
+
+                if (marker) {
+                    marker.setLatLng([lat, lng]);
+                } else {
+                    marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+                    marker.on('dragend', function () {
+                        var pos = marker.getLatLng();
+                        pasangTitik(pos.lat, pos.lng);
+                    });
+                }
+
+                map.setView([lat, lng], 16);
+            }
+
+            window.toggleLokasiPicker = function () {
+                var pengiriman = document.getElementById('pengiriman').value;
+                var box = document.getElementById('lokasiPickerBox');
+
+                if (pengiriman !== 'Kurir') {
+                    box.style.display = 'none';
+                    return;
+                }
+
+                box.style.display = 'block';
+
+                if (!map) {
+                    map = L.map('lokasiPickerMap').setView(defaultCenter, 12);
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; OpenStreetMap contributors',
+                        maxZoom: 18
+                    }).addTo(map);
+
+                    map.on('click', function (e) {
+                        pasangTitik(e.latlng.lat, e.latlng.lng);
+                    });
+
+                    // Peta perlu di-refresh ukurannya karena box-nya
+                    // sebelumnya display:none saat peta pertama dibuat.
+                    setTimeout(function () { map.invalidateSize(); }, 200);
+                } else {
+                    setTimeout(function () { map.invalidateSize(); }, 200);
+                }
+            };
+
+            window.gunakanLokasiSaya = function () {
+                if (!navigator.geolocation) {
+                    document.getElementById('lokasiPickerStatus').textContent =
+                        'Browser tidak mendukung pencarian lokasi otomatis. Silakan klik peta secara manual.';
+                    return;
+                }
+
+                document.getElementById('lokasiPickerStatus').textContent = 'Mencari lokasi kamu...';
+
+                navigator.geolocation.getCurrentPosition(
+                    function (pos) {
+                        pasangTitik(pos.coords.latitude, pos.coords.longitude);
+                    },
+                    function () {
+                        document.getElementById('lokasiPickerStatus').textContent =
+                            'Tidak bisa mengambil lokasi otomatis (izin ditolak/gagal). Silakan klik peta secara manual.';
+                    }
+                );
+            };
+
+            document.addEventListener('DOMContentLoaded', function () {
+                toggleLokasiPicker();
+            });
+        })();
+    </script>
 </body>
 
 </html>

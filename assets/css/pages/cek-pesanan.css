@@ -207,6 +207,13 @@
     color: var(--muted);
 }
 
+.alamat-catatan {
+    display: block;
+    margin-top: 6px;
+    font-size: 13px;
+    color: var(--blue);
+}
+
 .tracking-info-grid .total-price {
     color: var(--blue);
     font-weight: 900;
